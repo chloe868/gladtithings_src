@@ -1,6 +1,6 @@
 import React from 'react';
 import Color from './Color.js';
-import { faHome, faShieldAlt, faCopy, faCog, faBell, faChurch, faTachometerAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faShieldAlt, faCopy, faCog, faBell, faChurch, faTachometerAlt, faUsers, faWallet, faHistory, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { faComment, faShareSquare } from '@fortawesome/free-regular-svg-icons';
 
 export default {
@@ -40,7 +40,7 @@ export default {
     {
       title: 'Wallet',
       route: 'Dashboard',
-      icon: faTachometerAlt,
+      icon: faWallet,
       borderBottom: false,
       payload: 'drawer',
       currentPage: 'Dashboard'
@@ -48,7 +48,7 @@ export default {
     {
       title: 'Tithings',
       route: 'Donations',
-      icon: faCog,
+      icon: faHistory,
       borderBottom: false,
       currentPage: 'Donations'
     },
@@ -61,12 +61,20 @@ export default {
       currentPage: 'Settings'
     },
     {
-      title: 'Subscription',
-      route: 'subscriptionStack',
-      icon: faBell,
+      title: 'Deposit',
+      route: 'depositStack',
+      icon: faWallet,
       borderBottom: false,
       payload: 'drawerStack',
-      currentPage: 'Subscription'
+      currentPage: 'Deposit'
+    },
+    {
+      title: 'Withdraw',
+      route: 'depositStack',
+      icon: faCreditCard,
+      borderBottom: false,
+      payload: 'drawerStack',
+      currentPage: 'Deposit'
     },
     // {
     //   title: 'Share Profile',

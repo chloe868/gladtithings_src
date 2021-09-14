@@ -204,7 +204,7 @@ class Slider2 extends Component {
               marginTop: height / 3.7,
               position: 'absolute',
               right: 0,
-              height: '50%',
+              height: '47%',
             }}>
             <View style={{
               alignItems: 'flex-end',
@@ -247,7 +247,7 @@ class Slider2 extends Component {
                     color: Color.secondary,
                     marginRight: 10,
                     fontSize: 16
-                  }]} icon={faSignOutAlt} size={BasicStyles.iconSize}></FontAwesomeIcon>
+                  }]} icon={item.icon} size={BasicStyles.iconSize}></FontAwesomeIcon>
                 <Text style={styles.BottomText}>{item.title}</Text>
               </TouchableOpacity>
             )
