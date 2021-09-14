@@ -30,12 +30,27 @@ export default {
       currentPage: 'drawerStack'
     },
     {
-      title: 'Dashboard',
+      title: 'Communities',
+      route: 'Community',
+      icon: faUsers,
+      borderBottom: false,
+      payload: 'drawer',
+      currentPage: 'Community'
+    },
+    {
+      title: 'Wallet',
       route: 'Dashboard',
       icon: faTachometerAlt,
       borderBottom: false,
       payload: 'drawer',
       currentPage: 'Dashboard'
+    },
+    {
+      title: 'Tithings',
+      route: 'Donations',
+      icon: faCog,
+      borderBottom: false,
+      currentPage: 'Donations'
     },
     {
       title: 'Settings',
@@ -46,21 +61,6 @@ export default {
       currentPage: 'Settings'
     },
     {
-      title: 'Donations',
-      route: 'Donations',
-      icon: faCog,
-      borderBottom: false,
-      currentPage: 'Donations'
-    },
-    {
-      title: 'Community',
-      route: 'Community',
-      icon: faUsers,
-      borderBottom: false,
-      payload: 'drawer',
-      currentPage: 'Community'
-    },
-    {
       title: 'Subscription',
       route: 'subscriptionStack',
       icon: faBell,
@@ -68,14 +68,14 @@ export default {
       payload: 'drawerStack',
       currentPage: 'Subscription'
     },
-    {
-      title: 'Share Profile',
-      route: 'share',
-      icon: faShareSquare,
-      borderBottom: true,
-      payload: 'share',
-      currentPage: 'share'
-    }
+    // {
+    //   title: 'Share Profile',
+    //   route: 'share',
+    //   icon: faShareSquare,
+    //   borderBottom: true,
+    //   payload: 'share',
+    //   currentPage: 'share'
+    // }
     // {
     //   title: 'Subscription',
     //   route: 'subscriptionStack',
