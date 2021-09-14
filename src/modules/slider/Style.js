@@ -14,7 +14,7 @@ export default {
     color: Color.white,
     marginRight: 10,
     marginTop: 2,
-    fontSize: 16
+    fontSize: 17,
   },
   navSectionStyleNoBorder: {
     paddingTop: 5,
