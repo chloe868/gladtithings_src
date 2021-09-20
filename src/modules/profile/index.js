@@ -22,9 +22,6 @@ class Profile extends Component {
       isLoading: false,
       id: null,
       isImageUpload: false,
-      password: null,
-      confirmPassword: null,
-      email: null,
       isEdit: false,
       cellularNumber: null
     }
@@ -256,10 +253,10 @@ class Profile extends Component {
     const { firstName, lastName } = this.state;
     return (
       <View style={{ height: height, backgroundColor: Color.containerBackground }}>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 150 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 100, height: height }}>
           <View style={{
             backgroundColor: Color.containerBackground,
-            marginBottom: 170
+            marginBottom: 50
           }}>
             {this.state.isLoading ? <Spinner mode="overlay" /> : null}
             <View style={[Style.TopView, { backgroundColor: theme ? theme.primary : Color.primary }]}>
@@ -286,9 +283,9 @@ class Profile extends Component {
                       }]} />
                   ) : <FontAwesomeIcon
                     icon={faUserCircle}
-                    size={176}
+                    size={130}
                     style={{
-                      color: Color.primary
+                      color: 'white'
                     }}
                   />
                 }
@@ -300,7 +297,7 @@ class Profile extends Component {
               }}>{firstName && lastName && firstName + ' ' + lastName}</Text>
               <Text style={{
                 textAlign: 'center',
-                fontSize: 11,
+                marginBottom: 2,
                 color: Color.white
               }}>@lalaine_increment</Text>
               <View style={Style.BottomView}>
@@ -365,30 +362,12 @@ class Profile extends Component {
                 onTyping={text => { this.lastNameHandler(text) }}
               />
               <InputFieldWithIcon
-                placeholder={this.state.email ? this.state.email : 'Enter Email'}
+                placeholder={this.state.cellularNumber ? this.state.cellularNumber : 'Enter Phone Number'}
                 icon={faUser}
-                label={'Email'}
+                label={'Phone Number'}
                 disable={true}
                 profile={true}
-                onTyping={text => { this.emailHandler(text) }}
-              />
-              <InputFieldWithIcon
-                placeholder={this.state.password ? this.state.password : '********'}
-                icon={faUser}
-                label={'Password'}
-                disable={true}
-                profile={true}
-                secureTextEntry={true}
-                onTyping={text => { this.setState({ password: text }) }}
-              />
-              <InputFieldWithIcon
-                placeholder={this.state.confirmPassword ? this.state.confirmPassword : 'Confirm Password'}
-                icon={faUser}
-                label={'Confirm Password'}
-                disable={true}
-                secureTextEntry={true}
-                profile={true}
-                onTyping={text => { this.setState({ confirmPassword: text }) }}
+                onTyping={text => { this.lastNameHandler(text) }}
               />
             </View> :
               <View style={{
@@ -449,12 +428,12 @@ class Profile extends Component {
                 this.setState({ isImageUpload: false, isLoading: false })
               }} /> : null}
         </ScrollView>
-        <View style={{
-          bottom: 80,
+        {this.state.isEdit && <View style={{
+          bottom: 10,
           width: '90%'
         }}>
           <CustomizedButton onClick={() => { this.update() }} title={'Save'}></CustomizedButton>
-        </View>
+        </View>}
       </View>
     );
   }
