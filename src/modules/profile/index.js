@@ -163,7 +163,7 @@ class Profile extends Component {
       last_name: this.state.lastName,
       cellular_number: 'NULL'
     }
-    this.updateAccount();
+    // this.updateAccount();
     if (user.account_information?.last_name === this.state.lastName && user.account_information?.first_name === this.state.firstName) {
       return
     }
@@ -174,7 +174,7 @@ class Profile extends Component {
         this.reloadProfile();
         Alert.alert(
           "",
-          "Name updated successfully!",
+          "Profile updated successfully!",
           [
             { text: "OK" }
           ],
@@ -348,7 +348,6 @@ class Profile extends Component {
                 placeholder={this.state.firstName ? this.state.firstName : 'Enter First Name'}
                 icon={faUser}
                 label={'First Name'}
-                disable={true}
                 onTyping={text => { this.firstNameHandler(text) }}
                 profile={true}
                 placeholderTextColor={this.state.firstName ? '#000' : '#999'}
@@ -357,7 +356,6 @@ class Profile extends Component {
                 placeholder={this.state.lastName ? this.state.lastName : 'Enter Last Name'}
                 icon={faUser}
                 label={'Last Name'}
-                disable={true}
                 profile={true}
                 onTyping={text => { this.lastNameHandler(text) }}
               />
@@ -365,7 +363,6 @@ class Profile extends Component {
                 placeholder={this.state.cellularNumber ? this.state.cellularNumber : 'Enter Phone Number'}
                 icon={faUser}
                 label={'Phone Number'}
-                disable={true}
                 profile={true}
                 onTyping={text => { this.lastNameHandler(text) }}
               />
