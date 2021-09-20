@@ -40,14 +40,12 @@ class AccountSettings extends Component {
               onTyping={(text) => {this.setState({input: text})}}
             />
 
-
             <InputFieldWithIcon
               placeholder={user ? user.email : 'Email Address'}
               icon={faEnvelope}
               label={'Email Address'}
               onTyping={(text) => {this.setState({input: text})}}
             />
-
 
             <IncrementButton style={{
                 backgroundColor: Color.primary,
@@ -72,16 +70,6 @@ class AccountSettings extends Component {
                 fontWeight: 'bold'
               }}>Security Credentials</Text>
 
-
-              <InputFieldWithIcon
-                placeholder={'Old Password'}
-                icon={faUser}
-                label={'Old Password *'}
-                secureTextEntry={true}
-                onTyping={(text) => {this.setState({input: text})}}
-              />
-
-
               <InputFieldWithIcon
                 placeholder={'New Password'}
                 icon={faUser}
@@ -89,7 +77,6 @@ class AccountSettings extends Component {
                 secureTextEntry={true}
                 onTyping={(text) => {this.setState({input: text})}}
               />
-
 
               <InputFieldWithIcon
                 placeholder={'Confirm New Password'}
