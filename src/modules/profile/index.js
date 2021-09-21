@@ -252,11 +252,11 @@ class Profile extends Component {
     const { user, theme } = this.props.state;
     const { firstName, lastName } = this.state;
     return (
-      <View style={{ height: height, backgroundColor: Color.containerBackground }}>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 100, height: height }}>
+      <View style={{height: height, backgroundColor: Color.containerBackground}}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 150}}>
           <View style={{
             backgroundColor: Color.containerBackground,
-            marginBottom: 50
+            marginBottom: 170
           }}>
             {this.state.isLoading ? <Spinner mode="overlay" /> : null}
             <View style={[Style.TopView, { backgroundColor: theme ? theme.primary : Color.primary }]}>
@@ -426,10 +426,10 @@ class Profile extends Component {
               }} /> : null}
         </ScrollView>
         {this.state.isEdit && <View style={{
-          bottom: 10,
+          bottom: 80,
           width: '90%'
         }}>
-          <CustomizedButton onClick={() => { this.update() }} title={'Save'}></CustomizedButton>
+          <CustomizedButton onClick={() => { this.update() }} title={'Update'}></CustomizedButton>
         </View>}
       </View>
     );
