@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { Color } from 'common';
+import { Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import CardsWithIcon from '../generic/CardsWithIcon';
 import BalanceCard from 'modules/generic/BalanceCard.js';
 import IncrementButton from 'components/Form/Button';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import Subscription from 'modules/generic/Subscriptions.js'
+import Subscription from 'modules/generic/Subscriptions.js';
+import Api from 'services/api/index.js';
+import { Spinner } from 'components';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -56,36 +58,63 @@ const data = [
   }
 ]
 
-const balance = {
-  current_balance: 10000,
-  currency: 'USD',
-  available_balance: 5000
-}
-
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state={
-      input: null
+      input: null,
+      ledger: null,
+      isLoading: false
     }
+  }
+
+  componentDidMount() {
+    this.retrieveBalance()
+  }
+
+  retrieveBalance = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [
+        {
+          clause: '=',
+          column: 'account_id',
+          value: user.id
+        }
+      ],
+      account_code: user.code
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.ledgerDashboard, parameter, response => {
+      this.setState({ isLoading: false })
+      if(response.data) {
+        this.setState({ledger: response.data.ledger[0]});
+      }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false });
+    })
   }
 
   render() {
     const { theme } = this.props.state;
+    const { ledger } = this.state;
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={{
+            height: height,
+            backgroundColor: Color.containerBackground
+          }} showsVerticalScrollIndicator={false}>
           <View style={{
             padding: 15
           }}>
-            
-
             {
-              balance && (
-                <BalanceCard data={balance}/>
+              ledger && (
+                <BalanceCard data={ledger}/>
               )
             }
 
@@ -130,7 +159,6 @@ class Dashboard extends Component {
                 fontWeight: 'bold',
                 color: Color.primary
               }}>Donations</Text>
-
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('transactionsStack')
@@ -142,6 +170,7 @@ class Dashboard extends Component {
                 }}>View more</Text>
 
               </TouchableOpacity>
+              {this.state.isLoading ? <Spinner mode="overlay" /> : null}
             </View>
 
             {

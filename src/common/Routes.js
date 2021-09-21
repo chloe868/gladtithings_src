@@ -38,4 +38,5 @@ export default {
   commentRepliesCreate: apiUrl + 'comment_replies/create',
   merchantsRetrieve: apiUrl + 'merchants/retrieve_merchants',
   merchantOneRetrieve: apiUrl + 'merchants/retrieve',
+  ledgerDashboard: apiUrl + 'ledger/dashboard',
 };

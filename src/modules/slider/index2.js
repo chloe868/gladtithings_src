@@ -32,8 +32,8 @@ class Slider2 extends Component {
       this.navigate('Homepage')
       return
     }
-    this.props.navigation.navigate(route);
     this.props.navigation.toggleDrawer();
+    this.props.navigation.navigate(route);
   }
 
   navigate = (item) => {
