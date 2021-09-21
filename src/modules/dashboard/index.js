@@ -63,7 +63,12 @@ class Dashboard extends Component {
     super(props);
     this.state={
       input: null,
-      ledger: null,
+      ledger: {
+        currency: 'USD',
+        available_balance: 0,
+        current_balance: 0,
+        balance: 0
+      },
       isLoading: false
     }
   }
