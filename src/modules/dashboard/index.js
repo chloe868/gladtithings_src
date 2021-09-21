@@ -82,6 +82,7 @@ class Dashboard extends Component {
           value: user.id
         }
       ],
+      account_id: user.id,
       account_code: user.code
     }
     this.setState({ isLoading: true })
