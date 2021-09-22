@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';;
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';;
 import { Color, BasicStyles } from 'common';
 import { Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -9,6 +9,7 @@ import Button from '../generic/Button';
 import Styles from './CardsWithImagesStyles';
 
 const width = Math.round(Dimensions.get('window').width)
+const height = Math.round(Dimensions.get('window').height)
 
 class CardsWithImages extends Component {
   constructor(props) {
@@ -20,11 +21,17 @@ class CardsWithImages extends Component {
     return (
       <View style={Styles.container}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => (
-          <View style={{
+          <TouchableOpacity style={{
             height: 200,
             width: '50%',
             padding: 10
-          }}>
+          }}
+            onPress={() => {
+              if(this.props.redirect) {
+                this.props.redirect()
+              }
+            }}
+          >
             <View style={{
               height: '75%'
             }}>
@@ -47,7 +54,7 @@ class CardsWithImages extends Component {
               style={{
                 width: '85%'
               }}>{item.date}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     )
@@ -58,7 +65,10 @@ class CardsWithImages extends Component {
     return (
       <View style={Styles.container}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => (
-          <View style={Styles.view}>
+          <TouchableOpacity style={Styles.view} onPress={() => {
+            this.props.redirect()
+            console.log('hi');
+          }}>
             <View style={Styles.imageView}>
               <Image
                 source={require('assets/test.jpg')}
@@ -100,10 +110,10 @@ class CardsWithImages extends Component {
                 </View>
               }
               redirect={() => {
-                this.props.redirect()
+                this.props.buttonClick()
               }}
             />
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     )
@@ -114,16 +124,17 @@ class CardsWithImages extends Component {
     return (
       <View style={{
         width: width,
-        padding: 10
+        padding: 10,
+        height: height
       }}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => (
           <View style={{
             width: width,
             flexDirection: 'row',
-            height: 185
+            height: 220
           }}>
             <View style={{
-              height: 210,
+              height: 220,
               width: '50%',
               padding: 10
             }}>

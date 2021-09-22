@@ -116,7 +116,9 @@ class Dashboard extends Component {
             backgroundColor: Color.containerBackground
           }} showsVerticalScrollIndicator={false}>
           <View style={{
-            padding: 15
+            paddingLeft: 15,
+            paddingBottom: 15,
+            paddingRight: 15
           }}>
             {
               ledger && (
@@ -145,7 +147,7 @@ class Dashboard extends Component {
                 width: '40%'
               }}
               onClick={() => {
-                this.props.navigation.navigate('withdrawStack')
+                this.props.navigation.navigate('depositStack')
               }}
               title={'Withdraw'}
               />
@@ -164,7 +166,7 @@ class Dashboard extends Component {
               <Text style={{
                 fontWeight: 'bold',
                 color: Color.primary
-              }}>Donations</Text>
+              }}>Tithings</Text>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('transactionsStack')
@@ -173,7 +175,7 @@ class Dashboard extends Component {
 
                 <Text style={{
                   fontWeight: 'bold',
-                }}>View more</Text>
+                }}>{'View more >>>'}</Text>
 
               </TouchableOpacity>
               {this.state.isLoading ? <Spinner mode="overlay" /> : null}
