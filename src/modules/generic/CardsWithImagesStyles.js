@@ -6,7 +6,7 @@ export default {
     height: '100%',
     width: '100%',
     resizeMode: 'stretch',
-    borderRadius: 25
+    borderRadius: 15
   },
   textInImageView: {
     position: 'absolute',
@@ -26,7 +26,7 @@ export default {
     fontSize: 13
   },
   imageView: {
-    height: '60%'
+    height: '70%'
   },
   container: {
     width: width,

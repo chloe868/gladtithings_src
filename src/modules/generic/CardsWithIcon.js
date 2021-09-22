@@ -97,7 +97,8 @@ class CardsWithIcon extends Component {
         </View>
         <View style={{
           width: '25%',
-          alignItems: 'center'
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
           <Text style={{
             color: theme ? theme.primary : Color.primary,
@@ -141,6 +142,27 @@ class CardsWithIcon extends Component {
     )
   }
 
+  versionFive = () => {
+    const { theme } = this.props.state;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          this.props.redirect()
+        }}
+        style={[Styles.cardContainer, {padding: 20}]}>
+        <View style={{
+          width: '100%',
+          flexDirection: 'row'
+        }}>
+          <View style={{width: '100%'}}>
+            <Text style={{ fontFamily: 'Poppins-SemiBold', color: theme ? theme.primary : Color.primary }}>{this.props.title}</Text>
+            <Text style={{ fontSize: 13 }}>{this.props.description}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
   render() {
     const { version } = this.props;
     return (
@@ -152,6 +174,7 @@ class CardsWithIcon extends Component {
         {version === 2 && this.versionTwo()}
         {version === 3 && this.versionThree()}
         {version === 4 && this.versionToggle()}
+        {version === 5 && this.versionFive()}
       </View>
     )
   }

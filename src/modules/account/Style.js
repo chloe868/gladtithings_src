@@ -8,7 +8,7 @@ export default {
     alignItems: 'center',
     paddingLeft: 20,
     paddingRight: 20,
-    marginBottom: 150
+    marginBottom: 50
   },
   LogoContainer: {
     height: 100,

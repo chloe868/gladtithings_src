@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Color } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import CardsWithImages from '../generic/CardsWithImages';
 import CustomizedHeader from '../generic/CustomizedHeader';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -42,28 +43,89 @@ class HomePage extends Component {
     const { theme, user } = this.props.state;
     return (
       <View style={{
-        height: height,
         backgroundColor: Color.containerBackground
       }}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <CustomizedHeader
             version={2}
             redirect={() => {
-              this.props.navigation.navigate('otpStack');
               console.log('ji');
             }}
           />
           <View>
-            <Text style={{
-              paddingTop: 20,
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               paddingLeft: 20,
-              fontFamily: 'Poppins-SemiBold'
-            }}>Recently Visited Churches</Text>
+              paddingRight: 20,
+              paddingTop: 20
+            }}>
+              <Text style={{
+                fontWeight: 'bold'
+              }}>Recently Visited Churches</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('churchesStack')
+                  console.log('hi');
+                }}
+                style={{
+                  flexDirection: 'row'
+                }}
+              >
+                <Text style={{
+                  fontWeight: 'bold',
+                  marginRight: 5,
+                  color: theme ? theme.primary : Color.primary
+                }}>Find Church</Text>
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  size={15}
+                  style={{
+                    color: theme ? theme.primary : Color.primary,
+                    marginTop: 4
+                  }}
+                />
+
+              </TouchableOpacity>
+              {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+            </View>
             <CardsWithImages
               version={1}
               data={data}
               buttonColor={theme ? theme.secondary : Color.secondary}
               buttonTitle={'Subscribe'}
+              redirect={() => { this.props.navigation.navigate('churchProfileStack') }}
+              buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation' }) }}
+            />
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingLeft: 20,
+              paddingRight: 20
+            }}>
+              <Text style={{
+                fontWeight: 'bold'
+              }}>Upcoming Events</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('subscriptionStack')
+                }}
+              >
+                <Text style={{
+                  fontWeight: 'bold',
+                  color: theme ? theme.primary : Color.primary
+                }}>{'View more >>>'}</Text>
+
+              </TouchableOpacity>
+              {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+            </View>
+            <CardsWithImages
+              version={1}
+              data={data}
+              buttonColor={theme ? theme.secondary : Color.secondary}
+              buttonTitle={'Donate'}
+              redirect={() => { return }}
+              buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings' }) }}
             />
           </View>
         </ScrollView>

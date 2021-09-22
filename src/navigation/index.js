@@ -18,6 +18,8 @@ import DepositStack from 'src/modules/deposit/Drawer';
 import OtpStack from 'src/modules/otpPage/Drawer';
 import EditProfileStack from 'src/modules/editProfile/Drawer';
 import NotificationSettingsStack from 'src/modules/notificationSettings/Drawer';
+import ChurchProfileStack from 'src/modules/churchProfile/Drawer';
+import ChurchesStack from 'src/modules/churches/Drawer';
 import Drawer from './Drawer';
 
 const WelcomeStack = createStackNavigator(
@@ -86,7 +88,9 @@ const PrimaryNav = createStackNavigator(
     depositStack: { screen: DepositStack},
     notificationSettingsStack: { screen: NotificationSettingsStack},
     otpStack: { screen: OtpStack },
-    editProfileStack: { screen: EditProfileStack }
+    editProfileStack: { screen: EditProfileStack },
+    churchProfileStack: { screen: ChurchProfileStack },
+    churchesStack: { screen: ChurchesStack }
   },
   {
     // Default config for all screens

@@ -135,7 +135,9 @@ class Register extends Component {
               errorMessage !== null && (
                 <View style={{
                   flexDirection: 'row',
-                  padding: 30
+                  paddingLeft: 30,
+                  paddingRight: 30,
+                  paddingBottom: 10
                 }}>
                   <Text style={[Style.messageText, {
                     fontFamily: 'Poppins-SemiBold',

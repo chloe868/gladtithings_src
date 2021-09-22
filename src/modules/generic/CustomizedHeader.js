@@ -63,7 +63,8 @@ class CustomizedHeader extends Component {
         justifyContent: 'center',
         alignItems: 'center',
         width: width,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop: 10
       }}>
         <View style={{
           width: '50%',
@@ -86,7 +87,7 @@ class CustomizedHeader extends Component {
           <Text style={{
             color: Color.white,
             fontFamily: 'Poppins-SemiBold'
-          }}>$ 10.00 / Month</Text>
+          }}>Church 1</Text>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -98,14 +99,30 @@ class CustomizedHeader extends Component {
               style={{ marginRight: 5 }}
             />
             <Text style={{
-              fontSize: 10,
               fontFamily: 'Poppins-SemiBold'
-            }}>Church 1</Text>
+            }}>$ 10.00 / Month</Text>
           </View>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
             width: '100%'
+          }}>
+            <FontAwesomeIcon
+              icon={faCalendarCheck}
+              size={10}
+              style={{ marginRight: 5 }}
+            />
+            <Text
+              style={{
+                fontSize: 10,
+                width: '90%',
+                fontFamily: 'Poppins-SemiBold'
+              }}>Next donation on August 16, 2021</Text>
+          </View>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '85%'
           }}>
             <FontAwesomeIcon
               icon={faMapMarkerAlt}
@@ -117,28 +134,12 @@ class CustomizedHeader extends Component {
               fontFamily: 'Poppins-SemiBold'
             }}>Cebu</Text>
           </View>
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            width: '85%',
-            marginTop: 10
-          }}>
-            <FontAwesomeIcon
-              icon={faCalendarCheck}
-              size={10}
-              style={{ marginRight: 5 }}
-            />
-            <Text style={{
-              fontSize: 10,
-              fontFamily: 'Poppins-SemiBold'
-            }}>Next donation on August 16, 2021</Text>
-          </View>
 
           <Button
             style={{
-              width: '60%',
-              height: 30,
-              backgroundColor: Color.danger,
+              width: '80%',
+              height: 35,
+              backgroundColor: theme ? theme.secondary : Color.secondary,
               marginTop: 10
             }}
             content={
@@ -149,8 +150,9 @@ class CustomizedHeader extends Component {
               }}>
                 <Text style={{
                   color: 'white',
-                  fontSize: 12
-                }}>Cancel</Text>
+                  fontSize: 12,
+                  fontFamily: 'Poppins-SemiBold'
+                }}>Go to Subscription</Text>
               </View>
             }
             redirect={() => {
