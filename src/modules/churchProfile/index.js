@@ -93,9 +93,9 @@ class ChurchProfile extends Component {
               marginRight: 20
             }}
               onClick={() => {
-                this.props.navigation.navigate('depositStack')
+                this.props.navigation.navigate('depositStack', { type: 'Send Tithings' })
               }}
-              title={'Subscribe'}
+              title={'Follow'}
             />
 
             <IncrementButton style={{
@@ -103,9 +103,9 @@ class ChurchProfile extends Component {
               width: '40%'
             }}
               onClick={() => {
-                this.props.navigation.navigate('depositStack')
+                this.props.navigation.navigate('depositStack', { type: 'Send Tithings' })
               }}
-              title={'Donate'}
+              title={'Donation'}
             />
           </View>
           <View style={{
