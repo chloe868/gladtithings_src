@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
 import CustomizedHeader from '../generic/CustomizedHeader';
-import StripeCard from 'components/Payments/Stripe'
+import StripeCard from 'components/Payments/Stripe/Stripe.js'
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -79,57 +79,15 @@ class Transactions extends Component {
                   fontFamily: 'Poppins-SemiBold'
                 }}>USD</Text>
               </View>
-              <Text style={{
-                fontFamily: 'Poppins-SemiBold',
-                marginTop: 10
-              }}>Payment Methods</Text>
-
-              <View style={{
-                flexDirection: 'row',
-                marginBottom: 20,
-                marginTop: 20
-              }}>
-                <IncrementButton
-                  style={{
-                    backgroundColor: Color.primary,
-                    width: '40%'
-                  }}
-                  textStyle={{
-                    fontFamily: 'Poppins-SemiBold'
-                  }}
-                  onClick={() => {
-                    this.setState({
-                      method: 'paypal'
-                    })
-                  }}
-                  title={'PayPal'}
-                />
-
-                <IncrementButton
-                  style={{
-                    backgroundColor: Color.white,
-                    width: '40%',
-                    marginLeft: '1%',
-                    borderColor: Color.gray,
-                    borderWidth: 0.25
-                  }}
-                  textStyle={{
-                    fontFamily: 'Poppins-SemiBold',
-                    color: Color.gray
-                  }}
-                  onClick={() => {
-                    this.setState({
-                      method: 'stripe'
-                    })
-                  }}
-                  title={'CC / DC'}
-                />
-              </View>
             </View>
 
             {
               method === 'stripe' && (
-                <StripeCard />
+                <View style={{
+                  padding: 20,
+                }}>
+                  <StripeCard />
+                </View>
               )
             }
 
