@@ -43,7 +43,7 @@ class Transactions extends Component {
             <Text style={{
               paddingTop: 40,
               paddingBottom: 40,
-              fontWeight: 'bold',
+              fontFamily: 'Poppins-SemiBold',
               textAlign: 'center'
             }}>{params.message}</Text>
 
@@ -54,7 +54,7 @@ class Transactions extends Component {
                 marginBottom: 20
               }}
               textStyle={{
-                fontWeight: 'bold'
+                fontFamily: 'Poppins-SemiBold'
               }}
               onClick={() => {
                 this.props.navigation.navigate('Dashboard')

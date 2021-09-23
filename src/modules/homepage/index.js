@@ -61,7 +61,7 @@ class HomePage extends Component {
               paddingTop: 20
             }}>
               <Text style={{
-                fontWeight: 'bold'
+                fontFamily: 'Poppins-SemiBold'
               }}>Recently Visited Churches</Text>
               <TouchableOpacity
                 onPress={() => {
@@ -73,7 +73,7 @@ class HomePage extends Component {
                 }}
               >
                 <Text style={{
-                  fontWeight: 'bold',
+                  fontFamily: 'Poppins-SemiBold',
                   marginRight: 5,
                   color: theme ? theme.primary : Color.primary
                 }}>Find Church</Text>
@@ -104,7 +104,7 @@ class HomePage extends Component {
               paddingRight: 20
             }}>
               <Text style={{
-                fontWeight: 'bold'
+                fontFamily: 'Poppins-SemiBold'
               }}>Upcoming Events</Text>
               <TouchableOpacity
                 onPress={() => {
@@ -112,7 +112,7 @@ class HomePage extends Component {
                 }}
               >
                 <Text style={{
-                  fontWeight: 'bold',
+                  fontFamily: 'Poppins-SemiBold',
                   color: theme ? theme.primary : Color.primary
                 }}>{'View more >>>'}</Text>
 

@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
 import CustomizedHeader from '../generic/CustomizedHeader';
-// import StripeCard from 'components/Payments/Stripe'
+import StripeCard from 'components/Payments/Stripe'
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -16,7 +16,7 @@ class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      method: 'paypal'
+      method: 'stripe'
     }
   }
 
@@ -34,7 +34,7 @@ class Transactions extends Component {
           }}>
             {this.props.navigation?.state?.params?.type === 'Subscription Donation' || this.props.navigation?.state?.params?.type === 'Send Tithings' &&
               <View style={{
-                height: height / 3,
+                height: height / 4,
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: width,
@@ -73,14 +73,14 @@ class Transactions extends Component {
                 alignItems: 'center',
                 padding: 20,
               }}>
-                <Text style={{fontSize: 30}}>1,000.00</Text>
+                <Text style={{ fontSize: 30 }}>1,000.00</Text>
                 <Text style={{
                   color: theme ? theme.primary : Color.primary,
                   fontFamily: 'Poppins-SemiBold'
                 }}>USD</Text>
               </View>
               <Text style={{
-                fontWeight: 'bold',
+                fontFamily: 'Poppins-SemiBold',
                 marginTop: 10
               }}>Payment Methods</Text>
 
@@ -95,7 +95,7 @@ class Transactions extends Component {
                     width: '40%'
                   }}
                   textStyle={{
-                    fontWeight: 'bold'
+                    fontFamily: 'Poppins-SemiBold'
                   }}
                   onClick={() => {
                     this.setState({
@@ -114,7 +114,7 @@ class Transactions extends Component {
                     borderWidth: 0.25
                   }}
                   textStyle={{
-                    fontWeight: 'bold',
+                    fontFamily: 'Poppins-SemiBold',
                     color: Color.gray
                   }}
                   onClick={() => {
@@ -127,11 +127,11 @@ class Transactions extends Component {
               </View>
             </View>
 
-            {/*
-            method === 'stripe' && (
-              <StripeCard />
-            )
-          */}
+            {
+              method === 'stripe' && (
+                <StripeCard />
+              )
+            }
 
           </View>
 
@@ -151,7 +151,7 @@ class Transactions extends Component {
               width: '100%'
             }}
             textStyle={{
-              fontWeight: 'bold'
+              fontFamily: 'Poppins-SemiBold'
             }}
             onClick={() => {
               this.props.navigation.navigate('otpStack');

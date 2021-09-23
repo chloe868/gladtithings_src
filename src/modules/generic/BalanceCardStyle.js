@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 30,
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-SemiBold',
     paddingTop: 10,
     paddingBottom: 20
   },

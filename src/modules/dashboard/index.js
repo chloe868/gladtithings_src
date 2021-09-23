@@ -164,7 +164,7 @@ class Dashboard extends Component {
               marginBottom: 10
             }}>
               <Text style={{
-                fontWeight: 'bold',
+                fontFamily: 'Poppins-SemiBold',
                 color: Color.primary
               }}>Tithings</Text>
               <TouchableOpacity
@@ -174,7 +174,7 @@ class Dashboard extends Component {
                 >
 
                 <Text style={{
-                  fontWeight: 'bold',
+                  fontFamily: 'Poppins-SemiBold',
                 }}>{'View more >>>'}</Text>
 
               </TouchableOpacity>
