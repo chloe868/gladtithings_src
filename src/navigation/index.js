@@ -20,6 +20,7 @@ import EditProfileStack from 'src/modules/editProfile/Drawer';
 import NotificationSettingsStack from 'src/modules/notificationSettings/Drawer';
 import ChurchProfileStack from 'src/modules/churchProfile/Drawer';
 import ChurchesStack from 'src/modules/churches/Drawer';
+import EventsStack from 'src/modules/events/Drawer';
 import Drawer from './Drawer';
 
 const WelcomeStack = createStackNavigator(
@@ -90,7 +91,8 @@ const PrimaryNav = createStackNavigator(
     otpStack: { screen: OtpStack },
     editProfileStack: { screen: EditProfileStack },
     churchProfileStack: { screen: ChurchProfileStack },
-    churchesStack: { screen: ChurchesStack }
+    churchesStack: { screen: ChurchesStack },
+    eventsStack: { screen: EventsStack }
   },
   {
     // Default config for all screens

@@ -108,7 +108,7 @@ class HomePage extends Component {
               }}>Upcoming Events</Text>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('subscriptionStack')
+                  this.props.navigation.navigate('eventsStack')
                 }}
               >
                 <Text style={{

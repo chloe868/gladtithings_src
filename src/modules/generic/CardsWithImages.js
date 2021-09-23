@@ -220,7 +220,7 @@ class CardsWithImages extends Component {
                   </View>
                 }
                 redirect={() => {
-                  this.props.redirect()
+                  this.props.buttonClick()
                 }}
               />
             </View>

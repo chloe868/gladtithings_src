@@ -25,7 +25,7 @@ const data = [
   }
 ]
 
-class Subcriptions extends Component {
+class Subscriptions extends Component {
   constructor(props) {
     super(props);
   }
@@ -108,4 +108,4 @@ const mapStateToProps = state => ({ state: state });
 
 export default connect(
   mapStateToProps
-)(Subcriptions);
+)(Subscriptions);
