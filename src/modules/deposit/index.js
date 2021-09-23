@@ -68,8 +68,20 @@ class Transactions extends Component {
             <View style={{
               padding: 20,
             }}>
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 20,
+              }}>
+                <Text style={{fontSize: 30}}>1,000.00</Text>
+                <Text style={{
+                  color: theme ? theme.primary : Color.primary,
+                  fontFamily: 'Poppins-SemiBold'
+                }}>USD</Text>
+              </View>
               <Text style={{
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                marginTop: 10
               }}>Payment Methods</Text>
 
               <View style={{

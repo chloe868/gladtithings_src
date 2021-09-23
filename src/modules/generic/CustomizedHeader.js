@@ -135,7 +135,7 @@ class CustomizedHeader extends Component {
             }}>Cebu</Text>
           </View>
 
-          <Button
+          {!this.props.showButton && <Button
             style={{
               width: '80%',
               height: 35,
@@ -158,7 +158,7 @@ class CustomizedHeader extends Component {
             redirect={() => {
               this.props.redirect()
             }}
-          />
+          />}
         </View>
       </View>
     )
