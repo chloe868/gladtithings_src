@@ -197,7 +197,7 @@ class AccountSettings extends Component {
               marginBottom: 20
             }}>
               <Text style={{
-                fontWeight: 'bold'
+                fontFamily: 'Poppins-SemiBold'
               }}>Security Credentials</Text>
 
               <InputFieldWithIcon
@@ -223,7 +223,7 @@ class AccountSettings extends Component {
                   marginBottom: 20
                 }}
                 textStyle={{
-                  fontWeight: 'bold'
+                  fontFamily: 'Poppins-SemiBold'
                 }}
                 onClick={() => {
                   this.update()

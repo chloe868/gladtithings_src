@@ -129,7 +129,7 @@ class Events extends Component {
 								}}>USD</Text>
 							</View>
 							<Text style={{
-								fontWeight: 'bold',
+								fontFamily: 'Poppins-SemiBold',
 								marginTop: 10
 							}}>Payment Methods</Text>
 
@@ -144,7 +144,7 @@ class Events extends Component {
 										width: '40%'
 									}}
 									textStyle={{
-										fontWeight: 'bold'
+										fontFamily: 'Poppins-SemiBold'
 									}}
 									onClick={() => {
 										this.setState({
@@ -163,7 +163,7 @@ class Events extends Component {
 										borderWidth: 0.25
 									}}
 									textStyle={{
-										fontWeight: 'bold',
+										fontFamily: 'Poppins-SemiBold',
 										color: Color.gray
 									}}
 									onClick={() => {
@@ -196,7 +196,7 @@ class Events extends Component {
               width: '100%'
             }}
             textStyle={{
-              fontWeight: 'bold'
+              fontFamily: 'Poppins-SemiBold'
             }}
             onClick={() => {
               this.props.navigation.navigate('otpStack');

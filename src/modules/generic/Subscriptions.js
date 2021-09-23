@@ -31,7 +31,7 @@ class Subscriptions extends Component {
           marginBottom: 10
         }}>
           <Text style={{
-            fontWeight: 'bold',
+            fontFamily: 'Poppins-SemiBold',
             color: Color.primary
           }}>Subscriptions</Text>
           <TouchableOpacity
@@ -40,7 +40,7 @@ class Subscriptions extends Component {
             }}
           >
             <Text style={{
-              fontWeight: 'bold',
+              fontFamily: 'Poppins-SemiBold',
             }}>{'View more >>>'}</Text>
 
           </TouchableOpacity>

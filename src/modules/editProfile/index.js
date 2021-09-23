@@ -428,7 +428,7 @@ class EditProfile extends Component {
 
             {
               user?.username && (
-                <Text style={[{ fontWeight: 'bold', color: Color.white }]}>
+                <Text style={[{ fontFamily: 'Poppins-SemiBold', color: Color.white }]}>
                   {user.username}
                 </Text>
               )
@@ -451,7 +451,7 @@ class EditProfile extends Component {
                 paddingTop: 20,
                 paddingBottom: 20,
                 marginBottom: 10,
-                fontWeight: 'bold',
+                fontFamily: 'Poppins-SemiBold',
                 borderColor: Color.lightGray,
               }}>
               Basic Settings
@@ -511,7 +511,7 @@ class EditProfile extends Component {
                   borderWidth: 1
                 }}
                 textStyle={{
-                  fontWeight: 'bold',
+                  fontFamily: 'Poppins-SemiBold',
                   color: Color.white,
                 }}
               />

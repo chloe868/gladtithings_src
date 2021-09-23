@@ -36,7 +36,7 @@ class BalanceCard extends Component {
             <View>
               <Text style={{
                 ...styles.CurrentBalanceTextStyle,
-                fontWeight: 'bold'
+                fontFamily: 'Poppins-SemiBold'
               }}>
                 {Currency.display(data.current_balance, data.currency)}
               </Text>
