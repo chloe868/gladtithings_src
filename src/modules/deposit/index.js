@@ -32,7 +32,7 @@ class Transactions extends Component {
           <View style={{
             minHeight: height + (height * 0.5)
           }}>
-            {this.props.navigation?.state?.params?.type === 'Subscription Donation' &&
+            {this.props.navigation?.state?.params?.type === 'Subscription Donation' || this.props.navigation?.state?.params?.type === 'Send Tithings' &&
               <View style={{
                 height: height / 3,
                 justifyContent: 'center',
