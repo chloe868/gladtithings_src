@@ -22,7 +22,7 @@ class Slider2 extends Component {
       colors: []
     }
   }
-  navigateToScreen = (route) => {
+  navigateToScreen = (route, page) => {
     if (route == 'share') {
       this.onShare()
       return
@@ -33,7 +33,7 @@ class Slider2 extends Component {
       return
     }
     this.props.navigation.toggleDrawer();
-    this.props.navigation.navigate(route);
+    this.props.navigation.navigate(route, {page: page});
   }
 
   navigate = (item) => {
@@ -222,7 +222,7 @@ class Slider2 extends Component {
                     ]}
                       key={index}
                       onPress={() =>
-                        this.navigateToScreen(item.route)
+                        this.navigateToScreen(item.route, item.title)
                       }>
                       <View style={styles.inActiveDrawer}>
                         <FontAwesomeIcon style={{
@@ -241,7 +241,7 @@ class Slider2 extends Component {
         <View style={[styles.navSectionStyle, { borderBottomWidth: 0, flex: 1, position: 'absolute', bottom: 15, borderTopWidth: 1, width: width, borderColor: 'white', paddingRight: 10 }]}>
           {Helper.DrawerMenu1.map((item, index) => {
             return (
-              <TouchableOpacity onPress={() => { this.navigateToScreen(item.route) }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
+              <TouchableOpacity onPress={() => { this.navigateToScreen(item.route, item.title) }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
                 <FontAwesomeIcon style={[
                   styles.navItemStyle, {
                     color: Color.secondary,
