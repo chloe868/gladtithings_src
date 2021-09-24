@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, Dimensions, SafeAreaView, TextInput } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAlignLeft, faBars, faChevronLeft, faClock, faHistory, faShoppingBag, faStar, faEdit, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faAlignLeft, faBars, faChevronLeft, faClock, faHistory, faShoppingBag, faStar, faEdit, faQrcode, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { BasicStyles, Color } from 'common';
@@ -48,7 +48,6 @@ class Header extends Component {
   render() {
     const { routeName } = this.props.navigation.state;
     const { theme } = this.props.state;
-    console.log(routeName);
     return (
       <View
         style={{
@@ -89,7 +88,9 @@ class Header extends Component {
         {routeName === 'Dashboard' &&
           <TouchableOpacity
             onPress={() => {
-              this.navigateToScreen('MessagePage', 'Success Message')
+              // this.navigateToScreen('MessagePage', 'Success Message')
+              // this.props.setQRCodeModal(true);
+              this.props.navigation.navigate('qrCodeScannerStack');
             }}
             style={{
               justifyContent: 'center',
@@ -125,7 +126,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(actions.logout()),
     setStatusSearch: (statusSearch) => dispatch(actions.setStatusSearch(statusSearch)),
-    setCreateStatus: (createStatus) => dispatch(actions.setCreateStatus(createStatus))
+    setCreateStatus: (createStatus) => dispatch(actions.setCreateStatus(createStatus)),
+    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal({ isVisible: isVisible }))
   };
 };
 

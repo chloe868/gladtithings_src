@@ -21,6 +21,8 @@ import NotificationSettingsStack from 'src/modules/notificationSettings/Drawer';
 import ChurchProfileStack from 'src/modules/churchProfile/Drawer';
 import ChurchesStack from 'src/modules/churches/Drawer';
 import EventsStack from 'src/modules/events/Drawer';
+import QRCodeScannerStack from 'modules/qrCodeScanner/qrCodeScannerDrawer.js';
+import EwalletStack from 'src/modules/ewallet/Drawer';
 import Drawer from './Drawer';
 
 const WelcomeStack = createStackNavigator(
@@ -92,7 +94,9 @@ const PrimaryNav = createStackNavigator(
     editProfileStack: { screen: EditProfileStack },
     churchProfileStack: { screen: ChurchProfileStack },
     churchesStack: { screen: ChurchesStack },
-    eventsStack: { screen: EventsStack }
+    eventsStack: { screen: EventsStack },
+    qrCodeScannerStack: {screen: QRCodeScannerStack},
+    ewalletStack: {screen: EwalletStack}
   },
   {
     // Default config for all screens

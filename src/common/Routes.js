@@ -16,6 +16,7 @@ export default {
   notificationDelete: apiUrl + 'notifications/delete',
   accountProfileCreate: apiUrl + 'account_profiles/create',
   accountProfileUpdate: apiUrl + 'account_profiles/update',
+  accountProfileRetrieve: apiUrl + 'account_profiles/retrieve',
   accountInformationRetrieve: apiUrl + 'account_informations/retrieve',
   accountInformationUpdate: apiUrl + 'account_informations/update',
   emailAlert: apiUrl + 'emails/alert',
