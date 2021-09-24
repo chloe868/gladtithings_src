@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import CardsWithImages from '../generic/CardsWithImages';
 import CustomizedHeader from '../generic/CustomizedHeader';
 import IncrementButton from 'components/Form/Button';
+import StripeCard from 'components/Payments/Stripe/Stripe.js';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -84,10 +85,10 @@ class Events extends Component {
 				height: height,
 			}}>
 				<ScrollView showsVerticalScrollIndicator={false}
-				style={{
-					backgroundColor: Color.containerBackground,
-					marginBottom: 100
-				}}>
+					style={{
+						backgroundColor: Color.containerBackground,
+						marginBottom: 150
+					}}>
 					<CustomizedHeader
 						version={2}
 						redirect={() => {
@@ -174,36 +175,36 @@ class Events extends Component {
 									title={'CC / DC'}
 								/>
 							</View>
-							{/*
-					method === 'stripe' && (
-						<StripeCard />
-					)
-				*/}
+							<View style={{
+								padding: 20,
+							}}>
+								<StripeCard />
+							</View>
 						</View>
 					}
 				</ScrollView>
 				{donate && <View style={{
-          position: 'absolute',
-          bottom: 90,
-          left: 0,
-          paddingLeft: 20,
-          paddingRight: 20,
-          width: '100%'
-        }}>
-          <IncrementButton
-            style={{
-              backgroundColor: Color.secondary,
-              width: '100%'
-            }}
-            textStyle={{
-              fontFamily: 'Poppins-SemiBold'
-            }}
-            onClick={() => {
-              this.props.navigation.navigate('otpStack');
-            }}
-            title={'Continue'}
-          />
-        </View>}
+					position: 'absolute',
+					bottom: 90,
+					left: 0,
+					paddingLeft: 20,
+					paddingRight: 20,
+					width: '100%'
+				}}>
+					<IncrementButton
+						style={{
+							backgroundColor: Color.secondary,
+							width: '100%'
+						}}
+						textStyle={{
+							fontFamily: 'Poppins-SemiBold'
+						}}
+						onClick={() => {
+							this.props.navigation.navigate('otpStack');
+						}}
+						title={'Continue'}
+					/>
+				</View>}
 			</View>
 		);
 	}
