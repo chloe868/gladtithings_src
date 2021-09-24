@@ -85,12 +85,11 @@ export default {
   },
   btn: {
     height: 50,
-    backgroundColor: Color.primary,
     width: width - 40,
-    marginBottom: 20,
+    marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5
+    borderRadius: 50
   },
   btnRound: {
     height: 50,

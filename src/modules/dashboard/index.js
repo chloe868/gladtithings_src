@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Color, Routes } from 'common';
+import Api from 'services/api/index.js';
 import { connect } from 'react-redux';
 import CardsWithIcon from '../generic/CardsWithIcon';
 import BalanceCard from 'modules/generic/BalanceCard.js';
 import IncrementButton from 'components/Form/Button';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Subscription from 'modules/generic/Subscriptions.js';
-import Api from 'services/api/index.js';
 import { Spinner } from 'components';
+import QRCodeModal from 'components/Modal/QRCode';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -61,7 +62,7 @@ const data = [
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       input: null,
       ledger: {
         currency: 'USD',
@@ -74,7 +75,9 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.retrieveBalance()
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.retrieveBalance();
+    })
   }
 
   retrieveBalance = () => {
@@ -93,8 +96,9 @@ class Dashboard extends Component {
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerDashboard, parameter, response => {
       this.setState({ isLoading: false })
-      if(response.data) {
-        this.setState({ledger: response.data.ledger[0]});
+      if (response.data) {
+        this.setState({ ledger: response.data.ledger[0] });
+        this.props.setLedger(response.data.ledger[0])
       }
     }, error => {
       console.log(error);
@@ -115,6 +119,10 @@ class Dashboard extends Component {
             height: height,
             backgroundColor: Color.containerBackground
           }} showsVerticalScrollIndicator={false}>
+          {this.props.state?.isVisible?.isVisible && <QRCodeModal
+            user={this.props.state?.user}
+            navigation={this.props.navigation}
+          />}
           <View style={{
             paddingLeft: 15,
             paddingBottom: 15,
@@ -122,7 +130,7 @@ class Dashboard extends Component {
           }}>
             {
               ledger && (
-                <BalanceCard data={ledger}/>
+                <BalanceCard data={ledger} />
               )
             }
 
@@ -136,20 +144,20 @@ class Dashboard extends Component {
                 backgroundColor: Color.secondary,
                 width: '40%'
               }}
-              onClick={() => {
-                this.props.navigation.navigate('depositStack', {page: 'Deposit'})
-              }}
-              title={'Deposit'}
+                onClick={() => {
+                  this.props.navigation.navigate('depositStack', { page: 'Deposit' })
+                }}
+                title={'Deposit'}
               />
 
               <IncrementButton style={{
                 backgroundColor: Color.secondary,
                 width: '40%'
               }}
-              onClick={() => {
-                this.props.navigation.navigate('depositStack', {page: 'Withdraw'})
-              }}
-              title={'Withdraw'}
+                onClick={() => {
+                  this.props.navigation.navigate('depositStack', { page: 'Withdraw' })
+                }}
+                title={'Withdraw'}
               />
             </View>
 
@@ -171,7 +179,7 @@ class Dashboard extends Component {
                 onPress={() => {
                   this.props.navigation.navigate('transactionsStack')
                 }}
-                >
+              >
 
                 <Text style={{
                   fontFamily: 'Poppins-SemiBold',
@@ -207,8 +215,14 @@ class Dashboard extends Component {
     );
   }
 }
-const mapStateToProps = state => ({ state: state });
+const mapStateToProps = (state) => ({ state: state });
 
-export default connect(
-  mapStateToProps
-)(Dashboard);
+const mapDispatchToProps = (dispatch) => {
+  const { actions } = require('@redux');
+  return {
+    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal({isVisible: isVisible})),
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
