@@ -8,6 +8,7 @@ import { faChurch } from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
 import CustomizedHeader from '../generic/CustomizedHeader';
 import StripeCard from 'components/Payments/Stripe/Stripe.js'
+import { TextInput } from 'react-native-gesture-handler';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -16,7 +17,7 @@ class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      method: 'stripe'
+      amount: 0
     }
   }
 
@@ -66,14 +67,21 @@ class Transactions extends Component {
             }
 
             <View style={{
-              padding: 20,
+              paddingTop: 20,
+              paddingLeft: 20,
+              paddingRight: 20,
             }}>
               <View style={{
                 justifyContent: 'center',
-                alignItems: 'center',
-                padding: 20,
+                alignItems: 'center'
               }}>
-                <Text style={{ fontSize: 30 }}>1,000.00</Text>
+                <TextInput
+                  style={{ fontSize: 30 }}
+                  onChangeText={(input) => this.setState({ amount: input })}
+                  value={this.state.amount}
+                  placeholder={'0.0'}
+                  keyboardType={'numeric'}
+                />
                 <Text style={{
                   color: theme ? theme.primary : Color.primary,
                   fontFamily: 'Poppins-SemiBold'
@@ -81,15 +89,11 @@ class Transactions extends Component {
               </View>
             </View>
 
-            {
-              method === 'stripe' && (
-                <View style={{
-                  padding: 20,
-                }}>
-                  <StripeCard />
-                </View>
-              )
-            }
+            <View style={{
+              padding: 20,
+            }}>
+              <StripeCard />
+            </View>
 
           </View>
 

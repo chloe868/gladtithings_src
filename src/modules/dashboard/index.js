@@ -137,7 +137,7 @@ class Dashboard extends Component {
                 width: '40%'
               }}
               onClick={() => {
-                this.props.navigation.navigate('depositStack')
+                this.props.navigation.navigate('depositStack', {page: 'Deposit'})
               }}
               title={'Deposit'}
               />
@@ -147,7 +147,7 @@ class Dashboard extends Component {
                 width: '40%'
               }}
               onClick={() => {
-                this.props.navigation.navigate('depositStack')
+                this.props.navigation.navigate('depositStack', {page: 'Withdraw'})
               }}
               title={'Withdraw'}
               />
