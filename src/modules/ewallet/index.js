@@ -27,7 +27,8 @@ class Ewallet extends Component {
   }
 
   proceed = () => {
-    const { ledger } = this.props.state;
+    const { data } = this.props.navigation.state.params;
+    const { ledger, user } = this.props.state;
     const { amount } = this.state;
     if(ledger) {
       if(parseFloat(amount) === 0) {
@@ -51,7 +52,22 @@ class Ewallet extends Component {
           ]
         );
       } else {
-        this.props.navigation.navigate('otpStack');
+        let temp_data = {
+          payload: 'directTransfer',
+          from: {
+            code: user.code,
+            email: user.email,
+          },
+          to: {
+            code: data.code,
+            email: data.email,
+          },
+          amount: this.state.amount,
+          currency: 'USD',
+          notes: 'Direct transfer.',
+          charge: 0
+        }
+        this.props.navigation.navigate('otpStack', {data: temp_data});
       }
     } else {
       Alert.alert(
