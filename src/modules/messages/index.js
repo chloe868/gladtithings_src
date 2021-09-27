@@ -49,7 +49,7 @@ class Transactions extends Component {
 
              <IncrementButton style={{
                 backgroundColor: Color.secondary,
-                width: '40%',
+                width: '50%',
                 marginTop: 20,
                 marginBottom: 20
               }}

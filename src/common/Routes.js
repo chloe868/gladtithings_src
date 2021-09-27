@@ -39,5 +39,10 @@ export default {
   commentRepliesCreate: apiUrl + 'comment_replies/create',
   merchantsRetrieve: apiUrl + 'merchants/retrieve_merchants',
   merchantOneRetrieve: apiUrl + 'merchants/retrieve',
+  ledgerDirectTransfer: apiUrl + 'ledger/direct_transfer',
+  notificationSettingsRetrieve: apiUrl + 'notification_settings/retrieve',
+  notificationSettingOtp: apiUrl + 'notification_settings/update_otp',
   ledgerDashboard: apiUrl + 'ledger/dashboard',
+  ledgerTransfer: apiUrl + 'ledger/transfer',
+  transactionHistoryRetrieve: apiUrl + 'ledger/transaction_history'
 };

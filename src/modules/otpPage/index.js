@@ -227,22 +227,15 @@ class OTP extends Component {
       charge: data.charge,
       payload: payload
     }
-    console.log('[SEND directTransfer] parameter', parameter)
     this.setState({ isLoading: true });
     Api.request(Routes.ledgerDirectTransfer, parameter, response => {
       this.setState({ isLoading: false });
       console.log('[OTP] Create Request response', response)
       if (response.error == null) {
         if (payload == 'direct_transfer') {
-          this.navigateToScreen('directTransferDrawer', 'transferFundScreen', {
-            ...data,
-            success: true,
-            code: data.to.code
-          })
+          this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
         } else {
-          this.navigateToScreen('Dashboard', 'Dashboard', {
-            data: null
-          })
+          this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
         }
       } else {
         Alert.alert(
@@ -563,7 +556,10 @@ class OTP extends Component {
                       marginLeft: '1%'
                     }}
                     title={'Continue'}
-                    onClick={() => this.completeOTPField()}
+                    onClick={() => {
+                      // this.completeOTPField()
+                      this.handleResult();
+                    }}
                   />
                 </View>
               )
