@@ -60,4 +60,4 @@ buck-out/
 /components
 /services/api
 /services/broadcasting
-/config.js
+config.js
