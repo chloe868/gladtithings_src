@@ -23,7 +23,9 @@ class Profile extends Component {
       id: null,
       isImageUpload: false,
       isEdit: false,
-      cellularNumber: null
+      cellularNumber: null,
+      sex: null,
+      address: null
     }
   }
 
@@ -41,6 +43,18 @@ class Profile extends Component {
 
   emailHandler = (value) => {
     this.setState({ email: value })
+  }
+
+  cellularNumberHandler = (value) => {
+    this.setState({ cellularNumber: value })
+  }
+
+  addressHandler = (value) => {
+    this.setState({ address: value })
+  }
+
+  sexHandler = (value) => {
+    this.setState({ sex: value })
   }
 
   retrieve = () => {
@@ -66,7 +80,9 @@ class Profile extends Component {
           firstName: data.first_name,
           lastName: data.last_name,
           email: user.email,
-          cellularNumber: data.cellular_number
+          cellularNumber: data.cellular_number,
+          address: data.address,
+          sex: data.sex
         })
       }
     });
@@ -239,9 +255,11 @@ class Profile extends Component {
   }
 
   validation = () => {
-    const { firstName, lastName, password, confirmPassword } = this.state;
+    const { firstName, lastName, address, sex } = this.state;
     if (firstName === null || lastName === null ||
-      firstName === '' || lastName === '') {
+        firstName === '' || lastName === '' ||
+        address === '' || address === null ||
+        sex === '' || sex === null) {
       return true;
     } else {
       return false;
@@ -299,7 +317,7 @@ class Profile extends Component {
                 textAlign: 'center',
                 marginBottom: 2,
                 color: Color.white
-              }}>@lalaine_increment</Text>
+              }}>@{user.email}</Text>
               <View style={Style.BottomView}>
                 <FontAwesomeIcon style={{ marginRight: 5 }} icon={faCheckCircle} size={20} color={'#0066FF'} />
                 <Text style={{
@@ -360,11 +378,25 @@ class Profile extends Component {
                 onTyping={text => { this.lastNameHandler(text) }}
               />
               <InputFieldWithIcon
+                placeholder={this.state.sex ? this.state.sex : 'Enter Sex'}
+                icon={faUser}
+                label={'Sex'}
+                profile={true}
+                onTyping={text => { this.sexHandler(text) }}
+              />
+              <InputFieldWithIcon
                 placeholder={this.state.cellularNumber ? this.state.cellularNumber : 'Enter Phone Number'}
                 icon={faUser}
                 label={'Phone Number'}
                 profile={true}
-                onTyping={text => { this.lastNameHandler(text) }}
+                onTyping={text => { this.cellularNumberHandler(text) }}
+              />
+              <InputFieldWithIcon
+                placeholder={this.state.address ? this.state.address : 'Enter Address'}
+                icon={faMapMarkerAlt}
+                label={'Address'}
+                profile={true}
+                onTyping={text => { this.addressHandler(text) }}
               />
             </View> :
               <View style={{
@@ -410,7 +442,21 @@ class Profile extends Component {
                       marginRight: 10
                     }}
                   />
-                  <Text>{this.state.email || 'No data'}</Text>
+                  <Text>{this.state.address || 'No address provided'}</Text>
+                </View>
+                <View style={{
+                  flexDirection: 'row',
+                  padding: 10
+                }}>
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    size={20}
+                    style={{
+                      color: Color.black,
+                      marginRight: 10
+                    }}
+                  />
+                  <Text>{this.state.sex || 'Sex'}</Text>
                 </View>
               </View>}
           </View>
