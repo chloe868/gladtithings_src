@@ -44,5 +44,9 @@ export default {
   notificationSettingOtp: apiUrl + 'notification_settings/update_otp',
   ledgerDashboard: apiUrl + 'ledger/dashboard',
   ledgerTransfer: apiUrl + 'ledger/transfer',
-  transactionHistoryRetrieve: apiUrl + 'ledger/transaction_history'
+  ledgerCreate: apiUrl + 'ledger/create',
+  transactionHistoryRetrieve: apiUrl + 'ledger/transaction_history',
+  createPaymentIntent: apiUrl + 'stripe_webhooks/create_payment_intent',
+  createPaymentIntent: apiUrl + 'stripe_webhooks/create_payment_intent',
+  chargeCustomer: apiUrl + 'stripe_webhooks/charge_customer'
 };

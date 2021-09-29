@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions } from 'react-native';
-import { Color } from 'common';
+import { View, Text, ScrollView, Dimensions, Alert } from 'react-native';
+import { Color, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
-import { connect } from 'react-redux';
+  import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
 import CustomizedHeader from '../generic/CustomizedHeader';
 import StripeCard from 'components/Payments/Stripe/Stripe.js'
+import Stripe from 'components/Payments/Stripe/index.js'
 import { TextInput } from 'react-native-gesture-handler';
+import Api from 'services/api/index.js';
+import {confirmPayment, StripeProvider, CardField, createToken} from '@stripe/stripe-react-native'
+import Config from 'src/config.js'
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -17,7 +21,99 @@ class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      amount: 0
+      amount: 0,
+      card: null,
+    }
+  }
+
+  setDetails = (complete, details) => {
+    console.log('[CARD DETAILS]', complete, details);
+    if(complete === true){
+      this.setState({card: details})
+    }
+  }
+
+  createPayment = async () => {
+    await createToken({type: 'Card'}).then(res => {
+      console.log('[TOKEN]', res);
+      let params = {
+        amount: this.state.amount
+      }
+      Api.request(Routes.createPaymentIntent, params, response => {
+        console.log('[PAYMENT REPONSE]', response.data);
+        this.handlePayment(response.data, res.token)
+      })
+    })
+  }
+
+  createLedger = (source, paymentIntent) => {
+    const {user} = this.props.state;
+    let params = {
+      account_id: user.id,
+      account_code: user.code,
+      amount: this.state.amount,
+      currency: paymentIntent.currency,
+      details: 'deposit',
+      description: 'deposit'
+    }
+    console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
+    Api.request(Routes.ledgerCreate, params, response => {
+      console.log('[CHARGE RESPONSE]', response);
+      if(response.data != null){
+        Alert.alert(
+          "Payment Sucess",
+          "Successfull Paymemt",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => this.props.navigation.navigate('drawerStack') }
+          ]
+        )
+      }
+      if(respose.error !== null){
+        Alert.alert(
+          "Failed in charging user",
+          response.error,
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ]
+        )
+      }
+    })
+  }
+
+  handlePayment = async(data, source) => {
+    const {user} = this.props.state;
+    const {error, paymentIntent} = await confirmPayment(data.client_secret, {
+      type: 'Card',
+      billingDetails: {name: user.email},
+    })
+    if(error){
+      Alert.alert(
+        "Payment Failed",
+        error.message,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      )
+      console.log('[ERROR]', error);
+    }
+    if(paymentIntent){
+      await this.createLedger(source, paymentIntent)
+      console.log('[SUCCESS]', paymentIntent);
     }
   }
 
@@ -92,7 +188,32 @@ class Transactions extends Component {
             <View style={{
               padding: 20,
             }}>
-              <StripeCard />
+              {/* <Stripe setCardDetails={(complete, details) => this.setDetails(complete, details)}/> */}
+              {/* <StripeCard /> */}
+              <StripeProvider
+                publishableKey={Config.stripe.dev_pk}
+                merchantIdentifier="merchant.identifier"
+              >
+                <CardField
+                  postalCodeEnabled={false}
+                  placeholder={{
+                    number: '4242 4242 4242 4242',
+                  }}
+                  cardStyle={{
+                    backgroundColor: '#FFFFFF',
+                    textColor: '#000000',
+                    borderRadius: 50
+                  }}
+                  style={{
+                    width: '100%',
+                    height: 50,
+                    marginVertical: 30,
+                  }}
+                  onCardChange={(cardDetails) => {
+                    this.setDetails(cardDetails.complete, cardDetails);
+                  }}
+                />
+              </StripeProvider>
             </View>
 
           </View>
@@ -116,7 +237,8 @@ class Transactions extends Component {
               fontFamily: 'Poppins-SemiBold'
             }}
             onClick={() => {
-              this.props.navigation.navigate('otpStack');
+              // this.props.navigation.navigate('otpStack');
+              this.createPayment()
             }}
             title={'Continue'}
           />
