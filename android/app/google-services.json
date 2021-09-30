@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "363406580412",
+    "project_id": "gladtithings-662af",
+    "storage_bucket": "gladtithings-662af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363406580412:android:9460be5d27ee7242558eb9",
+        "android_client_info": {
+          "package_name": "com.gladtithings"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363406580412-st0i0bo6bvv9lrofn48bsqb5n9jj7mat.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaIL7czTjrQlSTXSk1yvg20Sbddrk9Fyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363406580412-st0i0bo6bvv9lrofn48bsqb5n9jj7mat.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "363406580412-9orrgi6k78j697kkhi3j8fkfvvsvbacr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gladtithings"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
