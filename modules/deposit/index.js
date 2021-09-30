@@ -219,12 +219,6 @@ class Deposit extends Component {
                   </Text>
                 </View>
               </View>
-              
-              <View style={{
-                padding: 20,
-              }}>
-                <StripeCard amount={amount}/>
-              </View>
 
               <View
                 style={{
