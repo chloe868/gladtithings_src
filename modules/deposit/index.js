@@ -14,12 +14,8 @@ import {WebView} from 'react-native-webview';
 import Api from 'services/api/index.js';
 import {
   confirmPayment,
-  StripeProvider,
-  CardField,
   createToken,
 } from '@stripe/stripe-react-native';
-import Config from 'src/config.js';
-
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
@@ -45,16 +41,30 @@ class Deposit extends Component {
   };
 
   createPayment = async () => {
-    await createToken({type: 'Card'}).then(res => {
-      console.log('[TOKEN]', res);
-      let params = {
-        amount: this.state.amount,
-      };
-      Api.request(Routes.createPaymentIntent, params, response => {
-        console.log('[PAYMENT REPONSE]', response.data);
-        this.handlePayment(response.data, res.token);
+    if(this.state.amount !== null && this.state.amount > 0){
+      await createToken({type: 'Card'}).then(res => {
+        console.log('[TOKEN]', res);
+        let params = {
+          amount: this.state.amount,
+        };
+        Api.request(Routes.createPaymentIntent, params, response => {
+          console.log('[PAYMENT REPONSE]', response.data);
+          this.handlePayment(response.data, res.token);
+        });
       });
-    });
+    }else{
+      Alert.alert('Payment Error', 'You are missing your amount', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => console.log('Cancel Pressed'),
+        },
+      ]);
+    }
   };
 
   createLedger = (source, paymentIntent) => {
@@ -224,30 +234,7 @@ class Deposit extends Component {
                 style={{
                   padding: 20,
                 }}>
-                <StripeCard amount={amount}/>
-                <StripeProvider
-                  publishableKey={Config.stripe.dev_pk}
-                  merchantIdentifier="merchant.identifier">
-                  <CardField
-                    postalCodeEnabled={false}
-                    placeholder={{
-                      number: '4242 4242 4242 4242',
-                    }}
-                    cardStyle={{
-                      backgroundColor: '#FFFFFF',
-                      textColor: '#000000',
-                      borderRadius: 50,
-                    }}
-                    style={{
-                      width: '100%',
-                      height: 50,
-                      marginVertical: 30,
-                    }}
-                    onCardChange={cardDetails => {
-                      this.setDetails(cardDetails.complete, cardDetails);
-                    }}
-                  />
-                </StripeProvider>
+                <StripeCard amount={amount} setCardDetails={(complete, cardDetails) => this.setDetails(complete, cardDetails)}/>
               </View>
             </View>
           )}
