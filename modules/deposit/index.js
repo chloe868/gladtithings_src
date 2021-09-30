@@ -224,6 +224,7 @@ class Deposit extends Component {
                 style={{
                   padding: 20,
                 }}>
+                <StripeCard amount={amount}/>
                 <StripeProvider
                   publishableKey={Config.stripe.dev_pk}
                   merchantIdentifier="merchant.identifier">
