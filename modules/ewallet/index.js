@@ -64,7 +64,7 @@ class Ewallet extends Component {
           },
           amount: this.state.amount,
           currency: 'USD',
-          notes: 'Direct transfer.',
+          notes: null,
           charge: 0
         }
         this.props.navigation.navigate('otpStack', {data: temp_data});
