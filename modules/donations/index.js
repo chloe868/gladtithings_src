@@ -10,7 +10,7 @@ import { Spinner } from 'components';
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-class Settings extends Component {
+class Donations extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -123,4 +123,4 @@ const mapStateToProps = state => ({ state: state });
 
 export default connect(
   mapStateToProps
-)(Settings);
+)(Donations);
