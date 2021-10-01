@@ -38,7 +38,7 @@ class Donations extends Component {
         value: user.id,
         clause: 'or'
       }],
-      sort: {created_at: 'asc'},
+      sort: {created_at: 'desc'},
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
     }
