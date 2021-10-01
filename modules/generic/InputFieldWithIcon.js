@@ -33,7 +33,7 @@ class TextInputWithIcon extends Component{
               fontFamily: this.props.profile ? 'Poppins-SemiBold' : 'normal',
               paddingTop: 20,
               paddingBottom: this.props.profile ? 10 : 20
-            }}>{this.props.label}</Text>
+            }}>{this.props.label} <Text style={{ color: 'red' }}>*</Text></Text>
           )
         }
         <View style={{

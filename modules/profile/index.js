@@ -378,9 +378,9 @@ class Profile extends Component {
                 onTyping={text => { this.lastNameHandler(text) }}
               />
               <InputFieldWithIcon
-                placeholder={this.state.sex ? this.state.sex : 'Enter Sex'}
+                placeholder={this.state.sex ? this.state.sex : 'Enter Gender'}
                 icon={faUser}
-                label={'Sex'}
+                label={'Gender'}
                 profile={true}
                 onTyping={text => { this.sexHandler(text) }}
               />
