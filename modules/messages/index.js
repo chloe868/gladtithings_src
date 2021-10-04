@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions } from 'react-native';
 import { Color } from 'common';
-import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
-import CardsWithIcon from '../generic/CardsWithIcon';
-import InputFieldWithIcon from '../generic/InputFieldWithIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faExclamationTriangle, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
