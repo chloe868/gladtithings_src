@@ -69,20 +69,20 @@ class Donations extends Component {
       }}>
         {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}
-        onScroll={(event) => {
-          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
-          let totalHeight = event.nativeEvent.contentSize.height
-          if (event.nativeEvent.contentOffset.y <= 0) {
-            if (isLoading == false) {
-              // this.retrieve(false)
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if (event.nativeEvent.contentOffset.y <= 0) {
+              if (isLoading == false) {
+                // this.retrieve(false)
+              }
             }
-          }
-          if (scrollingHeight >= (totalHeight)) {
-            if (isLoading == false) {
-              this.retrieve(true)
+            if (scrollingHeight >= (totalHeight)) {
+              if (isLoading == false) {
+                this.retrieve(true)
+              }
             }
-          }
-        }}
+          }}
         >
           <View style={{
             paddingLeft: 20,
@@ -94,17 +94,10 @@ class Donations extends Component {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      if (item.route !== 'pageMessageStack') {
-                        this.props.navigation.navigate(item.route)
-                      } else {
-                        this.props.navigation.navigate(item.route, {
-                          title: 'Success Page',
-                          message: 'Transaction was successful',
-                          payload: 'error'
-                        })
-                      }
+                      console.log('')
                     }}
                     version={3}
+                    description={item.description}
                     title={item.receiver ? item.receiver.email : item.description}
                     date={item.created_at_human}
                     amount={item.currency + ' ' + item.amount?.toLocaleString()}
