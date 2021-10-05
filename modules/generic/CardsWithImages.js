@@ -7,6 +7,7 @@ import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import Button from '../generic/Button';
 import Styles from './CardsWithImagesStyles';
+import Config from 'src/config.js';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -27,7 +28,7 @@ class CardsWithImages extends Component {
             padding: 10
           }}
             onPress={() => {
-              if(this.props.redirect) {
+              if (this.props.redirect) {
                 this.props.redirect()
               }
             }}
@@ -127,105 +128,98 @@ class CardsWithImages extends Component {
         padding: 10,
         height: height
       }}>
-        {this.props.data?.length > 0 && this.props.data.map((item, index) => (
-          <View style={{
-            width: width,
-            flexDirection: 'row',
-            height: 220
-          }}>
+        {this.props.data?.length > 0 && this.props.data.map((item, index) => {
+          console.log(item);
+          return (
             <View style={{
-              height: 220,
-              width: '50%',
-              padding: 10
+              width: width,
+              flexDirection: 'row',
+              height: 220
             }}>
-              <View style={Styles.imageView}>
-                <Image
-                  source={require('assets/test.jpg')}
-                  style={Styles.image} />
+              <View style={{
+                height: 220,
+                width: '50%',
+                padding: 10
+              }}>
+                <View style={Styles.imageView}>
+                  <Image
+                    source={{ uri: Config.BACKEND_URL + item.logo }}
+                    style={Styles.image} />
+                </View>
+                <View style={{
+                  flexDirection: 'row',
+                  marginTop: 10
+                }}>
+                  {item.featured_photos?.length > 0 && item.featured_photos.map((image, index) => {
+                    return (
+                      <Image
+                        source={{ uri: Config.BACKEND_URL + image.url }}
+                        style={{
+                          height: 40,
+                          width: '31%',
+                          marginRight: '3%',
+                          borderRadius: 5
+                        }}
+                      />
+                    )
+                  })}
+                </View>
               </View>
               <View style={{
-                flexDirection: 'row',
-                marginTop: 10
+                height: 210,
+                width: '50%',
+                paddingRight: 10,
+                paddingTop: 10,
+                paddingBottom: 10
               }}>
-                <Image
-                  source={require('assets/test.jpg')}
+                <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{item.name}</Text>
+                <View style={[
+                  Styles.bottomView, {
+                    marginTop: 5,
+                    marginBottom: 10
+                  }
+                ]}>
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    size={15}
+                    style={{
+                      color: theme ? theme.secondary : Color.secondary
+                    }}
+                  />
+                  <Text
+                    numberOfLines={1}
+                    style={{
+                      fontSize: 11,
+                      width: '85%'
+                    }}>{item.address}</Text>
+                </View>
+                <Button
                   style={{
-                    height: 40,
-                    width: '31%',
-                    marginRight: '3%',
-                    borderRadius: 5
-                  }} />
-                  <Image
-                  source={require('assets/test.jpg')}
-                  style={{
-                    height: 40,
-                    width: '31%',
-                    marginRight: '3%',
-                    borderRadius: 5
-                  }} />
-                  <Image
-                  source={require('assets/test.jpg')}
-                  style={{
-                    height: 40,
-                    width: '31%',
-                    borderRadius: 5
-                  }} />
-              </View>
-            </View>
-            <View style={{
-              height: 210,
-              width: '50%',
-              paddingRight: 10,
-              paddingTop: 10,
-              paddingBottom: 10
-            }}>
-              <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{item.title}</Text>
-              <View style={[
-                Styles.bottomView, {
-                  marginTop: 5,
-                  marginBottom: 10
-                }
-              ]}>
-                <FontAwesomeIcon
-                  icon={faMapMarkerAlt}
-                  size={15}
-                  style={{
-                    color: theme ? theme.secondary : Color.secondary
+                    width: '55%',
+                    height: 30,
+                    backgroundColor: this.props.buttonColor
+                  }}
+                  content={
+                    <View style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}>
+                      <Text style={{
+                        color: 'white',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-SemiBold'
+                      }}>{this.props.buttonTitle}</Text>
+                    </View>
+                  }
+                  redirect={() => {
+                    this.props.buttonClick()
                   }}
                 />
-                <Text
-                  numberOfLines={1}
-                  style={{
-                    fontSize: 11,
-                    width: '85%'
-                  }}>{item.address}</Text>
               </View>
-              <Button
-                style={{
-                  width: '55%',
-                  height: 30,
-                  backgroundColor: this.props.buttonColor
-                }}
-                content={
-                  <View style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}>
-                    <Text style={{
-                      color: 'white',
-                      fontSize: 12,
-                      fontFamily: 'Poppins-SemiBold'
-                    }}>{this.props.buttonTitle}</Text>
-                  </View>
-                }
-                redirect={() => {
-                  this.props.buttonClick()
-                }}
-              />
             </View>
-          </View>
-        ))}
+          )
+        })}
       </View>
     )
   }
