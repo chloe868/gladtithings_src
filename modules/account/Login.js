@@ -522,11 +522,11 @@ class Login extends Component {
               </Text>
             </View>
           </View>
-          {isLoading ? <Spinner mode="overlay" /> : null}
           {isResponseError ? <CustomError visible={isResponseError} onCLose={() => {
             this.setState({ isResponseError: false, isLoading: false })
           }} /> : null}
         </ScrollView>
+          {isLoading ? <Spinner mode="overlay" /> : null}
       </LinearGradient>
     );
   }
