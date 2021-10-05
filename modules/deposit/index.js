@@ -11,10 +11,13 @@ import StripeCard from 'components/Payments/Stripe/Stripe.js';
 import Stripe from 'components/Payments/Stripe/index.js';
 import {TextInput} from 'react-native-gesture-handler';
 import {WebView} from 'react-native-webview';
+import { Spinner } from 'components';
 import Api from 'services/api/index.js';
+import Config from 'src/config.js';
 import {
   confirmPayment,
   createToken,
+  initStripe 
 } from '@stripe/stripe-react-native';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -25,12 +28,20 @@ class Deposit extends Component {
     this.state = {
       amount: 0,
       card: null,
+      isLoading: false
     };
   }
 
   componentDidMount() {
     const {setPaypalUrl} = this.props;
     setPaypalUrl(null);
+    this.props.navigation.addListener('didFocus', () => {
+      console.log('[INIT STRIPE]');
+      initStripe({
+        publishableKey: Config.stripe.dev_pk,
+        merchantIdentifier: 'merchant.identifier',
+      })
+    })
   }
 
   setDetails = (complete, details) => {
@@ -47,6 +58,7 @@ class Deposit extends Component {
         let params = {
           amount: this.state.amount,
         };
+        this.setState({isLoading: true})
         Api.request(Routes.createPaymentIntent, params, response => {
           console.log('[PAYMENT REPONSE]', response.data);
           this.handlePayment(response.data, res.token);
@@ -80,28 +92,12 @@ class Deposit extends Component {
     console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
     Api.request(Routes.ledgerCreate, params, response => {
       console.log('[CHARGE RESPONSE]', response);
+      this.setState({isLoading: true})
       if (response.data != null) {
-        Alert.alert('Payment Sucess', 'Successfull Paymemt', [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: () => this.props.navigation.navigate('drawerStack'),
-          },
-        ]);
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
       }
       if (respose.error !== null) {
-        Alert.alert('Failed in charging user', response.error, [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ]);
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
       }
     });
   };
@@ -131,7 +127,7 @@ class Deposit extends Component {
 
   render() {
     const {theme, user, paypalUrl} = this.props.state;
-    const {method, amount} = this.state;
+    const {method, amount, isLoading} = this.state;
     return (
       <View
         style={{
@@ -266,6 +262,7 @@ class Deposit extends Component {
             />
           </View>
         )}
+        {isLoading ? <Spinner mode="overlay" /> : null}
       </View>
     );
   }
