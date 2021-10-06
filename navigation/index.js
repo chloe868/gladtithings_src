@@ -24,6 +24,7 @@ import EventsStack from 'src/modules/events/Drawer';
 import QRCodeScannerStack from 'modules/qrCodeScanner/qrCodeScannerDrawer.js';
 import EwalletStack from 'src/modules/ewallet/Drawer';
 import Drawer from './Drawer';
+import CreateCommunityStack from 'src/modules/createCommunity/Drawer.js';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -96,7 +97,9 @@ const PrimaryNav = createStackNavigator(
     churchesStack: { screen: ChurchesStack },
     eventsStack: { screen: EventsStack },
     qrCodeScannerStack: {screen: QRCodeScannerStack},
-    ewalletStack: {screen: EwalletStack}
+    ewalletStack: {screen: EwalletStack},
+    createCommunityStack: { screen: CreateCommunityStack },
+ 
   },
   {
     // Default config for all screens
