@@ -24,7 +24,7 @@ class Profile extends Component {
       isImageUpload: false,
       isEdit: false,
       cellularNumber: null,
-      sex: null,
+      gender: null,
       address: null
     }
   }
@@ -53,8 +53,8 @@ class Profile extends Component {
     this.setState({ address: value })
   }
 
-  sexHandler = (value) => {
-    this.setState({ sex: value })
+  genderHandler = (value) => {
+    this.setState({ gender: value })
   }
 
   retrieve = () => {
@@ -82,7 +82,7 @@ class Profile extends Component {
           email: user.email,
           cellularNumber: data.cellular_number,
           address: data.address,
-          sex: data.sex
+          gender: data.sex
         })
       }
     });
@@ -157,6 +157,7 @@ class Profile extends Component {
 
   update = () => {
     const { user } = this.props.state;
+    console.log(this.validation(), user, '-----');
     if (user === null) {
       return
     }
@@ -176,13 +177,16 @@ class Profile extends Component {
       account_id: user.id,
       first_name: this.state.firstName,
       middle_name: 'NULL',
+      sex: this.state.gender,
       last_name: this.state.lastName,
-      cellular_number: 'NULL'
+      cellular_number: this.state.cellularNumber,
+      address: this.state.address
     }
     // this.updateAccount();
-    if (user.account_information?.last_name === this.state.lastName && user.account_information?.first_name === this.state.firstName) {
-      return
-    }
+    // if (user.account_information?.last_name === this.state.lastName && user.account_information?.first_name === this.state.firstName && this.state) {
+    //   return
+    // }
+
     this.setState({ isLoading: true })
     Api.request(Routes.accountInformationUpdate, parameter, response => {
       this.setState({ isLoading: false })
@@ -255,11 +259,11 @@ class Profile extends Component {
   }
 
   validation = () => {
-    const { firstName, lastName, address, sex } = this.state;
+    const { firstName, lastName, address, gender } = this.state;
     if (firstName === null || lastName === null ||
         firstName === '' || lastName === '' ||
         address === '' || address === null ||
-        sex === '' || sex === null) {
+        gender === '' || gender === null) {
       return true;
     } else {
       return false;
@@ -270,13 +274,13 @@ class Profile extends Component {
     const { user, theme } = this.props.state;
     const { firstName, lastName } = this.state;
     return (
-      <View style={{height: height, backgroundColor: Color.containerBackground}}>
-        <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 150}}>
+      <View style={{backgroundColor: Color.containerBackground}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             backgroundColor: Color.containerBackground,
-            marginBottom: 170
+            marginBottom: 170,
+            height: height * 1.5
           }}>
-            {this.state.isLoading ? <Spinner mode="overlay" /> : null}
             <View style={[Style.TopView, { backgroundColor: theme ? theme.primary : Color.primary }]}>
               <TouchableOpacity
                 style={{
@@ -378,11 +382,11 @@ class Profile extends Component {
                 onTyping={text => { this.lastNameHandler(text) }}
               />
               <InputFieldWithIcon
-                placeholder={this.state.sex ? this.state.sex : 'Enter Sex'}
+                placeholder={this.state.gender ? this.state.gender : 'Enter Gender'}
                 icon={faUser}
-                label={'Sex'}
+                label={'Gender'}
                 profile={true}
-                onTyping={text => { this.sexHandler(text) }}
+                onTyping={text => { this.genderHandler(text) }}
               />
               <InputFieldWithIcon
                 placeholder={this.state.cellularNumber ? this.state.cellularNumber : 'Enter Phone Number'}
@@ -456,7 +460,7 @@ class Profile extends Component {
                       marginRight: 10
                     }}
                   />
-                  <Text>{this.state.sex || 'Sex'}</Text>
+                  <Text>{this.state.gender || 'Gender'}</Text>
                 </View>
               </View>}
           </View>
@@ -471,8 +475,9 @@ class Profile extends Component {
                 this.setState({ isImageUpload: false, isLoading: false })
               }} /> : null}
         </ScrollView>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
         {this.state.isEdit && <View style={{
-          bottom: 80,
+          bottom: 10,
           width: '90%'
         }}>
           <CustomizedButton onClick={() => { this.update() }} title={'Update'}></CustomizedButton>

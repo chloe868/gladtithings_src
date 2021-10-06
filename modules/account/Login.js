@@ -252,11 +252,8 @@ class Login extends Component {
     fcmService.registerAppWithFCM()
     fcmService.register(this.onRegister, this.onNotification, this.onOpenNotification)
     localNotificationService.configure(this.onOpenNotification, Helper.APP_NAME)
-    fcmService.subscribeTopic('Message-' + user.id)
-    // fcmService.subscribeTopic('Notifications-' + user.id)
-    // fcmService.subscribeTopic('Requests')
-    // fcmService.subscribeTopic('Payments-' + user.id)
-    fcmService.subscribeTopic('Comments-' + user.id)
+    fcmService.subscribeTopic(user.id)
+    fcmService.subscribeTopic(user.id)
     this.retrieveNotification()
     return () => {
       console.log("[App] unRegister")
@@ -440,7 +437,8 @@ class Login extends Component {
             flex: 1,
             alignItems: 'center',
             paddingLeft: 20,
-            paddingRight: 20
+            paddingRight: 20,
+            height: height * 1.5
           }}>
             <Header params={"Sign In"}></Header>
 
@@ -524,11 +522,11 @@ class Login extends Component {
               </Text>
             </View>
           </View>
-          {isLoading ? <Spinner mode="overlay" /> : null}
           {isResponseError ? <CustomError visible={isResponseError} onCLose={() => {
             this.setState({ isResponseError: false, isLoading: false })
           }} /> : null}
         </ScrollView>
+          {isLoading ? <Spinner mode="overlay" /> : null}
       </LinearGradient>
     );
   }

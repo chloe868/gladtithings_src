@@ -33,7 +33,7 @@ class TextInputWithIcon extends Component{
               fontFamily: this.props.profile ? 'Poppins-SemiBold' : 'normal',
               paddingTop: 20,
               paddingBottom: this.props.profile ? 10 : 20
-            }}>{this.props.label}</Text>
+            }}>{this.props.label} <Text style={{ color: 'red' }}>*</Text></Text>
           )
         }
         <View style={{
@@ -57,6 +57,9 @@ class TextInputWithIcon extends Component{
             placeholderTextColor={'#d1d1d1'}
             editable={this.props.disable ? false : true}
             secureTextEntry={this.props.secureTextEntry ? this.props.secureTextEntry : false}
+            style={{
+              width: '100%'
+            }}
           />
         </View>
       </View>

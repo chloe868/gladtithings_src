@@ -37,7 +37,7 @@ export default {
   commentsDelete: apiUrl + 'comments/delete',
   commentMembersCreate: apiUrl + 'comment_members/create',
   commentRepliesCreate: apiUrl + 'comment_replies/create',
-  merchantsRetrieve: apiUrl + 'merchants/retrieve_merchants',
+  merchantsRetrieve: apiUrl + 'account_merchants/retrieve_with_featured_photos',
   merchantOneRetrieve: apiUrl + 'merchants/retrieve',
   ledgerDirectTransfer: apiUrl + 'ledger/direct_transfer',
   notificationSettingsRetrieve: apiUrl + 'notification_settings/retrieve',
@@ -45,5 +45,6 @@ export default {
   ledgerDashboard: apiUrl + 'ledger/dashboard',
   ledgerTransfer: apiUrl + 'ledger/transfer',
   transactionHistoryRetrieve: apiUrl + 'ledger/transaction_history',
-  ledgerCreate: apiUrl + 'ledger/create'
+  ledgerCreate: apiUrl + 'ledger/create',
+  createPaymentIntent: apiUrl + 'stripe_webhooks/create_payment_intent'
 };
