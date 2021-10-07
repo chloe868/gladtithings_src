@@ -37,7 +37,8 @@ class HomePage extends Component {
     super(props);
     this.state = {
       input: null,
-      churches: []
+      churches: [],
+      days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     }
   }
 
@@ -46,6 +47,7 @@ class HomePage extends Component {
   }
 
   retrieveChurches = () => {
+    const { days } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
       limit: 2,
@@ -55,8 +57,26 @@ class HomePage extends Component {
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
-        this.setState({
-          churches: response.data
+        let temp = [];
+        response.data.map((item, index) => {
+          let sched = [];
+          if(item.schedule) {
+            sched = JSON.parse(item.schedule)
+          }
+          sched.length > 0 && sched.map((items, inde) => {
+            let currentDay = new Date().getDay();
+            if(items.title === days[currentDay]) {
+              items.schedule.length > 0 && items.schedule.map((i, ind) => {
+                temp.push({
+                  title: item.name,
+                  date: `${days[currentDay]} ${i.startTime} - ${i.endTime}`
+                })
+              })
+            }
+          })
+          this.setState({
+            churches: temp
+          })
         })
       }
     });
@@ -69,6 +89,7 @@ class HomePage extends Component {
       <View style={{
         backgroundColor: Color.containerBackground,
       }}>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
@@ -95,7 +116,6 @@ class HomePage extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('churchesStack')
-                    console.log('hi');
                   }}
                   style={{
                     flexDirection: 'row'
@@ -116,7 +136,6 @@ class HomePage extends Component {
                   />
 
                 </TouchableOpacity>
-                {this.state.isLoading ? <Spinner mode="overlay" /> : null}
               </View>
               <CardsWithImages
                 version={1}
@@ -126,7 +145,7 @@ class HomePage extends Component {
                 redirect={() => { this.props.navigation.navigate('churchProfileStack') }}
                 buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation' }) }}
               />
-              <View style={{
+              {churches?.length > 0 && <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 paddingLeft: 20,
@@ -146,8 +165,7 @@ class HomePage extends Component {
                   }}>{'View more >>>'}</Text>
 
                 </TouchableOpacity>
-                {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-              </View>
+              </View>}
               <CardsWithImages
                 version={1}
                 data={churches}
@@ -176,7 +194,6 @@ class HomePage extends Component {
                   }}>{'View more >>>'}</Text>
 
                 </TouchableOpacity>
-                {this.state.isLoading ? <Spinner mode="overlay" /> : null}
               </View>
               <CardsWithImages
                 version={1}

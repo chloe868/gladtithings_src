@@ -129,7 +129,6 @@ class CardsWithImages extends Component {
         height: height
       }}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => {
-          console.log(item);
           return (
             <View style={{
               width: width,
