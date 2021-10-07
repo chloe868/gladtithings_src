@@ -89,6 +89,7 @@ class Donations extends Component {
             paddingRight: 20,
             minHeight: height + (height * 0.5)
           }}>
+            {!isLoading && data.length === 0 && <Text>You have no transactions yet.</Text>}
             {
               data.map((item, index) => {
                 return (

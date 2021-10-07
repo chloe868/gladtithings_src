@@ -72,6 +72,7 @@ class Churches extends Component {
         >
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
           <CardsWithImages
+            photos={true}
             version={3}
             data={data}
             buttonColor={theme ? theme.primary : Color.primary}

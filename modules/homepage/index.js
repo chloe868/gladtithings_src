@@ -67,9 +67,16 @@ class HomePage extends Component {
             let currentDay = new Date().getDay();
             if(items.title === days[currentDay]) {
               items.schedule.length > 0 && items.schedule.map((i, ind) => {
+                let a = i.startTime.split(':')
+                let b = i.endTime.split(':')
+                console.log(a[0]);
+                let aIsAm = parseInt(a[0]) <= 12 ? 'AM' : 'PM'
+                let bIsAm = parseInt(b[0]) <= 12 ? 'AM' : 'PM'
                 temp.push({
+                  address: item.address,
+                  logo: item.logo,
                   title: item.name,
-                  date: `${days[currentDay]} ${i.startTime} - ${i.endTime}`
+                  date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`
                 })
               })
             }
@@ -139,6 +146,7 @@ class HomePage extends Component {
               </View>
               <CardsWithImages
                 version={1}
+                button={true}
                 data={data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Subscribe'}
@@ -196,6 +204,7 @@ class HomePage extends Component {
                 </TouchableOpacity>
               </View>
               <CardsWithImages
+                button={true}
                 version={1}
                 data={data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
