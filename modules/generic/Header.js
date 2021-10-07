@@ -80,10 +80,10 @@ class Header extends Component {
           />
         </TouchableOpacity>
 
-        <Text style={{
+        {routeName === 'Homepage' && <Text style={{
           color: Color.white,
           fontFamily: 'Poppins-SemiBold'
-        }}>Welcome Kennette!</Text>
+        }}>Welcome Kennette!</Text>}
 
         {routeName === 'Dashboard' &&
           <TouchableOpacity
