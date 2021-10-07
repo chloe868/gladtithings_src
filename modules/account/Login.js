@@ -381,6 +381,7 @@ class Login extends Component {
                 column: 'id'
               }]
             }
+            console.log(Routes.accountRetrieve, parameter);
             Api.request(Routes.accountRetrieve, parameter, userInfo => {
               if (userInfo.data.length > 0) {
                 login(userInfo.data[0], token);
