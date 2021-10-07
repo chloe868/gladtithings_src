@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';;
 import { Color, BasicStyles } from 'common';
 import { Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import Button from '../generic/Button';
 import Styles from './CardsWithImagesStyles';
@@ -66,17 +66,33 @@ class CardsWithImages extends Component {
     return (
       <View style={Styles.container}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => (
-          <TouchableOpacity style={Styles.view} onPress={() => {
+          <TouchableOpacity style={this.props.button ? Styles.view : Styles.view1} onPress={() => {
             this.props.redirect()
-            console.log('hi');
           }}>
-            <View style={Styles.imageView}>
-              <Image
-                source={require('assets/test.jpg')}
-                style={Styles.image} />
+            <View style={[
+              item.logo ? Styles.imageView : Styles.default, {
+                height: this.props.button ? '70%' : '85%'
+              }
+            ]}>
+              {
+                item.logo && <Image
+                  source={{ uri: Config.BACKEND_URL + item.logo }}
+                  style={Styles.image} />
+              }
               <View style={Styles.textInImageView}>
-                <Text style={[Styles.textInImage, { fontFamily: 'Poppins-SemiBold' }]}>{item.title}</Text>
-                <Text style={Styles.textInImage}>{item.date}</Text>
+                <Text style={[
+                  Styles.textInImage, {
+                    fontFamily: 'Poppins-SemiBold',
+                    color: item.logo ? Color.white : Color.black
+                  },
+                  item.logo ? Styles.textShadow : null
+                ]}>{item.title}</Text>
+                <Text style={[
+                  Styles.textInImage, {
+                    color: item.logo ? Color.white : Color.black
+                  },
+                  item.logo ? Styles.textShadow : null
+                ]}>{item.date}</Text>
               </View>
             </View>
             <View style={[Styles.bottomView, { height: '20%' }]}>
@@ -91,7 +107,7 @@ class CardsWithImages extends Component {
                 numberOfLines={1}
                 style={Styles.address}>{item.address}</Text>
             </View>
-            <Button
+            {this.props.button && <Button
               style={{
                 width: '55%',
                 height: 30,
@@ -113,7 +129,7 @@ class CardsWithImages extends Component {
               redirect={() => {
                 this.props.buttonClick()
               }}
-            />
+            />}
           </TouchableOpacity>
         ))}
       </View>
@@ -140,12 +156,20 @@ class CardsWithImages extends Component {
                 width: '50%',
                 padding: 10
               }}>
-                <View style={Styles.imageView}>
-                  <Image
-                    source={{ uri: Config.BACKEND_URL + item.logo }}
-                    style={Styles.image} />
+                <View style={item.logo ? Styles.imageView : Styles.default}>
+                  {
+                    item.logo ? <Image
+                      source={{ uri: Config.BACKEND_URL + item.logo }}
+                      style={Styles.image} />
+                      : <FontAwesomeIcon
+                        icon={faImage}
+                        size={100}
+                        style={{
+                          color: Color.gray
+                        }} />
+                  }
                 </View>
-                <View style={{
+                {this.props.photos && <View style={{
                   flexDirection: 'row',
                   marginTop: 10
                 }}>
@@ -162,7 +186,37 @@ class CardsWithImages extends Component {
                       />
                     )
                   })}
-                </View>
+                  {item.featured_photos?.length < 1 &&
+                    <View style={Styles.defaultFeatured}>
+                      <FontAwesomeIcon
+                        icon={faImage}
+                        size={25}
+                        style={{
+                          color: Color.gray
+                        }} />
+                    </View>
+                  }
+                  {item.featured_photos?.length < 2 &&
+                    <View style={Styles.defaultFeatured}>
+                      <FontAwesomeIcon
+                        icon={faImage}
+                        size={25}
+                        style={{
+                          color: Color.gray
+                        }} />
+                    </View>
+                  }
+                  {item.featured_photos?.length < 3 &&
+                    <View style={Styles.defaultFeatured}>
+                      <FontAwesomeIcon
+                        icon={faImage}
+                        size={25}
+                        style={{
+                          color: Color.gray
+                        }} />
+                    </View>
+                  }
+                </View>}
               </View>
               <View style={{
                 height: 210,
