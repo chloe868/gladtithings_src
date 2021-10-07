@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
 import { Spinner } from 'components';
-import { map } from 'lodash';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
