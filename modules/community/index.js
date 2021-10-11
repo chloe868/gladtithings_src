@@ -5,7 +5,7 @@ import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import PostCard from 'modules/generic/PostCard';
 import IncrementButton from 'components/Form/Button';
-import { faSearch, faPlusCircle, faBell, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlusCircle, faBell, faBan, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Format from './TabContainer'
 
@@ -39,6 +39,35 @@ const dataPope = [
     },
     text: "The Eucharist is here to remind us who God is. It does not do so just in words, but in a concrete way, showing us God as bread broken, as love crucified and  bestowed. #EcharisticCongress #Budapest",
     created_at_human: 'Just Now',
+  }
+
+]
+
+const dataCommunityInterested = [
+  {
+    id: 0,
+    account: {
+      id: 0,
+      username: 'JCI Cebu, Philippines',
+      first_name: '',
+      last_name: ''
+    },
+    status: 'Non Profit - 20k Followers - 10k Joined',
+    notifs: 'Follow & Join',
+    icon: faUsers
+  },
+
+  {
+    id: 1,
+    account: {
+      id: 0,
+      username: 'JCI Cebu, Philippines',
+      first_name: '',
+      last_name: ''
+    },
+    status: 'Non Profit - 20k Followers - 10k Joined',
+    notifs: 'Follow & Join',
+    icon: faUsers
   }
 
 ]
@@ -240,6 +269,30 @@ communities = () =>{
     <View style={{
       marginBottom: 100
     }}>
+      <View style={{
+              marginTop: 20,
+            }}>
+        <Text 
+          style={{
+          ...BasicStyles.standardWidth,
+           fontFamily: 'Poppins-SemiBold',
+          }}
+        >Communities You Might Interested In</Text>
+      </View>
+      {dataCommunityInterested.length > 0 && dataCommunityInterested.map((item, index) => (
+        <Format
+          navigation={this.props.navigation}
+          loader={this.loader}
+          data={{
+            user: item.account,
+            message: item.notifs,
+            date: item.status,
+            id: item.id,
+            icon: item.icon
+          }}
+          />
+      ))}  
+
        <View style={{
               marginTop: 20,
             }}>
@@ -312,39 +365,7 @@ communities = () =>{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        
-        <View style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              marginTop: 10,
-              
-            }}>
-                
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate('')
-                }}
-                >
-                <FontAwesomeIcon
-                  icon={faSearch}
-                />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-              
-                onPress={() => {
-                  this.props.navigation.navigate('createCommunityStack')
-                }}
-                >
-                <FontAwesomeIcon
-                  icon={faPlusCircle}
-                  marginLeft={15}
-                  marginRight={25}
-                />
-              </TouchableOpacity>
-            </View>
-            
-            
+ 
           <View style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -354,6 +375,29 @@ communities = () =>{
               overflow: 'hidden'
               
             }}>
+              
+              
+              <IncrementButton style={{
+                backgroundColor: this.state.isActive2 == 1? Color.secondary : Color.white,
+                width: '45%',
+                borderWidth: 0.1,
+                
+              }}
+
+              textStyle={{
+                color: this.state.isActive2 == 1? Color.white : Color.black
+              }}
+
+              onClick={() => {
+                this.setState({
+                  isActive2: 1,
+                  isActive: 0
+                })
+                this.communitiesMessage()
+              }}
+              title={'Communities'}
+              />  
+
               <IncrementButton style={{
                 
                 backgroundColor: this.state.isActive == 1? Color.secondary : Color.white,
@@ -373,30 +417,9 @@ communities = () =>{
                 })
                 this.popetwitterMessage()
               }}
-              title={"Pope's Twitter Message"}
+              title={"Pope's Messages"}
               />
 
-              <IncrementButton style={{
-                backgroundColor: this.state.isActive2 == 1? Color.secondary : Color.white,
-                width: '45%',
-                marginLeft: 6,
-                borderWidth: 0.1,
-                
-              }}
-
-              textStyle={{
-                color: this.state.isActive2 == 1? Color.white : Color.black
-              }}
-
-              onClick={() => {
-                this.setState({
-                  isActive2: 1,
-                  isActive: 0
-                })
-                this.communitiesMessage()
-              }}
-              title={'Communities'}
-              />
           </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, Image, Dimensions, Text, TextInput, Alert } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheck, faTimes, faStar, faUserCircle, faEllipsisH, faPrayingHands, faCommentAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt, faTrashAlt, faEyeSlash, faPencilAlt, faEllipsisH, faPrayingHands, faCommentAlt, faShare, faCog } from '@fortawesome/free-solid-svg-icons';
 import { BasicStyles, Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import Config from 'src/config.js';
@@ -9,6 +9,7 @@ import Api from 'services/api';
 import UserImage from 'components/User/Image';
 import ImageModal from 'components/Modal/ImageModal.js';
 import Styles from './PostCardStyles.js'
+import { Row } from 'native-base';
 
 const height = Math.round(Dimensions.get('window').height);
 const width = Math.round(Dimensions.get('window').width);
@@ -125,18 +126,85 @@ class PostCard extends Component {
           {this.state.options === true && show === true && (<TouchableOpacity style={{
             position: 'absolute',
             right: -5,
-            top: 40,
-            height: 40,
-            width: 105,
+            top: 20,
+            height: 180,
+            width: 150,
             borderWidth: 1,
-            borderRadius: 10,
             borderColor: Color.gray,
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: Color.white,
+            justifyContent: 'flex-start',
             zIndex: 10
           }}
-            onPress={() => { this.remove(data) }}>
-            <Text>Delete Post</Text>
+           // onPress={() => { this.remove(data) }}
+            >
+            <View
+              style={{
+                flexDirection: 'column',
+                paddingLeft: 10,      
+              }}
+            >  
+              <View
+                style={{
+                  flexDirection: 'row',
+                  paddingTop: 10,
+                  paddingBottom: 15               
+                }}
+                >
+                <FontAwesomeIcon icon={faCog}/>
+                <Text style={{paddingLeft: 10 }}>Post Actions</Text>
+              </View>
+            
+              <View
+                style={{
+                  paddingLeft: 25,
+                  flexDirection: 'row',
+                  paddingBottom: 15   
+                }}
+              >
+                <FontAwesomeIcon icon={faPencilAlt}/>
+                <Text style={{paddingLeft: 10 }}>Edit</Text>
+              </View>
+
+              <View
+                style={{
+                  paddingLeft: 25,
+                  flexDirection: 'row',
+                  paddingBottom: 15   
+                }}
+              >
+                <FontAwesomeIcon icon={faFileAlt}/>
+                <Text style={{paddingLeft: 10 }}>Report</Text>
+              </View>
+            
+              <View
+                style={{
+                  paddingLeft: 25,
+                  flexDirection: 'row',
+                  paddingBottom: 15   
+                }}
+              >
+                <FontAwesomeIcon icon={faEyeSlash}/>
+                <Text style={{paddingLeft: 10 }}>Hide</Text>
+              </View>
+            
+              <View
+                style={{
+                  paddingLeft: 25,
+                  flexDirection: 'row'
+                }}
+              >
+                <FontAwesomeIcon style={{
+                  color: '#FF0000'
+                }}
+                
+                icon={faTrashAlt}/>
+                <Text 
+                  style={{
+                    paddingLeft: 10,
+                    color: '#FF0000'
+                    }}>Delete</Text>
+              </View>
+            </View>
           </TouchableOpacity>)}
         </View>
       </View>
@@ -327,13 +395,11 @@ class PostCard extends Component {
             icon={faPrayingHands}
             size={20}
             style={{
-              color: Color.gray
             }}
           />
           <Text style={{
             marginLeft: 10,
             fontSize: 13,
-            color: Color.gray
           }}>Amen</Text>
         </TouchableOpacity>
 
@@ -341,7 +407,7 @@ class PostCard extends Component {
         <TouchableOpacity style={{
           alignItems: 'center',
           justifyContent: 'center',
-          marginRight: 5,
+          marginRight: 20,
           flexDirection: 'row'
         }}
           onPress={() => {
@@ -352,7 +418,7 @@ class PostCard extends Component {
             icon={faCommentAlt}
             size={20}
             style={{
-              color: Color.black
+            color: Color.black
             }}
           />
           <Text style={{
@@ -360,6 +426,29 @@ class PostCard extends Component {
             fontSize: 13
           }}>Comment</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: 20,
+          flexDirection: 'row'
+        }}
+          onPress={() => {
+            // this.props.onLike(data)
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faShare}
+            size={20}
+            style={{
+            }}
+          />
+          <Text style={{
+            marginLeft: 10,
+            fontSize: 13,
+          }}>Share</Text>
+        </TouchableOpacity>
+
       </View>
     )
   }
