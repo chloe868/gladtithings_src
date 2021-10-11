@@ -70,14 +70,14 @@ class Format extends Component {
         flexDirection: 'row',
         justifyContent: 'flex-start',
       }}>
-        <FontAwesomeIcon
+        {data.icon && <FontAwesomeIcon
           icon={data.icon}
           style={{
             marginRight: 10,
             marginLeft: 5
             
           }}
-        />
+        />}
         <Text style={{
           fontSize: BasicStyles.standardFontSize,
           

@@ -250,13 +250,12 @@ popetwitter = () => {
         <Format
           navigation={this.props.navigation}
           loader={this.loader}
-          
-           data={{
-                  user: item.account,
-                  message: item.text,
-                  date: item.created_at_human,
-                  id: item.id,
-                }} 
+          data={{
+            user: item.account,
+            message: item.text,
+            date: item.created_at_human,
+            id: item.id
+          }} 
         />
         
       ))}

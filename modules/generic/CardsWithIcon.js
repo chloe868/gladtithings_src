@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Dimensions, Text } from 'react-native'
 import { BasicStyles, Color } from 'common';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faChevronRight, faChurch, faExclamationTriangle, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faChevronRight, faChurch, faExclamationTriangle, faToggleOn, faToggleOff, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import Styles from './CardsWithIconStyle';
 
 const height = Math.round(Dimensions.get('window').height)
@@ -86,7 +86,7 @@ class CardsWithIcon extends Component {
           justifyContent: 'center'
         }}>
           <FontAwesomeIcon
-            icon={faChurch}
+            icon={this.props.description === 'Direct Transfer' ? faChurch : faCreditCard}
             size={35}
             style={{color: Color.secondary}}
           />

@@ -6,58 +6,11 @@ import { connect } from 'react-redux';
 import CardsWithIcon from '../generic/CardsWithIcon';
 import BalanceCard from 'modules/generic/BalanceCard.js';
 import IncrementButton from 'components/Form/Button';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Subscription from 'modules/generic/Subscriptions.js';
 import { Spinner } from 'components';
-import QRCodeModal from 'components/Modal/QRCode';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
-
-const data = [
-  {
-    id: 0,
-    title: 'Churh 1',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 1,
-    title: 'Churh 2',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 2,
-    title: 'Churh 1',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 3,
-    title: 'Churh 2',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 4,
-    title: 'Churh 1',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 5,
-    title: 'Churh 2',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  }
-]
 
 class Dashboard extends Component {
   constructor(props) {
@@ -70,14 +23,51 @@ class Dashboard extends Component {
         current_balance: 0,
         balance: 0
       },
-      isLoading: false
+      isLoading: false,
+      data: [],
+      offset: 0,
+      limit: 5
     }
   }
 
   componentDidMount() {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.retrieveBalance();
+      this.retrieve(false);
     })
+  }
+
+  retrieve = (flag) => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        column: 'account_id',
+        value: user.id,
+        clause: '='
+      }, {
+        column: 'account_id',
+        value: user.id,
+        clause: 'or'
+      }],
+      sort: { created_at: 'desc' },
+      limit: this.state.limit,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.transactionHistoryRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          offset: flag == false ? 1 : (this.state.offset + 1)
+        })
+      } else {
+        this.setState({
+          data: flag == false ? [] : this.state.data,
+          offset: flag == false ? 0 : this.state.offset
+        })
+      }
+    });
   }
 
   retrieveBalance = () => {
@@ -108,26 +98,23 @@ class Dashboard extends Component {
 
   render() {
     const { theme } = this.props.state;
-    const { ledger } = this.state;
+    const { ledger, data, isLoading } = this.state;
     return (
       <View style={{
-        height: height,
         backgroundColor: Color.containerBackground
       }}>
         <ScrollView
           style={{
-            height: height,
             backgroundColor: Color.containerBackground
-          }} showsVerticalScrollIndicator={false}>
-          {this.props.state?.isVisible?.isVisible && <QRCodeModal
-            user={this.props.state?.user}
-            navigation={this.props.navigation}
-          />}
+          }} showsVerticalScrollIndicator={false}
+        >
           <View style={{
             paddingLeft: 15,
             paddingBottom: 15,
-            paddingRight: 15
+            paddingRight: 15,
+            height: height * 1.5,
           }}>
+            {isLoading ? <Spinner mode="overlay" /> : null}
             {
               ledger && (
                 <BalanceCard data={ledger} />
@@ -186,7 +173,6 @@ class Dashboard extends Component {
                 }}>{'View more >>>'}</Text>
 
               </TouchableOpacity>
-              {this.state.isLoading ? <Spinner mode="overlay" /> : null}
             </View>
 
             {
@@ -194,21 +180,17 @@ class Dashboard extends Component {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      console.log('donate')
+                      console.log('')
                     }}
                     version={3}
-                    title={item.title}
                     description={item.description}
-                    date={item.date}
-                    amount={item.amount}
-                    style={{
-                      marginBottom: index == (data.length - 1) ? height * 0.5 : 0
-                    }}
+                    title={item.receiver ? item.receiver.email : item.description}
+                    date={item.created_at_human}
+                    amount={item.currency + ' ' + item.amount?.toLocaleString()}
                   />
                 )
               })
             }
-
           </View>
         </ScrollView>
       </View>
@@ -220,7 +202,7 @@ const mapStateToProps = (state) => ({ state: state });
 const mapDispatchToProps = (dispatch) => {
   const { actions } = require('@redux');
   return {
-    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal({isVisible: isVisible})),
+    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal({ isVisible: isVisible })),
     setLedger: (ledger) => dispatch(actions.setLedger(ledger))
   };
 };

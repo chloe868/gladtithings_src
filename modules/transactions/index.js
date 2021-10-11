@@ -1,98 +1,113 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Color } from 'common';
-import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import CardsWithIcon from '../generic/CardsWithIcon';
-import InputFieldWithIcon from '../generic/InputFieldWithIcon';
-import { faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import IncrementButton from 'components/Form/Button';
+import Api from 'services/api/index.js';
+import { Routes } from 'common';
+import { Spinner } from 'components';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
-const data = [
-  {
-    id: 0,
-    title: 'Churh 1',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 1,
-    title: 'Churh 2',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 2,
-    title: 'Churh 1',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 3,
-    title: 'Churh 2',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 4,
-    title: 'Churh 1',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  },
-  {
-    id: 5,
-    title: 'Churh 2',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00'
-  }
-]
 
 class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      input: null,
+      data: [],
+      offset: 0,
+      limit: 5,
+      isLoading: false
     }
   }
 
+  componentDidMount() {
+    this.retrieve(false);
+  }
+
+  retrieve = (flag) => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        column: 'account_id',
+        value: user.id,
+        clause: '='
+      }, {
+        column: 'account_id',
+        value: user.id,
+        clause: 'or'
+      }],
+      sort: {created_at: 'desc'},
+      limit: this.state.limit,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.transactionHistoryRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          offset: flag == false ? 1 : (this.state.offset + 1)
+        })
+      } else {
+        this.setState({
+          data: flag == false ? [] : this.state.data,
+          offset: flag == false ? 0 : this.state.offset
+        })
+      }
+    });
+  }
+
   render() {
-    const { theme, user } = this.props.state;
+    const { theme } = this.props.state;
+    const { data, isLoading } = this.state;
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        {isLoading ? <Spinner mode="overlay" /> : null}
+        <ScrollView showsVerticalScrollIndicator={false}
+        onScroll={(event) => {
+          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+          let totalHeight = event.nativeEvent.contentSize.height
+          if (event.nativeEvent.contentOffset.y <= 0) {
+            if (isLoading == false) {
+              // this.retrieve(false)
+            }
+          }
+          if (scrollingHeight >= (totalHeight)) {
+            if (isLoading == false) {
+              this.retrieve(true)
+            }
+          }
+        }}
+        >
           <View style={{
             paddingLeft: 20,
             paddingRight: 20,
             minHeight: height + (height * 0.5)
           }}>
+            {!isLoading && data.length === 0 && <Text>You have no transactions yet.</Text>}
             {
               data.map((item, index) => {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      console.log('donate')
+                      console.log('')
                     }}
                     version={3}
-                    title={item.title}
                     description={item.description}
-                    date={item.date}
-                    amount={item.amount}
+                    title={item.receiver ? item.receiver.email : item.description}
+                    date={item.created_at_human}
+                    amount={item.currency + ' ' + item.amount?.toLocaleString()}
                   />
                 )
               })
             }
+
           </View>
-          
         </ScrollView>
       </View>
     );
