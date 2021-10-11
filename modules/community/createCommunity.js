@@ -204,8 +204,9 @@ class CreateCommunity extends Component {
             <FontAwesomeIcon
               icon={faImage}
               size={150}
-              paddingHorizontal={185}
+              paddingHorizontal={200}
               style={{
+                width: '100%',
                 borderWidth: 0.1,
                 marginTop: 20,
                 backgroundColor: Color.white,
@@ -220,8 +221,9 @@ class CreateCommunity extends Component {
             <FontAwesomeIcon
               icon={faImage}
               size={150}
-              paddingHorizontal={185}
+              paddingHorizontal={200}
               style={{
+                width: '100%',
                 borderWidth: 0.1,
                 marginTop: 20,
                 backgroundColor: Color.white,

@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
-import Screen from './index';
+import Screen from './createCommunity';
 import {connect} from 'react-redux';
 import { BasicStyles, Color } from 'common';
 
