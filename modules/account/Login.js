@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import { View, Dimensions, Text, ScrollView, Platform } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import Style from './Style.js';
 import { Spinner } from 'components';
 import CustomError from 'components/Modal/Error.js';
@@ -11,10 +10,7 @@ import { Routes, Color, Helper, BasicStyles } from 'common';
 import Header from './Header';
 import config from 'src/config';
 import SystemVersion from 'services/System.js';
-import { Player } from '@react-native-community/audio-toolkit';
-import OtpModal from 'components/Modal/Otp.js';
 import LinearGradient from 'react-native-linear-gradient'
-import { Notifications, NotificationAction, NotificationCategory } from 'react-native-notifications';
 import PasswordInputWithIconLeft from 'components/InputField/PasswordWithIcon.js';
 import TextInputWithIcon from 'components/InputField/TextInputWithIcon.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -22,13 +18,15 @@ import { faArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
 import Button from '../generic/Button.js'
 import { fcmService } from 'services/broadcasting/FCMService';
 import { localNotificationService } from 'services/broadcasting/LocalNotificationService';
-import { Right } from 'native-base';
+import NotificationsHandler from 'services/NotificationHandler';
+
 const height = Math.round(Dimensions.get('window').height);
 const width = Math.round(Dimensions.get('window').width);
 class Login extends Component {
   //Screen1 Component
   constructor(props) {
     super(props);
+    this.notificationHandler = React.createRef();
     this.state = {
       username: null,
       password: null,
@@ -41,7 +39,6 @@ class Login extends Component {
       notifications: []
     };
     this.audio = null;
-    this.registerNotificationEvents();
   }
 
   async componentDidMount() {
@@ -58,11 +55,6 @@ class Login extends Component {
       })
     } else {
       this.getData();
-    }
-    this.audio = new Player('assets/notification.mp3');
-    const initialNotification = await Notifications.getInitialNotification();
-    if (initialNotification) {
-      this.setState({ notifications: [initialNotification, ...this.state.notifications] });
     }
   }
 
@@ -88,200 +80,46 @@ class Login extends Component {
     }
   }
 
-  retrieveSystemNotification = () => {
-    let parameter = {
-      condition: [{
-        value: '%' + Platform.OS + '%',
-        clause: 'like',
-        column: 'device'
-      }],
-      sort: {
-        created_at: 'desc'
-      }
-    }
-    Api.request(Routes.systemNotificationRetrieve, parameter, response => {
-      const { setSystemNotification } = this.props;
-      if (response.data.length > 0) {
-        setSystemNotification(response.data[0])
-      } else {
-        setSystemNotification(null)
-      }
-    }, error => {
-      console.log('error', error)
-    });
-  }
-
-  redirectToDrawer = (payload) => {
-    const { user } = this.props.state;
-    if (user !== null) {
-      let route = ''
-      switch (payload) {
-        case 'request':
-          route = 'Requests'
-          const { setSearchParameter } = this.props;
-          let searchParameter = {
-            column: 'id',
-            value: notification.payload_value
-          }
-          setSearchParameter(searchParameter)
-          break;
-        case 'ledger':
-          route = 'Dashboard'
-          break
-      }
-      const navigateAction = NavigationActions.navigate({
-        routeName: route
-      });
-      this.props.navigation.dispatch(navigateAction);
-    }
-  }
-
-  registerNotificationEvents() {
-    Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
-      this.setState({
-        notifications: [...this.state.notifications, notification]
-      });
-
-      completion({ alert: notification.payload.showAlert, sound: true, badge: false });
-    });
-
-    Notifications.events().registerNotificationOpened((notification, completion) => {
-      if (notification.extra != '') {
-        this.redirectToDrawer(notification.extra)
-      }
-      completion();
-    });
-  }
-
-  requestPermissions() {
-    Notifications.registerRemoteNotifications();
-  }
-
-  sendLocalNotification(title, body, route) {
-    Notifications.postLocalNotification({
-      title: title,
-      body: body,
-      extra: route
-    });
-  }
-
   redirect = (route) => {
     this.props.navigation.navigate(route);
   }
 
-  playAudio = () => {
-    if (this.audio) {
-      this.audio.play();
-    }
-  }
-
-  managePusherResponse = (response) => {
-    const { user } = this.props.state;
-    const data = response.data;
-    if (user == null) {
-      return;
-    }
-    if (response.type == Helper.pusher.notifications) {
-      console.log(Helper.pusher.notifications, response);
-      if (user.id == parseInt(data.to)) {
-        const { notifications } = this.props.state;
-        const { updateNotifications } = this.props;
-        console.log('notif pusher', data)
-        this.sendLocalNotification(data.title, data.description, data.payload)
-        updateNotifications(1, data);
-        this.playAudio()
-      }
-    } else if (response.type == Helper.pusher.systemNotification) {
-      this.sendLocalNotification(data.title, data.description, 'requests')
-    }
-  }
-
   retrieveUserData = (accountId) => {
-    console.log('=============', accountId, Helper.retrieveDataFlag);
     if (Helper.retrieveDataFlag == 1) {
       this.setState({ isLoading: false });
       const { setLayer } = this.props;
       setLayer(0)
-      this.props.navigation.navigate('drawerStack');
-    } else {
-      const { setNotifications } = this.props;
-      let parameter = {
-        account_id: accountId
-      }
-      this.retrieveSystemNotification();
+      this.firebaseNotification()
     }
   }
 
-  onRegister = (token) => {
-    console.log("[App] onRegister", token)
-  }
+  onRegister = () => {
+    this.notificationHandler.onRegister();
+  };
 
   onOpenNotification = (notify) => {
-  }
+    this.notificationHandler.onOpenNotification(notify);
+  };
 
   onNotification = (notify) => {
+    this.notificationHandler.onNotification(notify);
+  };
+
+  firebaseNotification(){
     const { user } = this.props.state;
-    let data = null
-    if (user == null || !notify.data) {
-      return
-    }
-    data = notify.data
-    let topic = data.topic.split('-')
-    switch (topic[0].toLowerCase()) {
-
-      case 'comments': {
-        const { setComments } = this.props;
-        let topicId = topic.length > 1 ? topic[1] : null
-        console.log('[comments]', data)
-        if (topicId && parseInt(topicId) == user.id) {
-          setComments(data)
-        } else {
-
-        }
-
-      }
-        break
-    }
-  }
-
-  firebaseNotification() {
-    const { user } = this.props.state;
-    if (user == null) {
+    if(user == null){
       return
     }
     fcmService.registerAppWithFCM()
     fcmService.register(this.onRegister, this.onNotification, this.onOpenNotification)
     localNotificationService.configure(this.onOpenNotification, Helper.APP_NAME)
-    fcmService.subscribeTopic(user.id)
-    fcmService.subscribeTopic(user.id)
-    this.retrieveNotification()
+    this.notificationHandler.setTopics()
+    this.redirect('drawerStack')
     return () => {
       console.log("[App] unRegister")
       fcmService.unRegister()
       localNotificationService.unRegister()
     }
-  }
-
-  retrieveNotification = () => {
-    const { setNotifications } = this.props;
-    const { user } = this.props.state;
-    if (user == null) {
-      return
-    }
-    let parameter = {
-      condition: [{
-        value: user.id,
-        clause: '=',
-        column: 'to'
-      }],
-      limit: 10,
-      offset: 0
-    }
-    Api.request(Routes.notificationsRetrieve, parameter, notifications => {
-      console.log("[RESTRIEVE]", notifications.data)
-      setNotifications(notifications.size, notifications.data)
-    }, error => {
-    })
   }
 
   login = () => {
@@ -290,7 +128,7 @@ class Login extends Component {
     if (this.state.token != null) {
       this.setState({ isLoading: true });
       Api.getAuthUser(this.state.token, (response) => {
-        console.log('[AUTH RESPONSE]', response);
+        this.setState({ isLoading: false });
         login(response, this.state.token);
         let parameter = {
           condition: [{
@@ -299,19 +137,16 @@ class Login extends Component {
             column: 'id'
           }]
         }
-        console.log('parameter', parameter, Routes.accountRetrieve)
         Api.request(Routes.accountRetrieve, parameter, userInfo => {
+          this.setState({ isLoading: false });
           if (userInfo.data.length > 0) {
             login(userInfo.data[0], this.state.token);
             this.retrieveUserData(userInfo.data[0].id)
-            this.firebaseNotification()
           } else {
-            this.setState({ isLoading: false });
             login(null, null)
           }
         }, error => {
           console.log(error, 'login-account retrieve');
-          // this.setState({isResponseError: true})
         })
       }, error => {
         console.log(error, 'login-authenticate');
@@ -334,45 +169,21 @@ class Login extends Component {
     }
   }
 
-  checkOtp = () => {
-    const { user } = this.props.state;
-    if (user.notification_settings != null) {
-      let nSettings = user.notification_settings
-      if (parseInt(nSettings.email_otp) == 1 || parseInt(nSettings.sms_otp) == 1) {
-        this.setState({
-          isOtpModal: true,
-          blockedFlag: false
-        })
-        return
-      }
-    }
-    const { setLayer } = this.props;
-    setLayer(0)
-    this.props.navigation.navigate('drawerStack');
-  }
-
-  onSuccessOtp = () => {
-    this.setState({ isOtpModal: false })
-    const { setLayer } = this.props;
-    setLayer(0)
-    this.props.navigation.navigate('drawerStack');
-  }
-
   submit() {
     // this.props.navigation.navigate('drawerStack');
     const { username, password } = this.state;
     const { login } = this.props;
     if ((username != null && username != '') && (password != null && password != '')) {
       this.setState({ isLoading: true, error: 0 });
-      // Login
-      console.log('--');
       Api.authenticate(username, password, (response) => {
+        this.setState({ isLoading: false });
         if (response.error) {
           this.setState({ error: 2, isLoading: false });
         }
         if (response.token) {
           const token = response.token;
           Api.getAuthUser(response.token, (response) => {
+            this.setState({ isLoading: false });
             login(response, token);
             let parameter = {
               condition: [{
@@ -383,11 +194,11 @@ class Login extends Component {
             }
             console.log(Routes.accountRetrieve, parameter);
             Api.request(Routes.accountRetrieve, parameter, userInfo => {
+              this.setState({ isLoading: false });
               if (userInfo.data.length > 0) {
                 login(userInfo.data[0], token);
                 this.retrieveUserData(userInfo.data[0].id)
               } else {
-                this.setState({ isLoading: false });
                 this.setState({ error: 2 })
               }
             }, error => {
@@ -441,6 +252,7 @@ class Login extends Component {
             paddingRight: 20,
             height: height * 1.5
           }}>
+            <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
             <Header params={"Sign In"}></Header>
 
             {error > 0 ? <View style={Style.messageContainer}>

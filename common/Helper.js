@@ -1,15 +1,12 @@
-import React from 'react';
-import Color from './Color.js';
-import { faHome, faShieldAlt, faCopy, faCog, faBell, faChurch, faTachometerAlt, faUsers, faWallet, faHistory, faCreditCard } from '@fortawesome/free-solid-svg-icons';
-import { faComment, faShareSquare } from '@fortawesome/free-regular-svg-icons';
+import { faHome, faShieldAlt, faCopy, faCog, faUsers, faWallet, faHistory, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 
 export default {
   company: 'Increment Technologies',
-  APP_NAME: '@SYNQT_',
-  APP_NAME_BASIC: 'SYNQT',
-  APP_EMAIL: 'support@wearesynqt.com',
-  APP_WEBSITE: 'support@wearesynqt.com',
-  APP_HOST: 'com.synqt',
+  APP_NAME: '@GLADTITHINGS_',
+  APP_NAME_BASIC: 'GLADTITHINGS',
+  APP_EMAIL: 'support@gladtithings.com',
+  APP_WEBSITE: 'support@gladtithings.com',
+  APP_HOST: 'com.gladtithings',
   pusher: {
     broadcast_type: 'pusher',
     channel: 'runway',
@@ -75,29 +72,7 @@ export default {
       borderBottom: false,
       payload: 'drawerStack',
       currentPage: 'Deposit'
-    },
-    // {
-    //   title: 'Share Profile',
-    //   route: 'share',
-    //   icon: faShareSquare,
-    //   borderBottom: true,
-    //   payload: 'share',
-    //   currentPage: 'share'
-    // }
-    // {
-    //   title: 'Subscription',
-    //   route: 'subscriptionStack',
-    //   icon: faBell,
-    //   borderBottom: false,
-    //   currentPage: 'Subscription'
-    // },
-    // {
-    //   title: 'Share Profile',
-    //   route: 'share',
-    //   icon: faShareSquare,
-    //   borderBottom: true,
-    //   currentPage: 'share'
-    // }
+    }
   ],
   DrawerMenu1: [{
     title: 'Terms & Conditions',
@@ -138,18 +113,5 @@ export default {
     } else {
       return true;
     }
-  },
-  cuisines:
-  {
-    1:'Filipino',
-    2: 'Chinese',
-    3: 'Japanese',
-    4: 'Indian',
-    5: 'Italian',
-    6: 'Thai',
-    7: 'Spanish',
-    8: 'French',
-    9: 'Korean',
-    10: 'Turkish'
   }
 };

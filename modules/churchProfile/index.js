@@ -54,6 +54,7 @@ class ChurchProfile extends Component {
 
   render() {
     const { theme, user } = this.props.state;
+    const { data } = this.props.navigation?.state?.params;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -79,7 +80,11 @@ class ChurchProfile extends Component {
             <Text style={{
               color: 'white',
               fontFamily: 'Poppins-SemiBold'
-            }}>Los Angeles, California, USA</Text>
+            }}>{data?.name}</Text>
+            <Text style={{
+              color: 'white',
+              fontFamily: 'Poppins-SemiBold'
+            }}>{data?.address}</Text>
           </View>
           <View style={{
             flexDirection: 'row',

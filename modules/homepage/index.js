@@ -38,7 +38,8 @@ class HomePage extends Component {
     this.state = {
       input: null,
       churches: [],
-      days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      isLoading: false
     }
   }
 
@@ -91,12 +92,12 @@ class HomePage extends Component {
 
   render() {
     const { theme, user } = this.props.state;
-    const { churches } = this.state;
+    const { churches, isLoading } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground,
       }}>
-        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+        {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
@@ -179,7 +180,7 @@ class HomePage extends Component {
                 data={churches}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Subscribe'}
-                redirect={() => { this.props.navigation.navigate('churchProfileStack') }}
+                redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
                 buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation' }) }}
               />
               <View style={{
