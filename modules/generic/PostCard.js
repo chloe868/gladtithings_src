@@ -127,7 +127,7 @@ class PostCard extends Component {
             position: 'absolute',
             right: -5,
             top: 20,
-            height: 180,
+            height: 200,
             width: 150,
             borderWidth: 1,
             borderColor: Color.gray,
