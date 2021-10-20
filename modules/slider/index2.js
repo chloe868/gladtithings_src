@@ -2,22 +2,25 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styles from './Style';
-import { NavigationActions, SafeAreaView, StackActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import { ScrollView, Text, View, Image, Share, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Helper, BasicStyles, Color } from 'common';
 import Config from 'src/config.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCopy, faSignOutAlt, faTimes, faUserCircle, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faTimes, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import LinearGradient from 'react-native-linear-gradient'
 import { Dimensions } from 'react-native';
-import { GoogleSignin, statusCodes } from '@react-native-community/google-signin'
+import { GoogleSignin } from '@react-native-community/google-signin'
+import NotificationsHandler from 'services/NotificationHandler';
+
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
 class Slider2 extends Component {
   constructor(props) {
     super(props);
+    this.notificationHandler = React.createRef();
     this.state = {
       colors: []
     }
@@ -106,11 +109,11 @@ class Slider2 extends Component {
 
     // setActiveRoute(null)
     this.props.navigation.navigate('loginStack');
+    this.notificationHandler.removeTopics();
   }
 
   render() {
     const { user, theme } = this.props.state;
-    console.log(user, '---');
     const { colors } = this.state
     return (
       <LinearGradient
@@ -123,6 +126,7 @@ class Slider2 extends Component {
           width: width
         }}
       >
+        <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
         <View style={{
           flexDirection: 'row',
           height: '100%'

@@ -128,6 +128,7 @@ class Deposit extends Component {
   render() {
     const {theme, user, paypalUrl} = this.props.state;
     const {method, amount, isLoading} = this.state;
+    const { data } = this.props.navigation?.state?.params;
     return (
       <View
         style={{
@@ -157,10 +158,10 @@ class Deposit extends Component {
               style={{
                 minHeight: height + height * 0.5,
               }}>
-              {this.props.navigation?.state?.params?.type ===
+              {(this.props.navigation?.state?.params?.type ===
                 'Subscription Donation' ||
-                (this.props.navigation?.state?.params?.type ===
-                  'Send Tithings' && (
+                this.props.navigation?.state?.params?.type ===
+                  'Send Tithings') && (
                   <View
                     style={{
                       height: height / 4,
@@ -183,10 +184,17 @@ class Deposit extends Component {
                         color: 'white',
                         fontFamily: 'Poppins-SemiBold',
                       }}>
-                      Los Angeles, California, USA
+                      {data?.name}
+                    </Text>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontFamily: 'Poppins-SemiBold',
+                      }}>
+                      {data?.address}
                     </Text>
                   </View>
-                ))}
+                )}
 
               {this.props.navigation?.state?.params?.type ===
                 'Send Event Tithings' && (

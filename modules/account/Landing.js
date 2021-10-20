@@ -15,10 +15,6 @@ class Landing extends Component {
   }
 
   onFocusFunction = async () => {
-    /**
-     * Executed each time we enter in this component &&
-     * will be executed after going back to this component 
-    */
     Linking.getInitialURL().then(url => {
       console.log(`from initial url ${url}, call navigate`)
       this.navigate(url);
@@ -48,8 +44,6 @@ class Landing extends Component {
       const route = url.replace(/.*?:\/\//g, '');
       const routeName = route.split('/')[0];
       if (routeName === 'wearesynqt' && route.split('/')[1] === 'profile') {
-        // navigate('orderPlacedStack')
-        console.log('DEEP LINK ROUTE IS SET::::')
         const {setDeepLinkRoute} = this.props;
         setDeepLinkRoute(url);
       };
