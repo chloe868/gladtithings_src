@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Color, Routes } from 'common';
+import Style from './Style.js';
 import { connect } from 'react-redux';
 import CardsWithImages from '../generic/CardsWithImages';
 import CustomizedHeader from '../generic/CustomizedHeader';
@@ -91,7 +92,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { theme, user } = this.props.state;
+    const { theme, user, language } = this.props.state;
     const { churches, isLoading } = this.state;
     return (
       <View style={{
@@ -111,29 +112,20 @@ class HomePage extends Component {
               }}
             />
             <View>
-              <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingLeft: 20,
-                paddingRight: 20,
-                paddingTop: 20
-              }}>
-                <Text style={{
-                  fontFamily: 'Poppins-SemiBold'
-                }}>Recently Visited Churches</Text>
+              <View style={Style.title}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontFamily: 'Poppins-SemiBold',
+                    width: '50%'
+                  }}
+                >{language.visitedChurches}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('churchesStack')
                   }}
-                  style={{
-                    flexDirection: 'row'
-                  }}
+                  style={Style.right}
                 >
-                  <Text style={{
-                    fontFamily: 'Poppins-SemiBold',
-                    marginRight: 5,
-                    color: theme ? theme.primary : Color.primary
-                  }}>Find Church</Text>
                   <FontAwesomeIcon
                     icon={faSearch}
                     size={15}
@@ -142,7 +134,11 @@ class HomePage extends Component {
                       marginTop: 4
                     }}
                   />
-
+                  <Text style={{
+                    fontFamily: 'Poppins-SemiBold',
+                    marginRight: 5,
+                    color: theme ? theme.primary : Color.primary
+                  }}>{language.findChurch}</Text>
                 </TouchableOpacity>
               </View>
               <CardsWithImages
@@ -150,28 +146,28 @@ class HomePage extends Component {
                 button={true}
                 data={data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={'Subscribe'}
-                redirect={() => { this.props.navigation.navigate('churchProfileStack') }}
+                buttonTitle={language.subscribe}
+                redirect={() => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
                 buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation' }) }}
               />
-              {churches?.length > 0 && <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingLeft: 20,
-                paddingRight: 20
-              }}>
-                <Text style={{
-                  fontFamily: 'Poppins-SemiBold'
-                }}>Upcoming Masses</Text>
+              {churches?.length > 0 && <View style={Style.title}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontFamily: 'Poppins-SemiBold',
+                    width: '50%'
+                  }}
+                >{language.upcomingMasses}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('churchesStack')
                   }}
+                  style={Style.right}
                 >
                   <Text style={{
                     fontFamily: 'Poppins-SemiBold',
                     color: theme ? theme.primary : Color.primary
-                  }}>{'View more >>>'}</Text>
+                  }}>{language.viewMore + '>>>'}</Text>
 
                 </TouchableOpacity>
               </View>}
@@ -179,28 +175,28 @@ class HomePage extends Component {
                 version={1}
                 data={churches}
                 buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={'Subscribe'}
+                buttonTitle={language.subscribe}
                 redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
                 buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation' }) }}
               />
-              <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingLeft: 20,
-                paddingRight: 20
-              }}>
-                <Text style={{
-                  fontFamily: 'Poppins-SemiBold'
-                }}>Upcoming Events</Text>
+              <View style={Style.title}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontFamily: 'Poppins-SemiBold',
+                    width: '50%'
+                  }}
+                >{language.upcomingEvents}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('eventsStack')
                   }}
+                  style={Style.right}
                 >
                   <Text style={{
                     fontFamily: 'Poppins-SemiBold',
                     color: theme ? theme.primary : Color.primary
-                  }}>{'View more >>>'}</Text>
+                  }}>{language.viewMore + '>>>'}</Text>
 
                 </TouchableOpacity>
               </View>
@@ -209,7 +205,7 @@ class HomePage extends Component {
                 version={1}
                 data={data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={'Donate'}
+                buttonTitle={language.donate}
                 redirect={() => { return }}
                 buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings' }) }}
               />

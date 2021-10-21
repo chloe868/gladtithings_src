@@ -47,7 +47,7 @@ class Header extends Component {
   };
   render() {
     const { routeName } = this.props.navigation.state;
-    const { theme } = this.props.state;
+    const { theme, language, user } = this.props.state;
     return (
       <View
         style={{
@@ -83,7 +83,7 @@ class Header extends Component {
         {routeName === 'Homepage' && <Text style={{
           color: Color.white,
           fontFamily: 'Poppins-SemiBold'
-        }}>Welcome Kennette!</Text>}
+        }}>{language.welcome} {user?.username?.charAt(0)?.toUpperCase() + user?.username?.substring(1)}!</Text>}
 
         {routeName === 'Dashboard' &&
           <TouchableOpacity

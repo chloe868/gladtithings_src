@@ -12,5 +12,17 @@ export default {
   },
   footerIcon: {
     marginTop: Platform.OS == 'ios' ? 30 : 0
+  },
+  title: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20
+  },
+  right: {
+    flexDirection: 'row-reverse',
+    width: '50%',
+    position: 'absolute',
+    right: 20,
+    top: 20,
   }
 }

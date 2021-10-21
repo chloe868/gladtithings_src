@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Style from './Style.js';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, Image, Text, TouchableHighlight, ScrollView, Linking } from 'react-native';
-import { Routes, Color, Helper, BasicStyles } from 'common';
+import { View, Image, Text, ScrollView, Linking } from 'react-native';
+import { Color, Helper, BasicStyles } from 'common';
 import LinearGradient from 'react-native-linear-gradient'
 import { Dimensions } from 'react-native';
 import Button from '../generic/Button.js'
+
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 class Landing extends Component {
@@ -15,6 +15,10 @@ class Landing extends Component {
   }
 
   onFocusFunction = async () => {
+    const { setLanguage } = this.props;
+    if(this.props.state.language === null) {
+      setLanguage(Helper.defaultLanguage)
+    }
     Linking.getInitialURL().then(url => {
       console.log(`from initial url ${url}, call navigate`)
       this.navigate(url);
@@ -73,7 +77,7 @@ class Landing extends Component {
   }
 
   render() {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
       <LinearGradient
         colors={theme && theme.gradient !== undefined && theme.gradient !== null ? theme.gradient : Color.gradient}
@@ -114,7 +118,7 @@ class Landing extends Component {
               }}
               content={
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ color: 'white', fontSize: 15 }}>Get Started</Text>
+                  <Text style={{ color: 'white', fontSize: 15 }}>{language?.getStarted}</Text>
                 </View>
               }
               redirect={() => this.props.navigation.navigate('registerStack')}
@@ -122,14 +126,14 @@ class Landing extends Component {
                 <Text style={{
                 color: 'white',
                 fontSize: BasicStyles.standardFontSize + 2
-              }}>Already have an account?&nbsp;&nbsp;
+              }}>{language?.alreadyHaveAnAccount}&nbsp;&nbsp;
                 <Text
                   style={{
                     fontFamily: 'Poppins-SemiBold',
                     fontSize: BasicStyles.standardFontSize + 2
                   }}
                   onPress={() => this.props.navigation.navigate('loginStack')}>
-                  Sign In
+                  {language?.signIn}
                 </Text>
               </Text>
             </View>
@@ -144,7 +148,8 @@ const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
     setTheme: (theme) => dispatch(actions.setTheme(theme)),
-    setDeepLinkRoute: (deepLinkRoute) => dispatch(actions.setDeepLinkRoute(deepLinkRoute))
+    setDeepLinkRoute: (deepLinkRoute) => dispatch(actions.setDeepLinkRoute(deepLinkRoute)),
+    setLanguage: (language) => dispatch(actions.setLanguage(language))
   };
 };
 export default connect(

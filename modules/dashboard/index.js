@@ -97,7 +97,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { theme } = this.props.state;
+    const { language } = this.props.state;
     const { ledger, data, isLoading } = this.state;
     return (
       <View style={{
@@ -134,7 +134,7 @@ class Dashboard extends Component {
                 onClick={() => {
                   this.props.navigation.navigate('depositStack', { page: 'Deposit' })
                 }}
-                title={'Deposit'}
+                title={language.deposit}
               />
 
               <IncrementButton style={{
@@ -144,7 +144,7 @@ class Dashboard extends Component {
                 onClick={() => {
                   this.props.navigation.navigate('depositStack', { page: 'Withdraw' })
                 }}
-                title={'Withdraw'}
+                title={language.withdraw}
               />
             </View>
 
@@ -161,7 +161,7 @@ class Dashboard extends Component {
               <Text style={{
                 fontFamily: 'Poppins-SemiBold',
                 color: Color.primary
-              }}>Tithings</Text>
+              }}>{language.tithings}</Text>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('transactionsStack')
@@ -170,7 +170,7 @@ class Dashboard extends Component {
 
                 <Text style={{
                   fontFamily: 'Poppins-SemiBold',
-                }}>{'View more >>>'}</Text>
+                }}>{language.viewMore + ' >>>'}</Text>
 
               </TouchableOpacity>
             </View>

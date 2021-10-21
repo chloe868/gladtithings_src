@@ -11,27 +11,6 @@ import CardsWithIcon from '../generic/CardsWithIcon';
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-const data = [
-  {
-    id: 0,
-    title: 'Theme 1',
-    address: 'Cebu, Cebu City, Philippines',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00',
-    type: 'Recollection'
-  },
-  {
-    id: 0,
-    title: 'Theme 1',
-    address: 'Cebu, Cebu City, Philippines',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00',
-    type: 'Recollection'
-  }
-]
-
 const donations = [
   {
     title: 'Display Settings',

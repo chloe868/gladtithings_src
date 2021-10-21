@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, Dimensions} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import Display from './';
 import {connect} from 'react-redux';
 import { BasicStyles, Color } from 'common';
-
+const width = Math.round(Dimensions.get('window').width);
 class HeaderOptions extends Component {
   constructor(props) {
     super(props);
@@ -15,17 +15,35 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop();
   };
   render() {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={this.back.bind(this)}>
-          {/*Donute Button Image */}
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: width,
+      }}>
+        <TouchableOpacity
+          onPress={this.back.bind(this)}
+          style={{
+            position: 'absolute',
+            left: 0
+          }}
+        >
           <FontAwesomeIcon
             icon={faChevronLeft}
             size={BasicStyles.headerBackIconSize}
-            style={{color: theme ? theme.primary : Color.primary }}
+            style={{ color: theme ? theme.primary : Color.primary }}
           />
         </TouchableOpacity>
+        <Text
+        numberOfLines={1}
+        style={{
+          fontFamily: 'Poppins-SemiBold',
+          fontSize: 20,
+          width: '80%',
+          textAlign: 'center'
+        }}>{language.themeSettings}</Text>
       </View>
     );
   }
@@ -46,7 +64,7 @@ const DisplayStack = createStackNavigator({
   displayScreen: {
     screen: Display,
     navigationOptions: ({navigation}) => ({
-      title: 'Theme Settings',
+      title: '',
       drawerLabel: 'Display',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle

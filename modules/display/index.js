@@ -6,23 +6,6 @@ import ThemeSettingTile from 'modules/display/ThemeSettingTile.js';
 import Footer from 'modules/generic/Footer'
 const height = Math.round(Dimensions.get('window').height);
 
-const dummyThemeData = [
-  {
-    title: 'Test Mode 1',
-    details: 'Add description here',
-    colors: ['#4CCBA6', '#000000'],
-  },
-  {
-    title: 'Test Mode',
-    details: 'Add description here',
-    colors: ['#5842D7', '#000000'],
-  },
-  {
-    title: 'Test Mode 1',
-    details: 'Add description here',
-    colors: ['#000000', '#4CCBA6'],
-  },
-];
 class Display extends Component {
   constructor(props) {
     super(props);
@@ -32,8 +15,8 @@ class Display extends Component {
   }
 
   componentDidMount(){
-    const { theme } = this.props.state;
-    dummyThemeData.map((item, index) => {
+    const { theme, language } = this.props.state;
+    language.colorList.map((item, index) => {
       if(item.colors[0] === theme?.primary || item.colors[0] === Color.primary) {
         this.setState({selectedTile: index})
       }
@@ -41,7 +24,8 @@ class Display extends Component {
   }
 
   selectHandler = (index) => {
-    let _theme = dummyThemeData[index].colors
+    const { language } = this.props.state;
+    let _theme = language.colorList.[index].colors
     const {setTheme} = this.props;
     let temGrad = []
     if(_theme[0] === '#4CCBA6' || _theme[0] === '#000000'){
@@ -64,7 +48,8 @@ class Display extends Component {
   
 
   displayThemeTiles = () => {
-    return dummyThemeData.map((data, index) => {
+    const{ language } = this.props.state;
+    return language.colorList.map((data, index) => {
       return (
         <ThemeSettingTile
           id={index}
