@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
-import { View, TextInput, Image, TouchableHighlight, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import Style from './Style.js';
 import { Spinner } from 'components';
 import Api from 'services/api/index.js';
@@ -11,16 +10,14 @@ import PasswordInputWithIconLeft from 'components/InputField/PasswordWithIcon.js
 import TextInputWithIcon from 'components/InputField/TextInputWithIcon.js';
 import Header from './Header';
 import LinearGradient from 'react-native-linear-gradient'
-import config from 'src/config';
 import { Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faComments, faArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
-// import Button from 'components/Form/Button';
+import { faArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
+
 import Button from '../generic/Button.js'
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 class Register extends Component {
-  //Screen1 Component
   constructor(props) {
     super(props);
     this.state = {
@@ -119,7 +116,7 @@ class Register extends Component {
 
   render() {
     const { isLoading, errorMessage, isResponseError } = this.state;
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
       <LinearGradient
         colors={theme && theme.gradient !== undefined && theme.gradient !== null ? theme.gradient : Color.gradient}
@@ -134,7 +131,7 @@ class Register extends Component {
             ...Style.MainContainer,
             minHeight: height * 1.5
             }}>
-            <Header params={"Sign Up"}></Header>
+            <Header params={language.signUp}></Header>
             {
               errorMessage !== null && (
                 <View style={{
@@ -154,7 +151,7 @@ class Register extends Component {
             <TextInputWithIcon
               onTyping={(username) => this.setState({ username })}
               value={this.state.email}
-              placeholder={'Username'}
+              placeholder={language.username}
               style={{
                 width: '90%',
                 borderColor: 'white',
@@ -166,7 +163,7 @@ class Register extends Component {
             <TextInputWithIcon
               onTyping={(email) => this.setState({ email })}
               value={this.state.email}
-              placeholder={'Email Address'}
+              placeholder={language.emailAddress}
               style={{
                 width: '90%',
                 borderColor: 'white',
@@ -184,7 +181,7 @@ class Register extends Component {
                 borderColor: 'white',
                 color: 'black'
               }}
-              placeholder={'Password'} />
+              placeholder={language.password} />
 
             <PasswordInputWithIconLeft
               onTyping={(input) => this.setState({
@@ -195,17 +192,18 @@ class Register extends Component {
                 borderColor: 'white',
                 color: 'black'
               }}
-              placeholder={'Confirm Password'}
+              placeholder={language.confirmPassword}
             />
 
             <Text
               onPress={() => this.redirect('forgotPasswordStack')}
               style={{
                 color: 'white',
-                width: '50%',
-                marginLeft: '60%',
+                width: '100%',
+                alignSelf: 'flex-end',
+                textAlign: 'right'
               }}
-            >Forgot Password?</Text>
+            >{language.forgotPassword}</Text>
 
 
 
@@ -219,7 +217,7 @@ class Register extends Component {
               }}
               content={
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ color: 'white', fontSize: 15 }}>Sign Up</Text>
+                  <Text style={{ color: 'white', fontSize: 15 }}>{language.signUp}</Text>
                   <FontAwesomeIcon color={'white'} icon={faArrowRight} style={{ marginLeft: 10, marginTop: 1 }} />
                 </View>
               }
@@ -234,13 +232,13 @@ class Register extends Component {
               <Text style={{
                 color: 'white',
                 fontSize: BasicStyles.standardFontSize
-              }}>Already have an account?&nbsp;&nbsp;
+              }}>{language.alreadyHaveAnAccount}&nbsp;&nbsp;
                 <Text
                   style={{
                     fontFamily: 'Poppins-SemiBold'
                   }}
                   onPress={() => this.props.navigation.navigate('loginStack')}>
-                  Sign In
+                  {language.signIn}
                 </Text>
               </Text>
             </View>

@@ -10,7 +10,7 @@ export default {
     borderColor: Color.gray,
     flexDirection: 'row',
     padding: 15,
-    marginBottom: 10,
-    marginTop: 10
+    marginBottom: 7,
+    marginTop: 7
   }
 };

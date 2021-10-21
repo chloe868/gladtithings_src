@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
-import { View, TextInput, Image, TouchableHighlight, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import Style from './Style.js';
 import { Spinner } from 'components';
 import Api from 'services/api/index.js';
@@ -15,12 +14,13 @@ import { Dimensions } from 'react-native';
 import PasswordInputWithIconLeft from 'components/InputField/PasswordWithIcon.js';
 import TextInputWithIcon from 'components/InputField/TextInputWithIcon.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faComments, faArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
 import Button from '../generic/Button.js'
+import { lang } from 'moment';
+
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 class ForgotPassword extends Component {
-  //Screen1 Component
   constructor(props) {
     super(props);
     this.state = {
@@ -160,7 +160,7 @@ class ForgotPassword extends Component {
   }
 
   _changePassword = () => {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
       <View>
         <PasswordInputWithIconLeft
@@ -168,7 +168,7 @@ class ForgotPassword extends Component {
             password: input
           })}
           style={{ width: '80%', borderColor: 'white' }}
-          placeholder={'New Password'} />
+          placeholder={language.newPassword} />
 
         <View style={{
           marginTop: 10,
@@ -179,7 +179,7 @@ class ForgotPassword extends Component {
               confirmPassword: input
             })}
             style={{ width: '80%', borderColor: 'white' }}
-            placeholder={'Confirm Password'}
+            placeholder={language.confirmPassword}
           />
         </View>
         <Button
@@ -191,7 +191,7 @@ class ForgotPassword extends Component {
           }}
           content={
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: 'white', fontSize: 15 }}>Reset</Text>
+              <Text style={{ color: 'white', fontSize: 15 }}>{language.reset}</Text>
               <FontAwesomeIcon color={'white'} icon={faArrowRight} style={{ marginLeft: 10, marginTop: 1 }} />
             </View>
           }
@@ -204,13 +204,13 @@ class ForgotPassword extends Component {
   }
 
   _sendRequest = () => {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
       <View>
         <TextInputWithIcon
           onTyping={(email) => this.setState({ email })}
           value={this.state.email}
-          placeholder={'Email Address'}
+          placeholder={language.emailAddress}
           style={{ width: '90%', borderColor: 'white' }}
           icon={faUser}
         />
@@ -223,7 +223,7 @@ class ForgotPassword extends Component {
           }}
           content={
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: 'white', fontSize: 15 }}>Submit</Text>
+              <Text style={{ color: 'white', fontSize: 15 }}>{language.submit}</Text>
               <FontAwesomeIcon color={'white'} icon={faArrowRight} style={{ marginLeft: 10, marginTop: 1 }} />
             </View>
           }
@@ -235,9 +235,8 @@ class ForgotPassword extends Component {
     );
   }
   render() {
-    const { isLoading, errorMessage, changeStep, successMessage } = this.state;
-    const { theme } = this.props.state;
-    const { blockedFlag, isOtpModal, isResponseError, responseErrorTitle, responseErrorMessage } = this.state;
+    const { isLoading, errorMessage, changeStep, successMessage, blockedFlag, isOtpModal, isResponseError, responseErrorTitle, responseErrorMessage } = this.state;
+    const { theme, language } = this.props.state;
     return (
       <LinearGradient
         colors={theme && theme.gradient !== undefined && theme.gradient !== null ? theme.gradient : Color.gradient}
@@ -250,7 +249,7 @@ class ForgotPassword extends Component {
           style={Style.ScrollView}
           showsVerticalScrollIndicator={false}>
           <View style={[Style.MainContainer, { height: height }]}>
-            <Header params={"Request to Reset Password"}></Header>
+            <Header params={language.requestReset}></Header>
             {
               errorMessage != null && (
                 <View style={{
@@ -293,14 +292,14 @@ class ForgotPassword extends Component {
               <Text style={{
                 color: 'white',
                 fontSize: BasicStyles.standardFontSize
-              }}>Already have an account?&nbsp;&nbsp;
+              }}>{language.alreadyHaveAnAccount}&nbsp;&nbsp;
                 <Text
                   style={{
                     textDecorationLine: 'underline',
                     fontFamily: 'Poppins-SemiBold'
                   }}
                   onPress={() => this.props.navigation.navigate('loginStack')}>
-                  Sign In
+                  {language.signIn}
                 </Text>
               </Text>
             </View>

@@ -17,8 +17,7 @@ class Subscriptions extends Component {
   }
 
   render() {
-    const { data } = this.props;
-    const { theme, user } = this.props.state;
+    const { language } = this.props.state;
     return (
       <View style={{
         paddingTop: this.props.paddingTop ? this.props.paddingTop : 0,
@@ -33,7 +32,7 @@ class Subscriptions extends Component {
           <Text style={{
             fontFamily: 'Poppins-SemiBold',
             color: Color.primary
-          }}>Subscriptions</Text>
+          }}>{language.subscriptions}</Text>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate('subscriptionStack')
@@ -41,7 +40,7 @@ class Subscriptions extends Component {
           >
             <Text style={{
               fontFamily: 'Poppins-SemiBold',
-            }}>{'View more >>>'}</Text>
+            }}>{language.viewMore + ' >>>'}</Text>
 
           </TouchableOpacity>
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
@@ -68,13 +67,13 @@ class Subscriptions extends Component {
                 textAlign: 'justify',
                 paddingBottom: 10
               }}>
-                Hassle free tithings. Just set the amount, church and time then we will do it for you.
+                {language.subscriptionDescription}
               </Text>
               <View style={{
                 width: '100%',
               }}>
                 <Button
-                  title={'Go to Subscriptions'}
+                  title={language.goToSubscription}
                   onClick={() => {
                     this.props.navigation.navigate('subscriptionStack')
                   }}

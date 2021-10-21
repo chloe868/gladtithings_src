@@ -11,29 +11,6 @@ import IncrementButton from 'components/Form/Button';
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-const data = [
-  {
-    title: 'Email Login',
-    description: "Receives email address every time there’s a login of the account.",
-    flag: false
-  },
-  {
-    title: 'Email OTP',
-    description: "OTP will be send to you email address",
-    flag: false
-  },
-  {
-    title: 'SMS OTP',
-    description: "OTP will be send to you via SMS using your registered mobile number",
-    flag: true
-  },
-  {
-    title: 'Subscribe to get our latest updates',
-    description: "Receives events, and many more to your registered email address",
-    flag: false
-  },
-]
-
 class NotificationSettings extends Component {
   constructor(props) {
     super(props);
@@ -42,7 +19,7 @@ class NotificationSettings extends Component {
   }
 
   render() {
-    const { theme, user } = this.props.state;
+    const { language } = this.props.state;
     return (
       <View style={{
         height: height,
@@ -56,19 +33,11 @@ class NotificationSettings extends Component {
           }}>
 
           {
-            data.map((item, index) => {
+            language.notificationsOptions.map((item, index) => {
               return (
                 <CardsWithIcon
                   redirect={() => {
-                    if(item.route !== 'pageMessageStack'){
-                      this.props.navigation.navigate(item.route)
-                    }else{
-                      this.props.navigation.navigate(item.route, {
-                        title: 'Success Page',
-                        message: 'Transaction was successful',
-                        payload: 'error'
-                      })
-                    }
+                    console.log('test')
                   }}
                   version={4}
                   title={item.title}

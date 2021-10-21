@@ -16,7 +16,7 @@ class BalanceCard extends Component {
 
   render() {
     const { data } = this.props;
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
       <View
         style={[styles.CardContainer, {
@@ -24,7 +24,7 @@ class BalanceCard extends Component {
         }]}>
         
         <Text style={styles.AvailableBalanceTextStyle}>
-          Available Balance
+          {language.availableBalance}
         </Text>
 
         <Text style={styles.BalanceTextStyle}>

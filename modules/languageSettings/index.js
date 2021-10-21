@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, Image } from 'react-native';
+import { View, Text, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { Color } from 'common';
 import { connect } from 'react-redux';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import styles from './Style.js';
+import { English, Spanish } from 'src/modules/locales';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -13,25 +14,39 @@ class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      language: [
+      languages: [
         {
           image: 'assets/united-states.png',
-          language: 'English',
-          enable: true
+          title: 'English',
+          language: 'english'
         },
         {
           image: 'assets/spain.png',
-          language: 'Spanish',
-          enable: false
+          title: 'Spanish',
+          language: 'spanish'
         }
       ]
     }
   }
 
+  changeLanguage = (item) => {
+    const { setLanguage } = this.props;
+    console.log(item.language)
+    switch(item.language) {
+      case 'english':
+        setLanguage(English)
+        break;
+      case 'spanish':
+        setLanguage(Spanish)
+        break;
+      default:
+        break;
+    }
+  }
 
   render() {
-    const { test, language } = this.state;
-    const { theme } = this.props.state;
+    const { test, languages } = this.state;
+    const { theme, language } = this.props.state;
     return (
       <View style={{
         paddingLeft: 20,
@@ -47,15 +62,21 @@ class Transactions extends Component {
               fontFamily: 'Poppins-SemiBold',
               textAlign: 'left',
               paddingTop: 2
-            }}>Available Languages</Text>
+            }}>{language.availabeLanguages}</Text>
             <Text style={{
               width: '85%'
-            }}>Top the language you want to use.</Text>
+            }}>{language.tapLanguage}</Text>
           </View>
           {
-            language.map((item, index) => {
+            languages.map((item, index) => {
               return (
-                <View style={styles.Container} key={index}>
+                <TouchableOpacity
+                  style={styles.Container}
+                  key={index}
+                  onPress={() => {
+                    this.changeLanguage(item)
+                  }}
+                >
                   <View style={{
                     width: '18%'
                   }}>
@@ -63,17 +84,19 @@ class Transactions extends Component {
                   </View>
                   <View style={styles.ThemeTitleContainer}>
                     <Text style={styles.ThemeTitleTextStyle}>
-                      {item.language}
+                      {item.title}
                     </Text>
                   </View>
-                  <View style={styles.IconContainer}>
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      size={25}
-                      style={{ color: Color.danger }}
-                    />
+                  <View>
+                    {language.lang == item.language && 
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        size={25}
+                        style={{ color: theme ? theme.primary : Color.primary }}
+                      />
+                    }
                   </View>
-                </View>
+                </TouchableOpacity>
               )
             })
           }
@@ -84,6 +107,15 @@ class Transactions extends Component {
 }
 const mapStateToProps = state => ({ state: state });
 
+
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+    setLanguage: (language) => dispatch(actions.setLanguage(language)),
+  };
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Transactions);

@@ -163,7 +163,7 @@ class AccountSettings extends Component {
   }
 
   render() {
-    const { theme, user } = this.props.state;
+    const { language, user } = this.props.state;
     return (
       <View style={{
         height: height,
@@ -177,17 +177,17 @@ class AccountSettings extends Component {
             minHeight: height + (height * 0.5)
           }}>
             <InputFieldWithIcon
-              placeholder={user ? user.username : 'Username'}
+              placeholder={user ? user.username : language.username}
               icon={faUser}
-              label={'Username'}
+              label={language.username}
               disable={true}
               onTyping={(text) => {this.setState({username: text})}}
             />
 
             <InputFieldWithIcon
-              placeholder={user ? user.email : 'Email Address'}
+              placeholder={user ? user.email : language.emailAddress}
               icon={faEnvelope}
-              label={'Email Address'}
+              label={language.emailAddress}
               onTyping={(text) => {this.setState({email: text})}}
             />
 
@@ -197,20 +197,20 @@ class AccountSettings extends Component {
             }}>
               <Text style={{
                 fontFamily: 'Poppins-SemiBold'
-              }}>Security Credentials</Text>
+              }}>{language.securityCredentials}</Text>
 
               <InputFieldWithIcon
-                placeholder={'New Password'}
+                placeholder={language.newPassword}
                 icon={faUser}
-                label={'New Password *'}
+                label={language.newPassword}
                 secureTextEntry={true}
                 onTyping={(text) => {this.setState({password: text})}}
               />
 
               <InputFieldWithIcon
-                placeholder={'Confirm New Password'}
+                placeholder={language.confirmPassword}
                 icon={faUser}
-                label={'Confirm New Password *'}
+                label={language.confirmPassword}
                 secureTextEntry={true}
                 onTyping={(text) => {this.setState({confirmPassword: text})}}
               />
@@ -227,7 +227,7 @@ class AccountSettings extends Component {
                 onClick={() => {
                   this.update()
                 }}
-                title={'Update'}
+                title={language.update}
               />
             </View>
           </View>

@@ -156,7 +156,7 @@ class Profile extends Component {
   }
 
   update = () => {
-    const { user } = this.props.state;
+    const { user, language } = this.props.state;
     console.log(this.validation(), user, '-----');
     if (user === null) {
       return
@@ -164,7 +164,7 @@ class Profile extends Component {
     if (this.validation() === true) {
       Alert.alert(
         "Opps",
-        "All fields are required!",
+        language.fieldError,
         [
           { text: "OK" }
         ],
@@ -182,10 +182,6 @@ class Profile extends Component {
       cellular_number: this.state.cellularNumber,
       address: this.state.address
     }
-    // this.updateAccount();
-    // if (user.account_information?.last_name === this.state.lastName && user.account_information?.first_name === this.state.firstName && this.state) {
-    //   return
-    // }
 
     this.setState({ isLoading: true })
     Api.request(Routes.accountInformationUpdate, parameter, response => {
@@ -271,7 +267,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { user, theme } = this.props.state;
+    const { user, theme, language } = this.props.state;
     const { firstName, lastName } = this.state;
     return (
       <View style={{backgroundColor: Color.containerBackground}}>
@@ -315,7 +311,7 @@ class Profile extends Component {
               <Text style={{
                 textAlign: 'center',
                 fontFamily: 'Poppins-SemiBold',
-                marginTop: 5
+                marginTop: 10
               }}>{firstName && lastName && firstName + ' ' + lastName}</Text>
               <Text style={{
                 textAlign: 'center',
@@ -328,7 +324,7 @@ class Profile extends Component {
                   textAlign: 'center',
                   fontFamily: 'Poppins-SemiBold',
                   fontStyle: 'italic'
-                }}>Verified</Text>
+                }}>{language.verified}</Text>
               </View>
             </View>
             <View style={{
@@ -342,7 +338,7 @@ class Profile extends Component {
                 style={{
                   fontFamily: 'Poppins-SemiBold',
                 }}>
-                Personal Information
+                {language.personalInformation}
               </Text>
               <TouchableOpacity
                 style={{
@@ -355,7 +351,7 @@ class Profile extends Component {
                 <Text style={{
                   color: this.state.isEdit ? Color.danger : theme ? theme.primary : Color.primary,
                   fontFamily: 'Poppins-SemiBold',
-                }}>{this.state.isEdit ? 'Cancel' : 'Edit'}</Text>
+                }}>{this.state.isEdit ? language.cancel : language.edit}</Text>
               </TouchableOpacity>
             </View>
             {this.state.isEdit ? <View style={{
@@ -367,44 +363,44 @@ class Profile extends Component {
               justifyContent: 'center'
             }}>
               <InputFieldWithIcon
-                placeholder={this.state.firstName ? this.state.firstName : 'Enter First Name'}
+                placeholder={this.state.firstName ? this.state.firstName : language.firstName}
                 icon={faUser}
-                label={'First Name'}
+                label={language.firstName}
                 onTyping={text => { this.firstNameHandler(text) }}
                 profile={true}
                 placeholderTextColor={this.state.firstName ? '#000' : '#999'}
               />
               <InputFieldWithIcon
-                placeholder={this.state.lastName ? this.state.lastName : 'Enter Last Name'}
+                placeholder={this.state.lastName ? this.state.lastName : language.lastName}
                 icon={faUser}
-                label={'Last Name'}
+                label={language.lastName}
                 profile={true}
                 onTyping={text => { this.lastNameHandler(text) }}
               />
               <InputFieldWithIcon
-                placeholder={this.state.gender ? this.state.gender : 'Enter Gender'}
+                placeholder={this.state.gender ? this.state.gender : language.noGender}
                 icon={faUser}
-                label={'Gender'}
+                label={language.noGender}
                 profile={true}
                 onTyping={text => { this.genderHandler(text) }}
               />
               <InputFieldWithIcon
-                placeholder={this.state.cellularNumber ? this.state.cellularNumber : 'Enter Phone Number'}
+                placeholder={this.state.cellularNumber ? this.state.cellularNumber : language.phoneNumber}
                 icon={faUser}
-                label={'Phone Number'}
+                label={language.phoneNumber}
                 profile={true}
                 onTyping={text => { this.cellularNumberHandler(text) }}
               />
               <InputFieldWithIcon
-                placeholder={this.state.address ? this.state.address : 'Enter Address'}
+                placeholder={this.state.address ? this.state.address : language.address}
                 icon={faMapMarkerAlt}
-                label={'Address'}
+                label={language.address}
                 profile={true}
                 onTyping={text => { this.addressHandler(text) }}
               />
             </View> :
               <View style={{
-                padding: 25
+                padding: 20
               }}>
                 <View style={{
                   flexDirection: 'row',
@@ -418,7 +414,7 @@ class Profile extends Component {
                       marginRight: 10
                     }}
                   />
-                  <Text>{this.state.email || 'No email provided'}</Text>
+                  <Text>{this.state.email || language.noEmail}</Text>
                 </View>
                 <View style={{
                   flexDirection: 'row',
@@ -432,7 +428,7 @@ class Profile extends Component {
                       marginRight: 10
                     }}
                   />
-                  <Text>{this.state.cellularNumber || 'No phone number provided'}</Text>
+                  <Text>{this.state.cellularNumber || language.noPhoneNumber}</Text>
                 </View>
                 <View style={{
                   flexDirection: 'row',
@@ -446,7 +442,7 @@ class Profile extends Component {
                       marginRight: 10
                     }}
                   />
-                  <Text>{this.state.address || 'No address provided'}</Text>
+                  <Text>{this.state.address || language.noLocation}</Text>
                 </View>
                 <View style={{
                   flexDirection: 'row',
@@ -460,7 +456,7 @@ class Profile extends Component {
                       marginRight: 10
                     }}
                   />
-                  <Text>{this.state.gender || 'Gender'}</Text>
+                  <Text>{this.state.gender || language.noGender}</Text>
                 </View>
               </View>}
           </View>
@@ -480,7 +476,7 @@ class Profile extends Component {
           bottom: 10,
           width: '90%'
         }}>
-          <CustomizedButton onClick={() => { this.update() }} title={'Update'}></CustomizedButton>
+          <CustomizedButton onClick={() => { this.update() }} title={language.update}></CustomizedButton>
         </View>}
       </View>
     );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, Dimensions, TextInput } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronLeft, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -22,7 +22,7 @@ class HeaderOptions extends Component {
   };
 
   render() {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     const { showSearch, input } = this.state;
     return (
       <View style={{ flexDirection: 'row', width: width }}>
@@ -65,7 +65,7 @@ class HeaderOptions extends Component {
               }}
               onChangeText={(text) => this.setState({ input: text })}
               value={input}
-              placeholder="Search"
+              placeholder={language.search}
             />
           </View> :
           <View style={{
@@ -81,7 +81,7 @@ class HeaderOptions extends Component {
                 fontSize: 18,
                 fontFamily: 'Poppins-SemiBold'
               }}
-            >Churches nearby...</Text>
+            >{language.churchesNearby}</Text>
           </View>
         }
         <View style={{

@@ -47,7 +47,7 @@ class Churches extends Component {
   }
 
   render() {
-    const { theme, user } = this.props.state;
+    const { theme, language } = this.props.state;
     const { data, isLoading } = this.state;
     return (
       <View style={{
@@ -76,7 +76,7 @@ class Churches extends Component {
             version={3}
             data={data}
             buttonColor={theme ? theme.primary : Color.primary}
-            buttonTitle={'Subscribe'}
+            buttonTitle={language.subscribe}
             redirect={() => { this.props.navigation.navigate('churchProfileStack') }}
             buttonClick={(data) => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation', data: data }) }}
           />

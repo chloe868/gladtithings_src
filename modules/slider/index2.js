@@ -113,7 +113,7 @@ class Slider2 extends Component {
   }
 
   render() {
-    const { user, theme } = this.props.state;
+    const { user, theme, language } = this.props.state;
     const { colors } = this.state
     return (
       <LinearGradient
@@ -214,8 +214,8 @@ class Slider2 extends Component {
               alignItems: 'flex-end',
               height: '100%'
             }}>
-              {Helper.DrawerMenu.length > 0 &&
-                Helper.DrawerMenu.map((item, index) => {
+              {language.DrawerMenu.length > 0 &&
+                language.DrawerMenu.map((item, index) => {
                   return (
                     <TouchableOpacity style={[
                       styles.navSectionStyle, {
@@ -226,7 +226,7 @@ class Slider2 extends Component {
                     ]}
                       key={index}
                       onPress={() =>
-                        this.navigateToScreen(item.route, item.title)
+                        this.navigateToScreen(item.route, item.route)
                       }>
                       <View style={styles.inActiveDrawer}>
                         <FontAwesomeIcon style={{
@@ -243,9 +243,9 @@ class Slider2 extends Component {
           </ScrollView>
         </View>
         <View style={[styles.navSectionStyle, { borderBottomWidth: 0, flex: 1, position: 'absolute', bottom: 15, borderTopWidth: 1, width: width, borderColor: 'white', paddingRight: 10 }]}>
-          {Helper.DrawerMenu1.map((item, index) => {
+          {language.DrawerMenu1.map((item, index) => {
             return (
-              <TouchableOpacity onPress={() => { this.navigateToScreen(item.route, item.title) }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
+              <TouchableOpacity onPress={() => { this.navigateToScreen(item.route, item.route) }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
                 <FontAwesomeIcon style={[
                   styles.navItemStyle, {
                     color: Color.secondary,

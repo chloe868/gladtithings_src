@@ -57,7 +57,7 @@ class CustomizedHeader extends Component {
   }
 
   versionTwo = () => {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
       <View style={{
         justifyContent: 'center',
@@ -152,7 +152,7 @@ class CustomizedHeader extends Component {
                   color: 'white',
                   fontSize: 12,
                   fontFamily: 'Poppins-SemiBold'
-                }}>Go to Subscription</Text>
+                }}>{language.goToSubscription}</Text>
               </View>
             }
             redirect={() => {

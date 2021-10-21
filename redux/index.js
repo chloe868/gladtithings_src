@@ -15,7 +15,8 @@ const types = {
   SET_CURRENT_ROUTE: 'SET_CURRENT_ROUTE',
   SET_QR_CODE_MODAL: 'SET_QR_CODE_MODAL',
   SET_LEDGER: 'SET_LEDGER',
-  SET_PAYPAL_URL: 'SET_PAYPAL_URL'
+  SET_PAYPAL_URL: 'SET_PAYPAL_URL',
+  SET_LANGUAGE: 'SET_LANGUAGE'
 };
 
 export const actions = {
@@ -52,6 +53,9 @@ export const actions = {
   },
   setPaypalUrl(paypalUrl) {
     return { type: types.SET_PAYPAL_URL, paypalUrl}
+  },
+  setLanguage(language) {
+    return { type: types.SET_LANGUAGE, language}
   }
 };
 
@@ -67,7 +71,8 @@ const initialState = {
     isVisible: false
   },
   ledger: null,
-  paypalUrl: null
+  paypalUrl: null,
+  language: null
 };
 
 storeData = async (key, value) => {
@@ -82,12 +87,13 @@ const reducer = (state = initialState, action) => {
   const { type, user, token } = action;
   const { theme, layer } = action;
   const { acc } = action;
-  const { route } = action;
   const { ledger } = action;
   const { paypalUrl } = action;
+  const { language } = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
+      initialState['language'] = state.language;
       return Object.assign({}, initialState);
     case types.LOGIN:
       storeData('token', token);
@@ -143,6 +149,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         paypalUrl
+      }
+    case types.SET_LANGUAGE:
+      return {
+        ...state,
+        language
       }
     default:
       return { ...state, nav: state.nav };

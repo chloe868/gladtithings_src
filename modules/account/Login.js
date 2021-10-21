@@ -232,8 +232,7 @@ class Login extends Component {
 
   render() {
     const { isLoading, error, isResponseError } = this.state;
-    const { blockedFlag, isOtpModal } = this.state;
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     return (
       <LinearGradient
         colors={theme && theme.gradient !== undefined && theme.gradient !== null ? theme.gradient : Color.gradient}
@@ -253,26 +252,26 @@ class Login extends Component {
             height: height * 1.5
           }}>
             <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
-            <Header params={"Sign In"}></Header>
+            <Header params={language.getStarted}></Header>
 
             {error > 0 ? <View style={Style.messageContainer}>
               {error == 1 ? (
-                <Text style={Style.messageText}>Please fill up the required fields.</Text>
+                <Text style={Style.messageText}>{language.fieldError}</Text>
               ) : null}
 
               {error == 2 ? (
-                <Text style={Style.messageText}>Username and password didn't match.</Text>
+                <Text style={Style.messageText}>{language.notMatchError}</Text>
               ) : null}
 
               {error == 3 ? (
-                <Text style={Style.messageText}>Your Email does not exist</Text>
+                <Text style={Style.messageText}>{language.emailError}</Text>
               ) : null}
             </View> : null}
 
             <TextInputWithIcon
               onTyping={(username) => this.setState({ username })}
               value={this.state.email}
-              placeholder={'Username'}
+              placeholder={language.username}
               style={{ width: '90%', borderColor: 'white', color: 'black' }}
               icon={faUser}
             />
@@ -282,19 +281,19 @@ class Login extends Component {
                 password: input
               })}
               style={{ width: '80%', borderColor: 'white', color: 'black' }}
-              placeholder={'Password'}
+              placeholder={language.password}
             />
 
             <Text
               onPress={() => this.redirect('forgotPasswordStack')}
               style={{
                 color: 'white',
-                width: '50%',
+                width: '100%',
                 marginTop: 20,
                 alignSelf: 'flex-end',
                 textAlign: 'right'
               }}
-            >Forgot Password?</Text>
+            >{language.forgotPassword}</Text>
 
             <Button
               style={{
@@ -306,7 +305,7 @@ class Login extends Component {
               }}
               content={
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ color: 'white', fontSize: 15 }}>Sign In</Text>
+                  <Text style={{ color: 'white', fontSize: 15 }}>{language.signIn}</Text>
                   <FontAwesomeIcon color={'white'} icon={faArrowRight} style={{ marginLeft: 10, marginTop: 1 }} />
                 </View>
               }
@@ -324,13 +323,13 @@ class Login extends Component {
               <Text style={{
                 color: 'white',
                 fontSize: BasicStyles.standardFontSize
-              }}>Dont't have an account?&nbsp;&nbsp;
+              }}>{language.dontHaveAnAccount}&nbsp;&nbsp;
                 <Text
                   style={{
                     fontFamily: 'Poppins-SemiBold'
                   }}
                   onPress={() => this.props.navigation.navigate('registerStack')}>
-                  Sign Up
+                  {language.signUp}
                 </Text>
               </Text>
             </View>
