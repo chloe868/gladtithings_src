@@ -20,8 +20,9 @@ class PostCard extends Component {
     this.state = {
       reply: null,
       options: false,
+      options2: false,
       imageModalUrl: null,
-      isImageModal: false
+      isImageModal: false,
     }
   }
 
@@ -44,6 +45,7 @@ class PostCard extends Component {
                 posts && posts.length > 0 && posts.map((item, index) => {
                   if (item.id == data.id) {
                     this.setState({ options: false })
+                    // this.setState({ options2: false })
                     posts.splice(index, 1)
                     this.props.setComments(posts)
                   }
@@ -174,6 +176,124 @@ class PostCard extends Component {
               >
                 <FontAwesomeIcon icon={faFileAlt}/>
                 <Text style={{paddingLeft: 10 }}>Report</Text>
+              </View>
+            
+              <View
+                style={{
+                  paddingLeft: 25,
+                  flexDirection: 'row',
+                  paddingBottom: 15   
+                }}
+              >
+                <FontAwesomeIcon icon={faEyeSlash}/>
+                <Text style={{paddingLeft: 10 }}>Hide</Text>
+              </View>
+            
+              <View
+                style={{
+                  paddingLeft: 25,
+                  flexDirection: 'row'
+                }}
+              >
+                <FontAwesomeIcon style={{
+                  color: '#FF0000'
+                }}
+                
+                icon={faTrashAlt}/>
+                <Text 
+                  style={{
+                    paddingLeft: 10,
+                    color: '#FF0000'
+                    }}>Delete</Text>
+              </View>
+            </View>
+          </TouchableOpacity>)}
+        </View>
+      </View>
+    )
+  }
+
+  renderHeaderComment = (data, show) => {
+    return (
+      <View style={{
+        ...BasicStyles.standardWidth,
+        flexDirection: 'row',
+        alignItems: 'center',
+        // paddingTop: show ? 20 : 0,
+      }}>
+        <UserImage
+          marginLeft={-2}
+          user={data.user}
+          size={35}
+        />
+        <View style={{
+          paddingLeft: 5,
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          width: '90%',
+          alignItems: 'center'
+        }}>
+          <View>
+            <Text style={{
+              fontSize: BasicStyles.standardTitleFontSize,
+              fontFamily: 'Poppins-SemiBold',
+            }}>{data?.user?.username}</Text>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize
+            }}>
+              {data.date}
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              right: 5,
+              top: 0
+            }}
+            onPress={() => { this.setState({ options2: !this.state.options2 }) }}>
+            <FontAwesomeIcon icon={faEllipsisH} />
+          </TouchableOpacity>
+          
+          {this.state.options2 === true && show === true && (<TouchableOpacity style={{
+            position: 'absolute',
+            right: -5,
+            top: 20,
+            height: 160,
+            width: 180,
+            borderWidth: 1,
+            borderColor: Color.gray,
+            backgroundColor: Color.white,
+            justifyContent: 'flex-start',
+            zIndex: 10
+          }}
+           // onPress={() => { this.remove(data) }}
+            >
+            <View
+              style={{
+                flexDirection: 'column',
+                paddingLeft: 10,      
+              }}
+            >  
+              <View
+                style={{
+                  flexDirection: 'row',
+                  paddingTop: 10,
+                  paddingBottom: 15               
+                }}
+                >
+                <FontAwesomeIcon icon={faCog}/>
+                <Text style={{paddingLeft: 10 }}>Comment Actions</Text>
+              </View>
+            
+              <View
+                style={{
+                  paddingLeft: 25,
+                  flexDirection: 'row',
+                  paddingBottom: 15   
+                }}
+              >
+                <FontAwesomeIcon icon={faPencilAlt}/>
+                <Text style={{paddingLeft: 10 }}>Edit</Text>
               </View>
             
               <View
@@ -461,6 +581,7 @@ class PostCard extends Component {
         width: '100%',
         alignItems: 'center'
       }}>
+        
         {
           comments?.length > 0 && comments.map((item, index) => (
             <View
@@ -468,11 +589,17 @@ class PostCard extends Component {
               style={{
                 width: '100%'
               }}>
-              {this.renderHeader({ user: item.account, date: item.created_at_human }, false)}
+              
+              {this.renderHeaderComment({ user: item.account, date: item.created_at_human, }, true)}
               {this.renderComment({ message: item.text })}
+              
             </View>
+            
           ))
         }
+        
+        
+        
         <View style={{
           width: '90%',
           borderTopColor: Color.lightGray,
@@ -510,7 +637,7 @@ class PostCard extends Component {
         borderRadius: BasicStyles.standardBorderRadius,
         borderColor: Color.gray,
         borderWidth: .3,
-        marginBottom: 10,
+        marginBottom: 20,
         marginTop: 10,
         backgroundColor: 'white'
       }}>
