@@ -80,19 +80,8 @@ class CardsWithImages extends Component {
                   style={Styles.image} />
               }
               <View style={Styles.textInImageView}>
-                <Text style={[
-                  Styles.textInImage, {
-                    fontFamily: 'Poppins-SemiBold',
-                    color: item.logo ? Color.white : Color.black
-                  },
-                  item.logo ? Styles.textShadow : null
-                ]}>{item.title}</Text>
-                <Text style={[
-                  Styles.textInImage, {
-                    color: item.logo ? Color.white : Color.black
-                  },
-                  item.logo ? Styles.textShadow : null
-                ]}>{item.date}</Text>
+                <Text style={Styles.textShadow}>{item.title}</Text>
+                <Text style={Styles.textShadow}>{item.date}</Text>
               </View>
             </View>
             <View style={[Styles.bottomView, { height: '20%' }]}>
