@@ -77,7 +77,7 @@ class HomePage extends Component {
                 temp.push({
                   address: item.address,
                   logo: item.logo,
-                  title: item.name,
+                  title: i.name,
                   date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`
                 })
               })
