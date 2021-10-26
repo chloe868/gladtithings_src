@@ -47,7 +47,7 @@ const churchProfileStack = createStackNavigator({
   churchProfileScreen: {
     screen: ChurchProfile,
     navigationOptions: ({navigation}) => ({
-      title: 'Church 1',
+      title: navigation.state.params?.data?.name,
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),

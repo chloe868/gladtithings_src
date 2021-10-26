@@ -199,6 +199,6 @@ export default {
       title: 'Modo 3',
       details: 'Add description here',
       colors: ['#000000', '#4CCBA6'],
-    },
+    }
   ]
 }

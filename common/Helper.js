@@ -103,5 +103,5 @@ export default {
       return true;
     }
   },
-  defaultLanguage: Spanish
+  defaultLanguage: English
 };
