@@ -149,16 +149,6 @@ const data = [
         },
         text: "Amazing!",
         created_at_human: 'Just Now'
-      },
-      {
-        account: {
-          id: 0,
-          username: 'riki',
-          first_name: 'Lalaine',
-          last_name: 'Garrido'
-        },
-        text: "Amazing!",
-        created_at_human: 'Just Now'
       }
     ],
     text: "We would like to thank everyone who donated to our campaigns. Here's the documentation.",
