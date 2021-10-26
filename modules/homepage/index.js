@@ -71,7 +71,6 @@ class HomePage extends Component {
               items.schedule.length > 0 && items.schedule.map((i, ind) => {
                 let a = i.startTime.split(':')
                 let b = i.endTime.split(':')
-                console.log(a[0]);
                 let aIsAm = parseInt(a[0]) <= 12 ? 'AM' : 'PM'
                 let bIsAm = parseInt(b[0]) <= 12 ? 'AM' : 'PM'
                 temp.push({
