@@ -61,8 +61,9 @@ export default {
     backgroundColor: Color.white,
   },
   textShadow: {
+    color: Color.white,
     textShadowColor: 'black',
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 10
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   }
 };
