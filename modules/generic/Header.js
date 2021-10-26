@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, Dimensions, SafeAreaView, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, Dimensions, TextInput } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAlignLeft, faBars, faChevronLeft, faClock, faHistory, faShoppingBag, faStar, faEdit, faQrcode, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faAlignLeft, faPlusCircle, faQrcode, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { BasicStyles, Color } from 'common';
@@ -11,7 +11,9 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: null
+      search: null,
+      showSearch: false,
+      input: null
     }
   }
 
@@ -48,6 +50,7 @@ class Header extends Component {
   render() {
     const { routeName } = this.props.navigation.state;
     const { theme, language, user } = this.props.state;
+    const { showSearch, input } = this.state;
     return (
       <View
         style={{
@@ -113,6 +116,82 @@ class Header extends Component {
               ]}
             />
           </TouchableOpacity>
+        }
+        {routeName === 'Community' && showSearch &&
+          <View style={{
+            borderWidth: 1,
+            height: 35,
+            width: width - 100,
+            marginLeft: 30,
+            marginRight: 25,
+            borderRadius: 20,
+            borderColor: Color.gray,
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}>
+            <FontAwesomeIcon
+              icon={faSearch}
+              size={20}
+              style={{
+                color: Color.gray,
+                marginRight: 10,
+                marginLeft: 10
+              }}
+            />
+            <TextInput
+              style={{
+                height: 35,
+                width: '100%'
+              }}
+              onChangeText={(text) => this.setState({ input: text })}
+              value={input}
+              placeholder={language.search}
+            />
+          </View>
+        }
+        {routeName === 'Community' && !showSearch &&
+          <View style={{
+            height: 35,
+            width: width - 110,
+            marginLeft: 25,
+            marginRight: 25,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: 'Poppins-SemiBold'
+              }}
+            >{routeName}</Text>
+          </View>
+        }
+        {routeName === 'Community' && <View style={{
+          flexDirection: 'row',
+          marginTop: 2,
+          right: 10,
+          position: 'absolute'
+        }}>
+          {!showSearch && <TouchableOpacity
+            style={{ marginRight: 10 }}
+            onPress={() => { this.setState({ showSearch: true }) }}
+          >
+            <FontAwesomeIcon
+              icon={faSearch}
+              size={BasicStyles.headerBackIconSize - 5}
+            />
+          </TouchableOpacity>}
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('createCommunityStack')
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faPlusCircle}
+              size={BasicStyles.headerBackIconSize - 5}
+            />
+          </TouchableOpacity>
+        </View>
         }
       </View>
     );

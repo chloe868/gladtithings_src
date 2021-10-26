@@ -16,7 +16,7 @@ const height = Math.round(Dimensions.get('window').height)
 const data = [
   {
     id: 0,
-    title: 'Theme 1',
+    name: 'Theme 1',
     address: 'Cebu, Cebu City, Philippines',
     description: "Receives email address every time there's a login of the account.",
     date: 'July 23, 2021 5:00 PM',
@@ -25,7 +25,7 @@ const data = [
   },
   {
     id: 0,
-    title: 'Theme 1',
+    name: 'Theme 1',
     address: 'Cebu, Cebu City, Philippines',
     description: "Receives email address every time there's a login of the account.",
     date: 'July 23, 2021 5:00 PM',
@@ -147,7 +147,7 @@ class HomePage extends Component {
                 data={data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.subscribe}
-                redirect={() => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
+                redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: data[index] }) }}
                 buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation' }) }}
               />
               {churches?.length > 0 && <View style={Style.title}>
