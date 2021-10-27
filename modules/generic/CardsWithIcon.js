@@ -17,8 +17,8 @@ class CardsWithIcon extends Component {
   versionOne = () => {
     const { theme } = this.props.state;
     return (
-      <View style={[Styles.cardContainer, {height: 90}]}>
-        <View style={{width: '90%'}}>
+      <View style={[Styles.cardContainer, { height: 90 }]}>
+        <View style={{ width: '90%' }}>
           <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{this.props.title}</Text>
           <Text style={{ fontSize: 13 }}>{this.props.description}</Text>
         </View>
@@ -45,12 +45,12 @@ class CardsWithIcon extends Component {
         onPress={() => {
           this.props.redirect()
         }}
-        style={[Styles.cardContainer, {height: 90}]}>
+        style={[Styles.cardContainer, { height: 90 }]}>
         <View style={{
           width: '100%',
           flexDirection: 'row'
         }}>
-          <View style={{width: '90%'}}>
+          <View style={{ width: '90%' }}>
             <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{this.props.title}</Text>
             <Text style={{ fontSize: 13 }}>{this.props.description}</Text>
           </View>
@@ -80,7 +80,7 @@ class CardsWithIcon extends Component {
           height: 80,
           ...this.props.style
         }}
-        >
+      >
         <View style={{
           width: '15%',
           justifyContent: 'center'
@@ -88,10 +88,10 @@ class CardsWithIcon extends Component {
           <FontAwesomeIcon
             icon={this.props.description === 'Direct Transfer' ? faChurch : faCreditCard}
             size={35}
-            style={{color: Color.secondary}}
+            style={{ color: Color.secondary }}
           />
         </View>
-        <View style={{width: '60%', justifyContent: 'center'}}>
+        <View style={{ width: '60%', justifyContent: 'center' }}>
           <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{this.props.title}</Text>
           <Text style={{ fontSize: 13 }}>{this.props.date}</Text>
         </View>
@@ -121,14 +121,17 @@ class CardsWithIcon extends Component {
           width: '100%',
           flexDirection: 'row'
         }}>
-          <View style={{width: '90%'}}>
+          <View style={{ width: '90%' }}>
             <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{this.props.title}</Text>
             <Text style={{ fontSize: 13 }}>{this.props.description}</Text>
           </View>
-          <View style={{
+          <TouchableOpacity style={{
             width: '10%',
             alignItems: 'center'
-          }}>
+          }}
+            onPress={() => {
+              this.props.clickToggle(!this.props.flag)
+            }}>
             <FontAwesomeIcon
               icon={this.props.flag ? faToggleOn : faToggleOff}
               size={25}
@@ -136,7 +139,7 @@ class CardsWithIcon extends Component {
                 color: this.props.flag ? Color.primary : Color.danger
               }}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     )
@@ -149,12 +152,12 @@ class CardsWithIcon extends Component {
         onPress={() => {
           this.props.redirect()
         }}
-        style={[Styles.cardContainer, {padding: 20}]}>
+        style={[Styles.cardContainer, { padding: 20 }]}>
         <View style={{
           width: '100%',
           flexDirection: 'row'
         }}>
-          <View style={{width: '100%'}}>
+          <View style={{ width: '100%' }}>
             <Text style={{ fontFamily: 'Poppins-SemiBold', color: theme ? theme.primary : Color.primary }}>{this.props.title}</Text>
             <Text style={{ fontSize: 13 }}>{this.props.description}</Text>
           </View>
