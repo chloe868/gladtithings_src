@@ -46,7 +46,7 @@ const Stack = createStackNavigator({
   displayScreen: {
     screen: Screen,
     navigationOptions: ({navigation}) => ({
-      title: navigation?.state?.params?.page === 'Withdraw' ? 'Withdraw Method' : navigation?.state?.params?.type || 'Deposit Method',
+      title: navigation?.state?.params?.page === 'withdrawStack' ? 'Withdraw Method' : navigation?.state?.params?.type || 'Deposit Method',
       drawerLabel: 'Deposit Method',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle

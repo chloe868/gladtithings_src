@@ -91,6 +91,7 @@ const PrimaryNav = createStackNavigator(
     transactionsStack: {screen: TransactionsStack},
     pageMessageStack: { screen: PageMessageStack},
     depositStack: { screen: DepositStack},
+    withdrawStack: { screen: DepositStack},
     notificationSettingsStack: { screen: NotificationSettingsStack},
     otpStack: { screen: OtpStack },
     editProfileStack: { screen: EditProfileStack },

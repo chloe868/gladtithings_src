@@ -71,7 +71,7 @@ export default {
     },
     {
       title: 'Retirar',
-      route: 'depositStack',
+      route: 'withdrawStack',
       icon: faCreditCard,
       borderBottom: false,
       payload: 'drawerStack',
