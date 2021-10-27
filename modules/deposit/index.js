@@ -81,16 +81,17 @@ class Deposit extends Component {
 
   createLedger = (source, paymentIntent) => {
     const {user} = this.props.state;
-    let params = {
+    const {params} = this.props.navigation.state;
+    let parameter = {
       account_id: user.id,
       account_code: user.code,
       amount: this.state.amount,
       currency: paymentIntent.currency,
-      details: 'deposit',
-      description: 'deposit',
+      details: params.page === 'withdrawStack' ? 'withdraw' : 'deposit',
+      description: params.page === 'withdrawStack' ? 'withdraw' : 'deposit',
     };
     console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
-    Api.request(Routes.ledgerCreate, params, response => {
+    Api.request(Routes.ledgerCreate, parameter, response => {
       console.log('[CHARGE RESPONSE]', response);
       this.setState({isLoading: true})
       if (response.data != null) {
@@ -103,6 +104,7 @@ class Deposit extends Component {
   };
 
   handlePayment = async (data, source) => {
+    const {params} = this.props.navigation.state;
     const {user} = this.props.state;
     const {error, paymentIntent} = await confirmPayment(data.client_secret, {
       type: 'Card',
@@ -112,10 +114,10 @@ class Deposit extends Component {
       Alert.alert('Payment Failed', error.message, [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => this.setState({isLoading: false}),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {text: 'OK', onPress: () => this.setState({isLoading: false})},
       ]);
       console.log('[ERROR]', error);
     }
