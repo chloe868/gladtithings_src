@@ -25,12 +25,17 @@ class NotificationSettings extends Component {
   
   update = (payload, value) => {
     let parameter = {
-      id: this.state.id
+      id: this.state.id,
+      account_id: this.props.state.user.id,
+      sms_login: 0,
+      sms_otp: 0,
+      email_login: 0,
+      email_otp: 0,
+      email_pin: 0
     }
     parameter[payload] = value ? 1 : 0
     this.setState({ isLoading: true })
     Api.request(Routes.notificationSettingsUpdate, parameter, response => {
-      
       this.setState({ isLoading: false });
       this.retrieve();
     }, error => {
@@ -89,7 +94,7 @@ class NotificationSettings extends Component {
                   redirect={() => {
                     console.log('test')
                   }}
-                  clickToggle={(value) => { this.update(data[index].payload, value)}}
+                  clickToggle={(value) => { this.update(data[index]?.payload, value)}}
                   version={4}
                   title={item.title}
                   flag={data[index]?.value > 0}
