@@ -24,13 +24,14 @@ class NotificationSettings extends Component {
   }
   
   update = (payload, value) => {
+    const { data } = this.state;
     let parameter = {
       id: this.state.id,
       account_id: this.props.state.user.id,
-      sms_login: 0,
-      sms_otp: 0,
-      email_login: 0,
-      email_otp: 0,
+      sms_login: data[3]?.value,
+      sms_otp: data[2]?.value,
+      email_login: data[0]?.value,
+      email_otp:data[1]?.value,
       email_pin: 0
     }
     parameter[payload] = value ? 1 : 0
