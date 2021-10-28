@@ -107,7 +107,7 @@ class HomePage extends Component {
             <CustomizedHeader
               version={2}
               redirect={() => {
-                console.log('ji');
+                this.props.navigation.navigate('subscriptionStack')
               }}
             />
             <View>
