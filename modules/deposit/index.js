@@ -108,7 +108,7 @@ class Deposit extends Component {
     const {user} = this.props.state;
     const {error, paymentIntent} = await confirmPayment(data.client_secret, {
       type: 'Card',
-      billingDetails: {name: user.email},
+      billingDetails: {name: user.username, email: user.email, phone: ' '},
     });
     if (error) {
       Alert.alert('Payment Failed', error.message, [
