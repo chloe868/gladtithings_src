@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Dimensions } from 'react-native';
+import { View, ScrollView, Dimensions, Linking } from 'react-native';
 import { Color } from 'common';
 import { connect } from 'react-redux';
 import CardsWithIcon from '../generic/CardsWithIcon';
@@ -34,9 +34,10 @@ class Settings extends Component {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      if(item.route !== 'pageMessageStack'){
-                        this.props.navigation.navigate(item.route)
-                      }else{
+                      if(item.route === 'website') {
+                        console.log('opening url')
+                        Linking.openURL('https://app.gladtithings.com');
+                      } else{
                         this.props.navigation.navigate(item.route, {
                           title: 'Success Page',
                           message: 'Transaction was successful',
