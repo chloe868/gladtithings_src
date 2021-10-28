@@ -114,7 +114,7 @@ export default {
     {
       title: 'sobre la aplicación',
       description: "Abrir sitio web ",
-      route: ''
+      route: 'website'
     },
     {
       title: 'Configuración de pantalla',

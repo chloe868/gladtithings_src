@@ -114,7 +114,7 @@ export default {
     {
       title: 'About Glad Tithings',
       description: "Open website ",
-      route: ''
+      route: 'website'
     },
     {
       title: 'Display Settings',

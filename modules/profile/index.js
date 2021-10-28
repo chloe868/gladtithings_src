@@ -74,7 +74,6 @@ class Profile extends Component {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         let data = response.data[0]
-        console.log(data, '---');
         this.setState({
           id: data.id,
           firstName: data.first_name,
@@ -157,7 +156,6 @@ class Profile extends Component {
 
   update = () => {
     const { user, language } = this.props.state;
-    console.log(this.validation(), user, '-----');
     if (user === null) {
       return
     }
@@ -318,14 +316,14 @@ class Profile extends Component {
                 marginBottom: 2,
                 color: Color.white
               }}>@{user.email}</Text>
-              <View style={Style.BottomView}>
+              {user.status === 'VERIFIED' && <View style={Style.BottomView}>
                 <FontAwesomeIcon style={{ marginRight: 5 }} icon={faCheckCircle} size={20} color={'#0066FF'} />
                 <Text style={{
                   textAlign: 'center',
                   fontFamily: 'Poppins-SemiBold',
                   fontStyle: 'italic'
                 }}>{language.verified}</Text>
-              </View>
+              </View>}
             </View>
             <View style={{
               marginTop: 40,
