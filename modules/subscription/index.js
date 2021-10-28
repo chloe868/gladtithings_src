@@ -28,78 +28,268 @@ const data = [
 class Subscriptions extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      details: false
+    }
+  }
+
+  listOfSubscription = () =>{
+    const { user, theme } = this.props.state;
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <CustomizedHeader
+        version={1}
+        text={data === null ? `You don't have church selected for now. Kindly click the button below to look for church you are interested to automate your tithings.` : 
+        'Here are the list of churches you are subscribed. Click the button below to look for more churches you are interested to automate your tithings'}
+        redirect={() => {
+          this.props.navigation.navigate('churchesStack')
+        }}
+      />
+      <View style={{
+        marginBottom: 100,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingLeft: 10,
+        alignItems: 'center'
+      }}>
+        <Button
+          style={{
+            width: '60%',
+            height: 50,
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            marginTop: 5
+          }}
+          content={
+            <View style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}>
+              <Text style={{
+                color: 'white',
+                fontSize: 12
+              }}>See your billing here...</Text>
+            </View>
+          }
+          redirect={() => {
+            this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: data})
+          }}
+        />
+        <View style={{
+          width: width,
+          flexDirection: 'row',
+          padding: 9
+        }}>
+        </View>
+        {data.length > 0 && data.map((item, index) => {
+          return (
+            <CustomizedHeader
+              version={3}
+              redirect={() => {
+                console.log('hi')
+              }}
+            />
+          )
+        })
+        }
+      </View>
+    </ScrollView>
+  }
+
+  detailOfSubscription = () => {
+    const { user, theme } = this.props.state;
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <CustomizedHeader
+        version={2}
+        redirect={() => {
+          this.props.navigation.navigate('churchesStack')
+        }}
+      />
+      <View style={{
+        marginBottom: 100,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingLeft: 10,
+        alignItems: 'center'
+      }}>
+        <Button
+          style={{
+            width: '60%',
+            height: 50,
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            marginTop: 5
+          }}
+          content={
+            <View style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}>
+              <Text style={{
+                color: 'white',
+                fontSize: 12
+              }}>See your billing here...</Text>
+            </View>
+          }
+          redirect={() => {
+            this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: data})
+          }}
+        />
+        <View style={{
+          width: width,
+          flexDirection: 'row',
+          padding: 9
+        }}>
+        </View>
+        {data.length > 0 && data.map((item, index) => {
+          return (
+            <CustomizedHeader
+              version={3}
+              redirect={() => {
+                console.log('hi')
+              }}
+            />
+          )
+        })
+        }
+      </View>
+    </ScrollView>
   }
 
   render() {
     const { user, theme } = this.props.state;
+    console.log('[[[[[', this.state.details)
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <CustomizedHeader
-            version={1}
-            redirect={() => {
-              console.log('hi')
-            }}
-          />
-          <View style={{
-            marginBottom: 100,
-            paddingTop: 10,
-            paddingRight: 10,
-            paddingLeft: 10,
-            alignItems: 'center'
-          }}>
-            <Button
-              style={{
-                width: '60%',
-                height: 50,
-                backgroundColor: theme ? theme.secondary : Color.secondary,
-                marginTop: 5
-              }}
-              content={
-                <View style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center'
-                }}>
-                  <Text style={{
-                    color: 'white',
-                    fontSize: 12
-                  }}>See yur billing here...</Text>
-                </View>
-              }
-              redirect={() => {
-                this.props.redirect()
-              }}
-            />
-            <View style={{
-              width: width,
-              flexDirection: 'row',
-              padding: 15
-            }}>
-              <View style={{ width: '50%' }}>
-                <Text style={{fontFamily: 'Poppins-SemiBold'}}>Payment Methods</Text>
-              </View>
-              <View style={{ width: '50%' }}>
-                <Text style={{
-                  color: theme ? theme.primary : Color.primary,
-                  fontFamily: 'Poppins-SemiBold',
-                  textAlign: 'right'
-                }}>Add</Text>
-              </View>
-            </View>
-            {data.length > 0 && data.map((item, index) => {
-              return (
-                <PaymentMethodCard
-                  data={item}
+        {
+          this.state.details === false ? (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <CustomizedHeader
+                version={1}
+                text={data === null ? `You don't have church selected for now. Kindly click the button below to look for church you are interested to automate your tithings.` : 
+                'Here are the list of churches you are subscribed. Click the button below to look for more churches you are interested to automate your tithings'}
+                redirect={() => {
+                  this.props.navigation.navigate('churchesStack')
+                }}
+              />
+              <View style={{
+                marginBottom: 100,
+                paddingTop: 10,
+                paddingRight: 10,
+                paddingLeft: 10,
+                alignItems: 'center'
+              }}>
+                <Button
+                  style={{
+                    width: '60%',
+                    height: 50,
+                    backgroundColor: theme ? theme.secondary : Color.secondary,
+                    marginTop: 5
+                  }}
+                  content={
+                    <View style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}>
+                      <Text style={{
+                        color: 'white',
+                        fontSize: 12
+                      }}>See your billing here...</Text>
+                    </View>
+                  }
+                  redirect={() => {
+                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: data})
+                  }}
                 />
-              )
-            })
-            }
-          </View>
-        </ScrollView>
+                <View style={{
+                  width: width,
+                  flexDirection: 'row',
+                  padding: 9
+                }}>
+                </View>
+                {data.length > 0 && data.map((item, index) => {
+                  return (
+                    <CustomizedHeader
+                      version={3}
+                      redirect={() => {
+                        this.setState({details: true})
+                      }}
+                    />
+                  )
+                })
+                }
+              </View>
+            </ScrollView>
+          ) : (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <CustomizedHeader
+                version={2}
+                buttonText={'edit'}
+                redirect={() => {
+                  this.props.navigation.navigate('churchesStack')
+                }}
+              />
+              <View style={{
+                marginBottom: 100,
+                paddingTop: 10,
+                paddingRight: 10,
+                paddingLeft: 10,
+                alignItems: 'center'
+              }}>
+                <Button
+                  style={{
+                    width: '60%',
+                    height: 50,
+                    backgroundColor: theme ? theme.secondary : Color.secondary,
+                    marginTop: 5
+                  }}
+                  content={
+                    <View style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}>
+                      <Text style={{
+                        color: 'white',
+                        fontSize: 12
+                      }}>See your billing here...</Text>
+                    </View>
+                  }
+                  redirect={() => {
+                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: data})
+                  }}
+                />
+                <View style={{
+                  width: width,
+                  flexDirection: 'row',
+                  padding: 15
+                }}>
+                  <View style={{ width: '50%' }}>
+                    <Text style={{fontFamily: 'Poppins-SemiBold'}}>Payment Methods</Text>
+                  </View>
+                  <View style={{ width: '50%' }}>
+                    <Text style={{
+                      color: theme ? theme.primary : Color.primary,
+                      fontFamily: 'Poppins-SemiBold',
+                      textAlign: 'right'
+                    }}>Add</Text>
+                  </View>
+                </View>
+                {data.length > 0 && data.map((item, index) => {
+                  return (
+                    <PaymentMethodCard
+                      data={item}
+                    />
+                  )
+                })
+                }
+              </View>
+            </ScrollView>
+          )
+        }
       </View>
     );
   }
