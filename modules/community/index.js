@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { Color, BasicStyles } from 'common';
+import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import PostCard from 'components/Comments/PostCard';
@@ -8,8 +8,8 @@ import IncrementButton from 'components/Form/Button';
 import { faSearch, faPlusCircle, faBell, faBan, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Format from './TabContainer'
-
-
+import Card from './Card'
+import Api from 'services/api';
 
 
 const width = Math.round(Dimensions.get('window').width)
@@ -101,35 +101,6 @@ const dataCommunityManage = [
 
 ]
 
-const dataCommunityFollowers = [
-  {
-    id: 0,
-    account: {
-      id: 0,
-      username: 'JCI Cebu, Philippines',
-      first_name: '',
-      last_name: ''
-    },
-    status: 'Non Profit - 20k Followers - 10k Joined',
-    notif: 'Unfollow',
-    icon: faBan
-  },
-
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'JCI Cebu, Philippines',
-      first_name: '',
-      last_name: ''
-    },
-    status: 'Non Profit - 20k Followers - 10k Joined',
-    notif: 'Unfollow',
-    icon: faBan
-  }
-
-]
-
 const data = [
   {
     id: 0,
@@ -206,143 +177,156 @@ class Community extends Component {
       community: false,
       message: false,
       isActive: null,
-      isActive2: null
+      isActive2: null,
+      community: []
     }
   }
 
+  componentDidMount(){
+  }
+
+  retrieveCommunities = () => {
+    const { user } = this.props.state;
+    if(user == null){
+      return null
+    }
+
+    let parameter = {
+    }
+    console.log({
+      parameter
+    })
+    this.setState({ isLoading: true })
+    Api.request(Routes.pageRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      console.log({
+        response
+      })
+      if(response.data && response.data.length > 0){
+        this.setState({
+          community: response.data
+        })
+      }else{
+        this.setState({
+          community: []
+        })
+      }
+    }, error => {
+      this.setState({ isLoading: false })
+    });
+  }
 
   
-popetwitterMessage = () => {
-  this.setState({
-    default: false,
-    message: true,
-    community: false,
-    
-  })
+  popetwitterMessage = () => {
+    this.setState({
+      default: false,
+      message: true,
+      community: false,
+    })
 
-}
+  }
 
-communitiesMessage = () => {
-  this.setState({
-    default: false,
-    message: false,
-    community: true
-  })
-}
+  communitiesMessage = () => {
+    this.setState({
+      default: false,
+      message: false,
+      community: true
+    })
+    this.retrieveCommunities()
+  }
 
-popetwitter = () => {
-  return(
-    <View style={{
-      marginBottom: 100
-    }}>
-     
-      {dataPope.length > 0 && dataPope.map((item, index) => (
-        <Format
-          navigation={this.props.navigation}
-          loader={this.loader}
-          data={{
-            user: item.account,
-            message: item.text,
-            date: item.created_at_human,
-            id: item.id
-          }} 
-        />
-        
-      ))}
-    </View>
-  )
-}
-
-communities = () =>{
-  return(
-    <View style={{
-      marginBottom: 100
-    }}>
+  popetwitter = () => {
+    return(
       <View style={{
-              marginTop: 20,
-            }}>
-        <Text 
-          style={{
-          ...BasicStyles.standardWidth,
-           fontFamily: 'Poppins-SemiBold',
-          }}
-        >Communities You Might Interested In</Text>
-      </View>
-      {dataCommunityInterested.length > 0 && dataCommunityInterested.map((item, index) => (
-        <Format
-          navigation={this.props.navigation}
-          loader={this.loader}
-          data={{
-            user: item.account,
-            message: item.notifs,
-            date: item.status,
-            id: item.id,
-            icon: item.icon
-          }}
+        marginBottom: 100
+      }}>
+       
+        {dataPope.length > 0 && dataPope.map((item, index) => (
+          <Format
+            navigation={this.props.navigation}
+            loader={this.loader}
+            data={{
+              user: item.account,
+              message: item.text,
+              date: item.created_at_human,
+              id: item.id
+            }} 
           />
-      ))}  
-
-       <View style={{
-              marginTop: 20,
-            }}>
-        <Text 
-          style={{
-          ...BasicStyles.standardWidth,
-           fontFamily: 'Poppins-SemiBold',
-          }}
-        >Communities You Manage</Text>
-      </View>
-      {dataCommunityManage.length > 0 && dataCommunityManage.map((item, index) => (
-        <Format
-          navigation={this.props.navigation}
-          loader={this.loader}
-          data={{
-            user: item.account,
-            message: item.notifs,
-            date: item.status,
-            id: item.id,
-            icon: item.icon
-          }}
-          />
-      ))}
-
-      <View style={{
-              marginTop: 20,
-              marginBottom: 20
-            }}>
-        <Text 
-          style={{
-          ...BasicStyles.standardWidth,
-           fontFamily: 'Poppins-SemiBold',
-          }}
-        >Communities You Followed & Joined</Text>
-        <Text
-          style={{
-          paddingTop: 10,
-          ...BasicStyles.standardWidth,
-          }}
-        >View Recommendation</Text>
-
-
-      </View>
-      
-      {dataCommunityFollowers.length > 0 && dataCommunityFollowers.map((item, index) => (
-        <Format
           
-          navigation={this.props.navigation}
-          loader={this.loader}
-           data={{
-                  user: item.account,
-                  message: item.notif,
-                  date: item.status,
-                  id: item.id,
-                  icon: item.icon
-                }}
-        />
-      ))}
-    </View>
-  )
-}
+        ))}
+      </View>
+    )
+  }
+
+  communities = () =>{
+    const { community } = this.state;
+
+    return(
+      <View style={{
+        marginBottom: 100
+      }}>
+        <View style={{
+                marginTop: 20,
+              }}>
+          <Text 
+            style={{
+            ...BasicStyles.standardWidth,
+             fontFamily: 'Poppins-SemiBold',
+            }}
+          >Communities You Might Interested In</Text>
+        </View>
+        {community.length > 0 && community.map((item, index) => (
+          <Card
+            data={item}
+          />
+        ))}
+
+         <View style={{
+                marginTop: 20,
+              }}>
+          <Text 
+            style={{
+            ...BasicStyles.standardWidth,
+             fontFamily: 'Poppins-SemiBold',
+            }}
+          >Communities You Manage</Text>
+        </View>
+
+
+        {community.length > 0 && community.map((item, index) => (
+          <Card
+            data={item}
+          />
+        ))}
+
+        <View style={{
+                marginTop: 20,
+                marginBottom: 20
+              }}>
+          <Text 
+            style={{
+            ...BasicStyles.standardWidth,
+             fontFamily: 'Poppins-SemiBold',
+            }}
+          >Communities You Followed & Joined</Text>
+          <Text
+            style={{
+            paddingTop: 10,
+            ...BasicStyles.standardWidth,
+            }}
+          >View Recommendation</Text>
+
+
+        </View>
+        
+        {community.length > 0 && community.map((item, index) => (
+          <Card
+            data={item}
+          />
+        ))}
+      </View>
+    )
+  }
 
 
 

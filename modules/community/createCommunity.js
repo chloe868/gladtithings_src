@@ -20,145 +20,45 @@ class CreateCommunity extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: null,
+      address: null,
+      category: null,
+      email: null,
+      website: null,
+      errorMessage: null
     }
   }
 
-  // componentDidMount() {
-  //   const { user } = this.props.state;
-  //   this.setState({email: user.email})
-  //   this.retrieve();
-  // }
 
-  // retrieve = () => {
-  //   const { user } = this.props.state;
-  //   if (user === null) {
-  //     return
-  //   }
-  //   let parameter = {
-  //     condition: [{
-  //       value: user.id,
-  //       clause: '=',
-  //       column: 'account_id'
-  //     }]
-  //   }
-  //   this.setState({ isLoading: true })
-  //   Api.request(Routes.accountRetrieve, parameter, response => {
-  //     this.setState({ isLoading: false })
-  //     if (response.data.length > 0) {
-  //       let data = response.data[0]
-  //       this.setState({
-  //         id: data.id,
-  //         username: data.username
-  //       })
-  //     }
-  //   }, error => {
-  //     console.log(error)
-  //     this.setState({ isLoading: false })
-  //   });
-  // }
+  submit = () => {
+    const { user } = this.props.state;
+    const { title, address, category, email, website } = this.state;
+    if(user == null){
+      return null
+    }
 
-  // update = () => {
-  //   const { user } = this.props.state;
-  //   if (user === null) {
-  //     return
-  //   }
-  //   console.log(user.email, this.state.email);
-  //   if(user.email === this.state.email) {
-  //     return
-  //   }
-  //   this.updateAccount();
-  // }
-
-  // reloadProfile = () => {
-  //   const { user, token } = this.props.state;
-  //   if (user == null) {
-  //     return
-  //   }
-  //   let parameter = {
-  //     condition: [{
-  //       value: user.id,
-  //       clause: '=',
-  //       column: 'id'
-  //     }]
-  //   }
-  //   this.setState({ isLoading: true })
-  //   Api.request(Routes.accountRetrieve, parameter, response => {
-  //     this.setState({ isLoading: false })
-  //     const { updateUser } = this.props;
-  //     updateUser(response.data[0])
-  //   }, error => {
-  //     console.log(error)
-  //     this.setState({ isLoading: false })
-  //   });
-  // }
-
-  // updateAccount = () => {
-  //   const { user } = this.props.state;
-  //   if(this.state.email !== user.email && (this.state.password === '' || this.state.password === null)) {
-  //     Alert.alert(
-  //       "Opps",
-  //       "Email not updated. Password needs to be changed too if you change your email.",
-  //       [
-  //         { text: "OK" }
-  //       ],
-  //       { cancelable: false }
-  //     );
-  //     return
-  //   }
-  //   if(this.state.password && (this.state.password.length < 6 || /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/.test(this.state.password) === false)) {
-  //     Alert.alert(
-  //       "Opps",
-  //       "Passwords should be atleast 6 characters. It must be alphanumeric characters. It should contain 1 number, 1 special character and 1 capital letter.",
-  //       [
-  //         { text: "OK" }
-  //       ],
-  //       { cancelable: false }
-  //     );
-  //     return
-  //   }
-  //   if((this.state.password !== null || this.state.confirmPassword !== null
-  //     || this.state.password !== '' || this.state.confirmPassword !== '') && this.state.password !== this.state.confirmPassword) {
-  //     Alert.alert(
-  //       "Opps",
-  //       "Passwords doesn't match.",
-  //       [
-  //         { text: "OK" }
-  //       ],
-  //       { cancelable: false }
-  //     );
-  //     return
-  //   }
-  //   if(this.state.password === null || this.state.confirmPassword === null
-  //     || this.state.password === '' || this.state.confirmPassword === '') {
-  //       return
-  //   }
-  //   let parameter = {
-  //     id: user.id,
-  //     code: user.code,
-  //     username: user.username,
-  //     email: this.state.email,
-  //     password: this.state.password
-  //   }
-  //   console.log(parameter, Routes.accountUpdate);
-  //   this.setState({ isLoading: true })
-  //   Api.request(Routes.accountUpdate, parameter, response => {
-  //     this.setState({ isLoading: false })
-  //     if(response.data !== null) {
-  //       Alert.alert(
-  //         "",
-  //         "Account updated successfully!",
-  //         [
-  //           { text: "OK" }
-  //         ],
-  //         { cancelable: false }
-  //       );
-  //     }
-  //     this.reloadProfile();
-  //   }, error => {
-  //     this.setState({ isLoading: false })
-  //     console.log(error)
-  //   });
-  // }
+    let parameter = {
+      account_id: user.id,
+      title,
+      address,
+      category,
+      email,
+      website
+    }
+    console.log({
+      parameter
+    })
+    this.setState({ isLoading: true })
+    Api.request(Routes.pageCreate, parameter, response => {
+      this.setState({ isLoading: false })
+      console.log({
+        response
+      })
+      
+    }, error => {
+      this.setState({ isLoading: false })
+    });
+  }
 
   render() {
     const { theme, user } = this.props.state;
@@ -179,40 +79,45 @@ class CreateCommunity extends Component {
               placeholder={language.community.name_placeholder}
               icon={faUser}
               label={language.community.name}
-
-            //  onTyping={(text) => {this.setState({username: text})}}
+              onTyping={(title) => {
+                this.setState({title})
+              }}
             />
 
             <InputFieldWithIcon
               placeholder={language.community.address_placeholder}
               icon={faMapMarkerAlt}
               label={language.community.address}
-
-            //  onTyping={(text) => {this.setState({username: text})}}
+              onTyping={(address) => {
+                this.setState({address})
+              }}
             />
 
             <InputFieldWithIcon
               placeholder={language.community.category_placeholder}
               icon={faSitemap}
               label={language.community.category}
-
-            //  onTyping={(text) => {this.setState({username: text})}}
+              onTyping={(category) => {
+                this.setState({category})
+              }}
             />
 
             <InputFieldWithIcon
               placeholder={language.community.website_placeholder}
               icon={faGlobe}
               label={language.community.website}
-
-            //  onTyping={(text) => {this.setState({username: text})}}
+              onTyping={(website) => {
+                this.setState({website})
+              }}
             />
 
             <InputFieldWithIcon
               placeholder={language.community.email_placeholder}
               icon={faEnvelope}
               label={language.community.email}
-
-            //  onTyping={(text) => {this.setState({username: text})}}
+              onTyping={(email) => {
+                this.setState({email})
+              }}
             />
             
             <Text
@@ -269,7 +174,7 @@ class CreateCommunity extends Component {
                   fontFamily: 'Poppins-SemiBold'
                 }}
                 onClick={() => {
-                  this.update()
+                  this.submit()
                 }}
                 title={language.community.submit}
               />
