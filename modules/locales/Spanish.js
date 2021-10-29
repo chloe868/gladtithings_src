@@ -200,5 +200,6 @@ export default {
       details: 'Add description here',
       colors: ['#000000', '#4CCBA6'],
     },
-  ]
+  ],
+  emptyTithings: 'Basta empty ni sya na spanish.'
 }
