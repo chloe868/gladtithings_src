@@ -43,6 +43,7 @@ export default {
   notificationSettingsUpdate: apiUrl + 'notification_settings/update',
   notificationSettingOtp: apiUrl + 'notification_settings/update_otp',
   ledgerDashboard: apiUrl + 'ledger/dashboard',
+  ledgerSummary: apiUrl + 'ledger/summary',
   ledgerTransfer: apiUrl + 'ledger/transfer',
   transactionHistoryRetrieve: apiUrl + 'ledger/transaction_history',
   ledgerCreate: apiUrl + 'ledger/create',

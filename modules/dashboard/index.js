@@ -8,6 +8,8 @@ import BalanceCard from 'modules/generic/BalanceCard.js';
 import IncrementButton from 'components/Form/Button';
 import Subscription from 'modules/generic/Subscriptions.js';
 import { Spinner } from 'components';
+import Skeleton from 'components/Loading/Skeleton';
+import EmptyMessage from 'modules/generic/Empty.js'
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -24,6 +26,7 @@ class Dashboard extends Component {
         balance: 0
       },
       isLoading: false,
+      transactionLoading: false,
       data: [],
       offset: 0,
       limit: 5
@@ -31,13 +34,11 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      this.retrieveBalance();
-      this.retrieve(false);
-    })
+    this.retrieveBalance();
+    this.retrieveLedgerHistory()
   }
 
-  retrieve = (flag) => {
+  retrieveLedgerHistory = (flag) => {
     const { user } = this.props.state;
     let parameter = {
       condition: [{
@@ -53,9 +54,9 @@ class Dashboard extends Component {
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
     }
-    this.setState({ isLoading: true })
+    this.setState({ transactionLoading: true })
     Api.request(Routes.transactionHistoryRetrieve, parameter, response => {
-      this.setState({ isLoading: false })
+      this.setState({ transactionLoading: false })
       if (response.data.length > 0) {
         this.setState({
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
@@ -70,35 +71,39 @@ class Dashboard extends Component {
     });
   }
 
+
   retrieveBalance = () => {
-    const { user } = this.props.state;
+    const {user} = this.props.state;
+    if (user == null) {
+      return;
+    }
     let parameter = {
-      condition: [
-        {
-          clause: '=',
-          column: 'account_id',
-          value: user.id
-        }
-      ],
       account_id: user.id,
       account_code: user.code
-    }
-    this.setState({ isLoading: true })
-    Api.request(Routes.ledgerDashboard, parameter, response => {
-      this.setState({ isLoading: false })
-      if (response.data) {
-        this.setState({ ledger: response.data.ledger[0] });
-        this.props.setLedger(response.data.ledger[0])
+    };
+    this.setState({isLoading: true});
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      this.setState({isLoading: false});
+      const { setLedger } = this.props;
+      if (response.data.length > 0) {
+        setLedger(response.data[0])
+        this.setState({
+          ledger: response.data
+        })
+      } else {
+        setLedger(null);
+        this.setState({
+          ledger: null
+        })
       }
     }, error => {
-      console.log(error);
-      this.setState({ isLoading: false });
-    })
+      this.setState({isLoading: false, history: null});
+    });
   }
 
   render() {
     const { language } = this.props.state;
-    const { ledger, data, isLoading } = this.state;
+    const { ledger, data, isLoading, transactionLoading } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -114,10 +119,16 @@ class Dashboard extends Component {
             paddingRight: 15,
             height: height * 1.5,
           }}>
-            {isLoading ? <Spinner mode="overlay" /> : null}
+
             {
-              ledger && (
-                <BalanceCard data={ledger} />
+              (this.state.ledger && this.state.ledger.length > 0) && this.state.ledger.map((item, index) => (
+                <BalanceCard data={item} style={{marginTop: 20}}/>
+              ))
+            }
+            
+            {
+              (isLoading) && (
+                <Skeleton size={1} template={'block'} height={125}/>
               )
             }
 
@@ -190,6 +201,17 @@ class Dashboard extends Component {
                   />
                 )
               })
+            }
+            {
+              (data && data.length === 0 && transactionLoading == false) && (
+                <EmptyMessage message={language.emptyTithings}/>
+              )
+            }
+
+            {
+              (transactionLoading) && (
+                <Skeleton size={3} template={'block'} height={60}/>
+              )
             }
           </View>
         </ScrollView>
