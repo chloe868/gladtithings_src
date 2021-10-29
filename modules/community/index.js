@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { Color, BasicStyles } from 'common';
+import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import PostCard from 'components/Comments/PostCard';
@@ -9,6 +9,9 @@ import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Format from './TabContainer';
 import Style from './Style';
+import Api from 'services/api/index.js';
+import { Spinner } from 'components';
+import _ from 'lodash';
 import CreatePost from 'src/components/Comments/Create';
 
 const width = Math.round(Dimensions.get('window').width)
@@ -125,76 +128,7 @@ const dataCommunityFollowers = [
     notif: 'Unfollow',
     icon: faBan
   }
-
 ]
-
-const data = [
-  {
-    id: 0,
-    account: {
-      id: 0,
-      username: 'lalaine',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [
-      {
-        account: {
-          id: 0,
-          username: 'riki',
-          first_name: 'Lalaine',
-          last_name: 'Garrido'
-        },
-        text: "Amazing!",
-        created_at_human: 'Just Now'
-      }
-    ],
-    text: "We would like to thank everyone who donated to our campaigns. Here's the documentation.",
-    created_at_human: 'Just Now',
-    images: [1]
-  },
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'jake',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [],
-    text: 'Hi. This is a test version two.',
-    created_at_human: 'August 30, 2021',
-    images: [1, 2]
-  },
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'heeseung',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [],
-    text: 'Hi. This is a test version two.',
-    created_at_human: 'August 30, 2021',
-    images: [1, 2, 3]
-  },
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'sunoo',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [],
-    text: 'Hi. This is a test version two.',
-    created_at_human: 'August 30, 2021',
-    images: [1, 2, 3, 4]
-  }
-]
-
-
 
 class Community extends Component {
   constructor(props) {
@@ -205,8 +139,38 @@ class Community extends Component {
       message: false,
       isActive: null,
       isActive2: null,
-      createStatus: false
+      createStatus: false,
+      offset: 0,
+      limit: 5,
+      isLoading: false
     }
+  }
+
+  componentDidMount() {
+    this.retrieve(false);
+  }
+
+  retrieve = (flag) => {
+    const { setComments } = this.props;
+    let parameter = {
+      limit: this.state.limit,
+      offset: flag === true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
+      sort: {
+        created_at: "desc"
+      }
+    }
+    this.setState({ isLoading: true });
+    Api.request(Routes.commentsRetrieve, parameter, response => {
+      this.setState({ isLoading: false });
+      if (response.data.length > 0) {
+        this.setState({ offset: flag === false ? 1 : (this.state.offset + 1) })
+        setComments(flag === false ? response.data : _.uniqBy([...this.props.state.comments, ...response.data], 'id'));
+        console.log(this.props.state.comments);
+      } else {
+        this.setState({ offset: flag == false ? 0 : this.state.offset, })
+        setComments(flag == false ? [] : this.props.state.comments);
+      }
+    })
   }
 
   popetwitterMessage = () => {
@@ -335,9 +299,8 @@ class Community extends Component {
   }
 
   render() {
-    const { theme } = this.props.state;
-    const { createStatus } = this.state;
-    console.log(createStatus, '-----------')
+    const { theme, comments } = this.props.state;
+    const { createStatus, isLoading } = this.state;
     return (
       <View style={{
         height: height,
@@ -393,39 +356,45 @@ class Community extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           {this.state.default == true &&
             <View style={{
-              marginBottom: 100
+              height: height * 1.5
             }}>
-              {data.length > 0 && data.map((item, index) => (
-                <PostCard
-                  navigation={this.props.navigation}
-                  loader={this.loader}
-                  data={{
-                    user: item.account,
-                    comments: item.comment_replies,
-                    message: item.text,
-                    date: item.created_at_human,
-                    id: item.id,
-                    liked: item.liked,
-                    joined: item.joined,
-                    members: item.members,
-                    index: index
-                  }}
-                  images={item.images?.length > 0 ? item.images : []}
-                  postReply={() => { this.reply(item) }}
-                  reply={(value) => this.replyHandler(value)}
-                  onLike={(params) => this.like(params)}
-                  onJoin={(params) => this.join(params)}
-                />
-              ))}
+              {comments.length > 0 && comments.map((item, index) => {
+                return (
+                  <PostCard
+                    navigation={this.props.navigation}
+                    loader={this.loader}
+                    data={{
+                      user: item.account,
+                      comments: item.comment_replies,
+                      message: item.text,
+                      date: item.created_at_human,
+                      id: item.id,
+                      liked: item.liked,
+                      joined: item.joined,
+                      members: item.members,
+                      index: index
+                    }}
+                    images={item.images?.length > 0 ? item.images : []}
+                    postReply={() => { this.reply(item) }}
+                    reply={(value) => this.replyHandler(value)}
+                    onLike={(params) => this.like(params)}
+                    onJoin={(params) => this.join(params)}
+                    style={{
+                      backgroundColor: 'white'
+                    }}
+                  />
+                )
+              })}
             </View>
           }
           {this.state.message && this.popetwitter()}
           {this.state.community && this.communities()}
 
         </ScrollView>
+        {isLoading ? <Spinner mode="overlay" /> : null}
         <CreatePost
           visible={createStatus}
-          close={() => this.setState({createStatus: false})}
+          close={() => this.setState({ createStatus: false })}
           title={'Create Post'}
         />
         <TouchableOpacity
@@ -437,7 +406,7 @@ class Community extends Component {
             bottom: 70
           }]}
           onPress={() => {
-            this.setState({createStatus: true});
+            this.setState({ createStatus: true });
           }}>
           <FontAwesomeIcon
             icon={faPlus}
@@ -453,8 +422,15 @@ class Community extends Component {
   }
 }
 
-const mapStateToProps = state => ({ state: state });
+const mapStateToProps = (state) => ({ state: state });
 
-export default connect(
-  mapStateToProps
-)(Community);
+const mapDispatchToProps = (dispatch) => {
+  const { actions } = require('@redux');
+  return {
+    setComments: (comments) => {
+      dispatch(actions.setComments(comments));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Community);
