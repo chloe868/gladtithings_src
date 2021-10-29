@@ -163,6 +163,8 @@ class Deposit extends Component {
               {(this.props.navigation?.state?.params?.type ===
                 'Subscription Donation' ||
                 this.props.navigation?.state?.params?.type ===
+                'Edit Subscription Donation' ||
+                this.props.navigation?.state?.params?.type ===
                   'Send Tithings') && (
                   <View
                     style={{
