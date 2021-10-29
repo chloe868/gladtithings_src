@@ -1,12 +1,12 @@
 import React, { Component, } from 'react';
 import { View, Text, ScrollView, Dimensions, Alert, Image } from 'react-native';
-import { Color, Routes } from 'common';
+import { Color, Routes, BasicStyles } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import { Spinner } from 'components';
 import CardsWithIcon from 'modules/generic/CardsWithIcon';
 import InputFieldWithIcon from 'modules/generic/InputFieldWithIcon';
-import { faUser, faEnvelope, faImage} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faEnvelope, faImage, faMapMarkerAlt, faGlobe, faSitemap} from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
 import Api from 'services/api/index.js';
 import CardsWithImages from '../generic/CardsWithImages';
@@ -173,7 +173,7 @@ class CreateCommunity extends Component {
           <View style={{
             paddingLeft: 20,
             paddingRight: 20,
-            minHeight: height + (height * 0.5)
+            minHeight: height * 1.5
           }}>
             <InputFieldWithIcon
               placeholder={language.community.name_placeholder}
@@ -185,7 +185,7 @@ class CreateCommunity extends Component {
 
             <InputFieldWithIcon
               placeholder={language.community.address_placeholder}
-              icon={faUser}
+              icon={faMapMarkerAlt}
               label={language.community.address}
 
             //  onTyping={(text) => {this.setState({username: text})}}
@@ -193,8 +193,24 @@ class CreateCommunity extends Component {
 
             <InputFieldWithIcon
               placeholder={language.community.category_placeholder}
-              icon={faUser}
+              icon={faSitemap}
               label={language.community.category}
+
+            //  onTyping={(text) => {this.setState({username: text})}}
+            />
+
+            <InputFieldWithIcon
+              placeholder={language.community.website_placeholder}
+              icon={faGlobe}
+              label={language.community.website}
+
+            //  onTyping={(text) => {this.setState({username: text})}}
+            />
+
+            <InputFieldWithIcon
+              placeholder={language.community.email_placeholder}
+              icon={faEnvelope}
+              label={language.community.email}
 
             //  onTyping={(text) => {this.setState({username: text})}}
             />
@@ -202,6 +218,11 @@ class CreateCommunity extends Component {
             <Text
               style={{marginTop: 22}}
             >{language.community.logo}</Text>
+
+            <Text style={{
+              marginTop: 5,
+              fontSize: BasicStyles.standardFontSize - 2
+            }}>512px x 512px</Text>
             <FontAwesomeIcon
               icon={faImage}
               size={150}
@@ -242,7 +263,7 @@ class CreateCommunity extends Component {
                   backgroundColor: Color.secondary,
                   width: '100%',
                   marginTop: 20,
-                  marginBottom: 20
+                  marginBottom: 100
                 }}
                 textStyle={{
                   fontFamily: 'Poppins-SemiBold'

@@ -47,5 +47,9 @@ export default {
   ledgerTransfer: apiUrl + 'ledger/transfer',
   transactionHistoryRetrieve: apiUrl + 'ledger/transaction_history',
   ledgerCreate: apiUrl + 'ledger/create',
-  createPaymentIntent: apiUrl + 'stripe_webhooks/create_payment_intent'
+  createPaymentIntent: apiUrl + 'stripe_webhooks/create_payment_intent',
+  pageCreate: 'pages/create',
+  pageUpdate: 'pages/update',
+  pageDelete: 'pages/delete',
+  pageRetrieve: 'pages/retrieve'
 };

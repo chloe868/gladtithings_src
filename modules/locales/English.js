@@ -209,6 +209,10 @@ export default {
     address_placeholder: 'Address',
     category: 'Category',
     category_placeholder: 'Church Volunteers',
+    email: 'Email',
+    email_placeholder: 'Email Address',
+    website: 'Website',
+    website_placeholder: 'Website',
     logo: 'Logo',
     banner: 'Banner',
     submit: 'Submit'
