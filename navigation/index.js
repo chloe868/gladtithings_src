@@ -26,6 +26,7 @@ import EwalletStack from 'src/modules/ewallet/Drawer';
 import LanguageSettingsStack from 'src/modules/languageSettings/Drawer';
 import Drawer from './Drawer';
 import CreateCommunityStack from 'src/modules/community/createCommunityDrawer.js';
+import PaymentStack from 'src/modules/payments/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -83,6 +84,7 @@ const PrimaryNav = createStackNavigator(
     viewProfileStack: {screen: ViewProfileStack},
     communityStack: {screen: CommunityStack},
     subscriptionStack: {screen: SubscriptionStack},
+    paymentStack: {screen: PaymentStack},
     messagePageStack: {screen: MessagePageStack},
     termsAndConditionStack: {screen: TermsAndConditionsStack},
     privacyStack: {screen: PrivacyStack},
