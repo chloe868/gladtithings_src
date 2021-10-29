@@ -557,8 +557,8 @@ class OTP extends Component {
                     }}
                     title={'Continue'}
                     onClick={() => {
-                      // this.completeOTPField()
-                      this.handleResult();
+                      this.completeOTPField()
+                      // this.handleResult();
                     }}
                   />
                 </View>
