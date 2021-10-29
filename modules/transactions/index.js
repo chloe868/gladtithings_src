@@ -7,6 +7,9 @@ import Api from 'services/api/index.js';
 import { Routes } from 'common';
 import { Spinner } from 'components';
 
+import Skeleton from 'components/Loading/Skeleton';
+import EmptyMessage from 'modules/generic/Empty.js'
+
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
@@ -60,7 +63,7 @@ class Transactions extends Component {
   }
 
   render() {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     const { data, isLoading } = this.state;
     return (
       <View style={{
@@ -89,7 +92,15 @@ class Transactions extends Component {
             paddingRight: 20,
             minHeight: height + (height * 0.5)
           }}>
-            {!isLoading && data.length === 0 && <Text>You have no transactions yet.</Text>}
+
+            {
+              (isLoading) && (
+                <Skeleton size={5} template={'block'} height={60}/>
+              )
+            }
+
+
+            {!isLoading && data.length === 0 && <EmptyMessage message={language.emptyTithings}/>}
             {
               data.map((item, index) => {
                 return (
