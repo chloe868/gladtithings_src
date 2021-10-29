@@ -201,5 +201,20 @@ export default {
       colors: ['#000000', '#4CCBA6'],
     },
   ],
-  emptyTithings: 'Basta empty ni sya na spanish.'
+  emptyTithings: 'Basta empty ni sya na spanish.',
+  community: {
+    name: 'Name(ES)',
+    name_placeholder: 'Name of the Organization(ES)',
+    address: 'Address(ES)',
+    address_placeholder: 'Address(ES)',
+    category: 'Category(ES)',
+    category_placeholder: 'Church Volunteers(ES)',
+    email: 'Email(ES)',
+    email_placeholder: 'Email Address(ES)',
+    website: 'Website(ES)',
+    website_placeholder: 'Website(ES)',
+    logo: 'Logo(ES)',
+    banner: 'Banner(ES)',
+    submit: 'Submit(ES)'
+  }
 }
