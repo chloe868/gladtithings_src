@@ -201,5 +201,16 @@ export default {
       colors: ['#000000', '#4CCBA6'],
     }
   ],
-  emptyTithings: 'No tithings available.'
+  emptyTithings: 'No tithings available.',
+  community: {
+    name: 'Name',
+    name_placeholder: 'Name of the Organization',
+    address: 'Address',
+    address_placeholder: 'Address',
+    category: 'Category',
+    category_placeholder: 'Church Volunteers',
+    logo: 'Logo',
+    banner: 'Banner',
+    submit: 'Submit'
+  }
 }

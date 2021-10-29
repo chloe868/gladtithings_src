@@ -162,6 +162,7 @@ class CreateCommunity extends Component {
 
   render() {
     const { theme, user } = this.props.state;
+    const { language } = this.props.state;
     return (
       <View style={{
         height: height,
@@ -175,32 +176,32 @@ class CreateCommunity extends Component {
             minHeight: height + (height * 0.5)
           }}>
             <InputFieldWithIcon
-              placeholder={'Name of the Organization'}
+              placeholder={language.community.name_placeholder}
               icon={faUser}
-              label={'Name'}
+              label={language.community.name}
 
             //  onTyping={(text) => {this.setState({username: text})}}
             />
 
             <InputFieldWithIcon
-              placeholder={'Address'}
+              placeholder={language.community.address_placeholder}
               icon={faUser}
-              label={'Address'}
+              label={language.community.address}
 
             //  onTyping={(text) => {this.setState({username: text})}}
             />
 
             <InputFieldWithIcon
-              placeholder={'Church Volunteers'}
+              placeholder={language.community.category_placeholder}
               icon={faUser}
-              label={'Category'}
+              label={language.community.category}
 
             //  onTyping={(text) => {this.setState({username: text})}}
             />
             
             <Text
               style={{marginTop: 22}}
-            >Logo</Text>
+            >{language.community.logo}</Text>
             <FontAwesomeIcon
               icon={faImage}
               size={150}
@@ -217,7 +218,7 @@ class CreateCommunity extends Component {
 
             <Text
               style={{marginTop: 22}}
-            >Banner</Text>
+            >{language.community.banner}</Text>
             <FontAwesomeIcon
               icon={faImage}
               size={150}
@@ -249,7 +250,7 @@ class CreateCommunity extends Component {
                 onClick={() => {
                   this.update()
                 }}
-                title={'Submit'}
+                title={language.community.submit}
               />
             </View>
           </View>

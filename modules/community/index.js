@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-nati
 import { Color, BasicStyles } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
-import PostCard from 'modules/generic/PostCard';
+import PostCard from 'components/Comments/PostCard';
 import IncrementButton from 'components/Form/Button';
 import { faSearch, faPlusCircle, faBell, faBan, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
