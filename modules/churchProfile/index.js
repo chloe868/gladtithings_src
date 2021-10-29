@@ -50,6 +50,10 @@ class ChurchProfile extends Component {
     }
   }
 
+  componentDidMount(){
+    console.log(this.props.navigation.state.params, '----')
+  }
+
   render() {
     const { theme, user } = this.props.state;
     const { data } = this.props.navigation.state.params
@@ -109,7 +113,7 @@ class ChurchProfile extends Component {
                 width: '40%'
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Send Tithings' })
+                  this.props.navigation.navigate('depositStack', { type: 'Send Tithings', data: data})
                 }}
                 title={'Donation'}
               />

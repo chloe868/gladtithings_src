@@ -5,7 +5,7 @@ import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import PostCard from 'components/Comments/PostCard';
 import IncrementButton from 'components/Form/Button';
-import { faSearch, faPlusCircle, faBell, faBan, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Format from './TabContainer'
 import Card from './Card'
@@ -14,7 +14,6 @@ import Api from 'services/api';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
-
 
 const dataPope = [
   {
@@ -167,8 +166,6 @@ const data = [
   }
 ]
 
-
-  
 class Community extends Component {
   constructor(props) {
     super(props);
@@ -331,111 +328,138 @@ class Community extends Component {
 
 
   render() {
-    const { user, theme } = this.props.state;
-
+    const { theme, comments } = this.props.state;
+    const { createStatus, isLoading } = this.state;
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
- 
-          <View style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: 20,
-              marginBottom: 20,
-              marginHorizontal: 25,
-              overflow: 'hidden'
-              
-            }}>
-              
-              
-              <IncrementButton style={{
-                backgroundColor: this.state.isActive2 == 1? Color.secondary : Color.white,
-                width: '45%',
-                borderWidth: 0.1,
-                
-              }}
 
-              textStyle={{
-                color: this.state.isActive2 == 1? Color.white : Color.black
-              }}
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 20,
+          marginBottom: 20,
+          marginHorizontal: 25,
+          overflow: 'hidden'
 
-              onClick={() => {
-                this.setState({
-                  isActive2: 1,
-                  isActive: 0
-                })
-                this.communitiesMessage()
-              }}
-              title={'Communities'}
-              />  
+        }}>
+          <IncrementButton style={{
+            backgroundColor: this.state.isActive2 == 1 ? Color.secondary : Color.white,
+            width: '45%',
+            borderWidth: 0.1,
 
-              <IncrementButton style={{
-                
-                backgroundColor: this.state.isActive == 1? Color.secondary : Color.white,
-                width: '50%',
-                borderWidth: 0.1,
-              }}
-
-              textStyle={{
-                color: this.state.isActive == 1? Color.white : Color.black
-                
-              }}
-
-              onClick={() => {
-                this.setState({
-                  isActive: 1,
-                  isActive2: 0
-                })
-                this.popetwitterMessage()
-              }}
-              title={"Pope's Messages"}
-              />
-
-          </View>
+          }}
+            textStyle={{
+              color: this.state.isActive2 == 1 ? Color.white : Color.black
+            }}
+            onClick={() => {
+              this.setState({
+                isActive2: 1,
+                isActive: 0
+              })
+              this.communitiesMessage()
+            }}
+            title={'Communities'}
+          />
+          <IncrementButton style={{
+            backgroundColor: this.state.isActive == 1 ? Color.secondary : Color.white,
+            width: '50%',
+            borderWidth: 0.1,
+          }}
+            textStyle={{
+              color: this.state.isActive == 1 ? Color.white : Color.black
+            }}
+            onClick={() => {
+              this.setState({
+                isActive: 1,
+                isActive2: 0
+              })
+              this.popetwitterMessage()
+            }}
+            title={"Pope's Messages"}
+          />
+        </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          { this.state.default == true && 
-          <View style={{
-            marginBottom: 100
-          }}>
-            {data.length > 0 && data.map((item, index) => (
-              <PostCard
-                navigation={this.props.navigation}
-                loader={this.loader}
-                data={{
-                  user: item.account,
-                  comments: item.comment_replies,
-                  message: item.text,
-                  date: item.created_at_human,
-                  id: item.id,
-                  liked: item.liked,
-                  joined: item.joined,
-                  members: item.members,
-                  index: index
-                }}
-                images={item.images?.length > 0 ? item.images : []}
-                postReply={() => { this.reply(item) }}
-                reply={(value) => this.replyHandler(value)}
-                onLike={(params) => this.like(params)}
-                onJoin={(params) => this.join(params)}
-              />
-            ))}
-          </View>
+          {this.state.default == true &&
+            <View style={{
+              height: height * 1.5
+            }}>
+              {comments.length > 0 && comments.map((item, index) => {
+                return (
+                  <PostCard
+                    navigation={this.props.navigation}
+                    loader={this.loader}
+                    data={{
+                      user: item.account,
+                      comments: item.comment_replies,
+                      message: item.text,
+                      date: item.created_at_human,
+                      id: item.id,
+                      liked: item.liked,
+                      joined: item.joined,
+                      members: item.members,
+                      index: index
+                    }}
+                    images={item.images?.length > 0 ? item.images : []}
+                    postReply={() => { this.reply(item) }}
+                    reply={(value) => this.replyHandler(value)}
+                    onLike={(params) => this.like(params)}
+                    onJoin={(params) => this.join(params)}
+                    style={{
+                      backgroundColor: 'white'
+                    }}
+                  />
+                )
+              })}
+            </View>
           }
           {this.state.message && this.popetwitter()}
           {this.state.community && this.communities()}
-          
+
         </ScrollView>
+        {isLoading ? <Spinner mode="overlay" /> : null}
+        <CreatePost
+          visible={createStatus}
+          close={() => this.setState({ createStatus: false })}
+          title={'Create Post'}
+        />
+        <TouchableOpacity
+          style={[Style.floatingButton, {
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            height: 60,
+            width: 60,
+            borderRadius: 30,
+            bottom: 70
+          }]}
+          onPress={() => {
+            this.setState({ createStatus: true });
+          }}>
+          <FontAwesomeIcon
+            icon={faPlus}
+            style={{
+              color: Color.white
+            }}
+            size={16}
+          />
+        </TouchableOpacity>
         <Footer layer={0} {...this.props} />
       </View>
     );
   }
 }
 
-const mapStateToProps = state => ({ state: state });
+const mapStateToProps = (state) => ({ state: state });
 
-export default connect(
-  mapStateToProps
-)(Community);
+const mapDispatchToProps = (dispatch) => {
+  const { actions } = require('@redux');
+  return {
+    setComments: (comments) => {
+      dispatch(actions.setComments(comments));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Community);

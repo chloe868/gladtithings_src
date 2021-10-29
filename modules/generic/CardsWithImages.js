@@ -67,7 +67,7 @@ class CardsWithImages extends Component {
       <View style={Styles.container}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => (
           <TouchableOpacity style={this.props.button ? Styles.view : Styles.view1} onPress={() => {
-            this.props.redirect(index)
+            this.props.redirect(item)
           }}>
             <View style={[
               item.logo ? Styles.imageView : Styles.default, {
@@ -80,7 +80,7 @@ class CardsWithImages extends Component {
                   style={Styles.image} />
               }
               <View style={Styles.textInImageView}>
-                <Text style={Styles.textShadow}>{item.title}</Text>
+                <Text style={Styles.textShadow}>{item.name}</Text>
                 <Text style={Styles.textShadow}>{item.date}</Text>
               </View>
             </View>
