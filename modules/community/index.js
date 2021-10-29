@@ -10,6 +10,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Format from './TabContainer'
 import Card from './Card'
 import Api from 'services/api';
+import CreatePost from 'src/components/Comments/Create';
+import Style from './Style';
+import _ from 'lodash';
+import { Spinner } from 'components';
 
 
 const width = Math.round(Dimensions.get('window').width)
@@ -175,11 +179,37 @@ class Community extends Component {
       message: false,
       isActive: null,
       isActive2: null,
-      community: []
+      community: [],
+      createStatus: false,
+      data: []
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    this.retrieve(false);
+  }
+
+  retrieve = (flag) => {
+    const { setComments } = this.props;
+    let parameter = {
+      limit: this.state.limit,
+      offset: flag === true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
+      sort: {
+        created_at: "desc"
+      }
+    }
+    this.setState({ isLoading: true });
+    Api.request(Routes.commentsRetrieve, parameter, response => {
+      this.setState({ isLoading: false });
+      if (response.data.length > 0) {
+        this.setState({ offset: flag === false ? 1 : (this.state.offset + 1) })
+        setComments(flag === false ? response.data : _.uniqBy([...this.props.state.comments, ...response.data], 'id'));
+        console.log(this.props.state.comments);
+      } else {
+        this.setState({ offset: flag == false ? 0 : this.state.offset, })
+        setComments(flag == false ? [] : this.props.state.comments);
+      }
+    })
   }
 
   retrieveCommunities = () => {
@@ -426,7 +456,7 @@ class Community extends Component {
           close={() => this.setState({ createStatus: false })}
           title={'Create Post'}
         />
-        <TouchableOpacity
+        {this.state.default && <TouchableOpacity
           style={[Style.floatingButton, {
             backgroundColor: theme ? theme.secondary : Color.secondary,
             height: 60,
@@ -444,7 +474,7 @@ class Community extends Component {
             }}
             size={16}
           />
-        </TouchableOpacity>
+        </TouchableOpacity>}
         <Footer layer={0} {...this.props} />
       </View>
     );
