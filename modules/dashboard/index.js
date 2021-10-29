@@ -203,7 +203,7 @@ class Dashboard extends Component {
               })
             }
             {
-              (data && data.length === 0) && (
+              (data && data.length === 0 && transactionLoading == false) && (
                 <EmptyMessage message={'No tithings available.'}/>
               )
             }
