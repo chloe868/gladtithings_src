@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { Color, BasicStyles } from 'common';
+import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import PostCard from 'components/Comments/PostCard';
 import IncrementButton from 'components/Form/Button';
-import { faSearch, faPlusCircle, faBell, faBan, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import Format from './TabContainer'
-
-
-
+import Format from './TabContainer';
+import Style from './Style';
+import Api from 'services/api/index.js';
+import { Spinner } from 'components';
+import _ from 'lodash';
+import CreatePost from 'src/components/Comments/Create';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
-
 
 const dataPope = [
   {
@@ -127,77 +128,8 @@ const dataCommunityFollowers = [
     notif: 'Unfollow',
     icon: faBan
   }
-
 ]
 
-const data = [
-  {
-    id: 0,
-    account: {
-      id: 0,
-      username: 'lalaine',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [
-      {
-        account: {
-          id: 0,
-          username: 'riki',
-          first_name: 'Lalaine',
-          last_name: 'Garrido'
-        },
-        text: "Amazing!",
-        created_at_human: 'Just Now'
-      }
-    ],
-    text: "We would like to thank everyone who donated to our campaigns. Here's the documentation.",
-    created_at_human: 'Just Now',
-    images: [1]
-  },
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'jake',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [],
-    text: 'Hi. This is a test version two.',
-    created_at_human: 'August 30, 2021',
-    images: [1, 2]
-  },
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'heeseung',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [],
-    text: 'Hi. This is a test version two.',
-    created_at_human: 'August 30, 2021',
-    images: [1, 2, 3]
-  },
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'sunoo',
-      first_name: 'Lalaine',
-      last_name: 'Garrido'
-    },
-    comment_replies: [],
-    text: 'Hi. This is a test version two.',
-    created_at_human: 'August 30, 2021',
-    images: [1, 2, 3, 4]
-  }
-]
-
-
-  
 class Community extends Component {
   constructor(props) {
     super(props);
@@ -206,252 +138,299 @@ class Community extends Component {
       community: false,
       message: false,
       isActive: null,
-      isActive2: null
+      isActive2: null,
+      createStatus: false,
+      offset: 0,
+      limit: 5,
+      isLoading: false
     }
   }
 
+  componentDidMount() {
+    this.retrieve(false);
+  }
 
-  
-popetwitterMessage = () => {
-  this.setState({
-    default: false,
-    message: true,
-    community: false,
-    
-  })
+  retrieve = (flag) => {
+    const { setComments } = this.props;
+    let parameter = {
+      limit: this.state.limit,
+      offset: flag === true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
+      sort: {
+        created_at: "desc"
+      }
+    }
+    this.setState({ isLoading: true });
+    Api.request(Routes.commentsRetrieve, parameter, response => {
+      this.setState({ isLoading: false });
+      if (response.data.length > 0) {
+        this.setState({ offset: flag === false ? 1 : (this.state.offset + 1) })
+        setComments(flag === false ? response.data : _.uniqBy([...this.props.state.comments, ...response.data], 'id'));
+        console.log(this.props.state.comments);
+      } else {
+        this.setState({ offset: flag == false ? 0 : this.state.offset, })
+        setComments(flag == false ? [] : this.props.state.comments);
+      }
+    })
+  }
 
-}
+  popetwitterMessage = () => {
+    this.setState({
+      default: false,
+      message: true,
+      community: false,
+    })
 
-communitiesMessage = () => {
-  this.setState({
-    default: false,
-    message: false,
-    community: true
-  })
-}
+  }
 
-popetwitter = () => {
-  return(
-    <View style={{
-      marginBottom: 100
-    }}>
-     
-      {dataPope.length > 0 && dataPope.map((item, index) => (
-        <Format
-          navigation={this.props.navigation}
-          loader={this.loader}
-          data={{
-            user: item.account,
-            message: item.text,
-            date: item.created_at_human,
-            id: item.id
-          }} 
-        />
-        
-      ))}
-    </View>
-  )
-}
+  communitiesMessage = () => {
+    this.setState({
+      default: false,
+      message: false,
+      community: true
+    })
+  }
 
-communities = () =>{
-  return(
-    <View style={{
-      marginBottom: 100
-    }}>
+  popetwitter = () => {
+    return (
       <View style={{
-              marginTop: 20,
-            }}>
-        <Text 
-          style={{
-          ...BasicStyles.standardWidth,
-           fontFamily: 'Poppins-SemiBold',
-          }}
-        >Communities You Might Interested In</Text>
-      </View>
-      {dataCommunityInterested.length > 0 && dataCommunityInterested.map((item, index) => (
-        <Format
-          navigation={this.props.navigation}
-          loader={this.loader}
-          data={{
-            user: item.account,
-            message: item.notifs,
-            date: item.status,
-            id: item.id,
-            icon: item.icon
-          }}
+        marginBottom: 100
+      }}>
+        {dataPope.length > 0 && dataPope.map((item, index) => (
+          <Format
+            navigation={this.props.navigation}
+            loader={this.loader}
+            data={{
+              user: item.account,
+              message: item.text,
+              date: item.created_at_human,
+              id: item.id
+            }}
           />
-      ))}  
-
-       <View style={{
-              marginTop: 20,
-            }}>
-        <Text 
-          style={{
-          ...BasicStyles.standardWidth,
-           fontFamily: 'Poppins-SemiBold',
-          }}
-        >Communities You Manage</Text>
+        ))}
       </View>
-      {dataCommunityManage.length > 0 && dataCommunityManage.map((item, index) => (
-        <Format
-          navigation={this.props.navigation}
-          loader={this.loader}
-          data={{
-            user: item.account,
-            message: item.notifs,
-            date: item.status,
-            id: item.id,
-            icon: item.icon
-          }}
-          />
-      ))}
+    )
+  }
 
+  communities = () => {
+    return (
       <View style={{
-              marginTop: 20,
-              marginBottom: 20
-            }}>
-        <Text 
-          style={{
-          ...BasicStyles.standardWidth,
-           fontFamily: 'Poppins-SemiBold',
-          }}
-        >Communities You Followed & Joined</Text>
-        <Text
-          style={{
-          paddingTop: 10,
-          ...BasicStyles.standardWidth,
-          }}
-        >View Recommendation</Text>
+        marginBottom: 100
+      }}>
+        <View style={{
+          marginTop: 20,
+        }}>
+          <Text
+            style={{
+              ...BasicStyles.standardWidth,
+              fontFamily: 'Poppins-SemiBold',
+            }}
+          >Communities You Might Interested In</Text>
+        </View>
+        {dataCommunityInterested.length > 0 && dataCommunityInterested.map((item, index) => (
+          <Format
+            navigation={this.props.navigation}
+            loader={this.loader}
+            data={{
+              user: item.account,
+              message: item.notifs,
+              date: item.status,
+              id: item.id,
+              icon: item.icon
+            }}
+          />
+        ))}
+        <View style={{
+          marginTop: 20,
+        }}>
+          <Text
+            style={{
+              ...BasicStyles.standardWidth,
+              fontFamily: 'Poppins-SemiBold',
+            }}
+          >Communities You Manage</Text>
+        </View>
+        {dataCommunityManage.length > 0 && dataCommunityManage.map((item, index) => (
+          <Format
+            navigation={this.props.navigation}
+            loader={this.loader}
+            data={{
+              user: item.account,
+              message: item.notifs,
+              date: item.status,
+              id: item.id,
+              icon: item.icon
+            }}
+          />
+        ))}
 
+        <View style={{
+          marginTop: 20,
+          marginBottom: 20
+        }}>
+          <Text
+            style={{
+              ...BasicStyles.standardWidth,
+              fontFamily: 'Poppins-SemiBold',
+            }}
+          >Communities You Followed & Joined</Text>
+          <Text
+            style={{
+              paddingTop: 10,
+              ...BasicStyles.standardWidth,
+            }}
+          >View Recommendation</Text>
+        </View>
 
+        {dataCommunityFollowers.length > 0 && dataCommunityFollowers.map((item, index) => (
+          <Format
+            navigation={this.props.navigation}
+            loader={this.loader}
+            data={{
+              user: item.account,
+              message: item.notif,
+              date: item.status,
+              id: item.id,
+              icon: item.icon
+            }}
+          />
+        ))}
       </View>
-      
-      {dataCommunityFollowers.length > 0 && dataCommunityFollowers.map((item, index) => (
-        <Format
-          
-          navigation={this.props.navigation}
-          loader={this.loader}
-           data={{
-                  user: item.account,
-                  message: item.notif,
-                  date: item.status,
-                  id: item.id,
-                  icon: item.icon
-                }}
-        />
-      ))}
-    </View>
-  )
-}
-
-
+    )
+  }
 
   render() {
-    const { user, theme } = this.props.state;
-
+    const { theme, comments } = this.props.state;
+    const { createStatus, isLoading } = this.state;
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
- 
-          <View style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: 20,
-              marginBottom: 20,
-              marginHorizontal: 25,
-              overflow: 'hidden'
-              
-            }}>
-              
-              
-              <IncrementButton style={{
-                backgroundColor: this.state.isActive2 == 1? Color.secondary : Color.white,
-                width: '45%',
-                borderWidth: 0.1,
-                
-              }}
 
-              textStyle={{
-                color: this.state.isActive2 == 1? Color.white : Color.black
-              }}
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 20,
+          marginBottom: 20,
+          marginHorizontal: 25,
+          overflow: 'hidden'
 
-              onClick={() => {
-                this.setState({
-                  isActive2: 1,
-                  isActive: 0
-                })
-                this.communitiesMessage()
-              }}
-              title={'Communities'}
-              />  
+        }}>
+          <IncrementButton style={{
+            backgroundColor: this.state.isActive2 == 1 ? Color.secondary : Color.white,
+            width: '45%',
+            borderWidth: 0.1,
 
-              <IncrementButton style={{
-                
-                backgroundColor: this.state.isActive == 1? Color.secondary : Color.white,
-                width: '50%',
-                borderWidth: 0.1,
-              }}
-
-              textStyle={{
-                color: this.state.isActive == 1? Color.white : Color.black
-                
-              }}
-
-              onClick={() => {
-                this.setState({
-                  isActive: 1,
-                  isActive2: 0
-                })
-                this.popetwitterMessage()
-              }}
-              title={"Pope's Messages"}
-              />
-
-          </View>
+          }}
+            textStyle={{
+              color: this.state.isActive2 == 1 ? Color.white : Color.black
+            }}
+            onClick={() => {
+              this.setState({
+                isActive2: 1,
+                isActive: 0
+              })
+              this.communitiesMessage()
+            }}
+            title={'Communities'}
+          />
+          <IncrementButton style={{
+            backgroundColor: this.state.isActive == 1 ? Color.secondary : Color.white,
+            width: '50%',
+            borderWidth: 0.1,
+          }}
+            textStyle={{
+              color: this.state.isActive == 1 ? Color.white : Color.black
+            }}
+            onClick={() => {
+              this.setState({
+                isActive: 1,
+                isActive2: 0
+              })
+              this.popetwitterMessage()
+            }}
+            title={"Pope's Messages"}
+          />
+        </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          { this.state.default == true && 
-          <View style={{
-            marginBottom: 100
-          }}>
-            {data.length > 0 && data.map((item, index) => (
-              <PostCard
-                navigation={this.props.navigation}
-                loader={this.loader}
-                data={{
-                  user: item.account,
-                  comments: item.comment_replies,
-                  message: item.text,
-                  date: item.created_at_human,
-                  id: item.id,
-                  liked: item.liked,
-                  joined: item.joined,
-                  members: item.members,
-                  index: index
-                }}
-                images={item.images?.length > 0 ? item.images : []}
-                postReply={() => { this.reply(item) }}
-                reply={(value) => this.replyHandler(value)}
-                onLike={(params) => this.like(params)}
-                onJoin={(params) => this.join(params)}
-              />
-            ))}
-          </View>
+          {this.state.default == true &&
+            <View style={{
+              height: height * 1.5
+            }}>
+              {comments.length > 0 && comments.map((item, index) => {
+                return (
+                  <PostCard
+                    navigation={this.props.navigation}
+                    loader={this.loader}
+                    data={{
+                      user: item.account,
+                      comments: item.comment_replies,
+                      message: item.text,
+                      date: item.created_at_human,
+                      id: item.id,
+                      liked: item.liked,
+                      joined: item.joined,
+                      members: item.members,
+                      index: index
+                    }}
+                    images={item.images?.length > 0 ? item.images : []}
+                    postReply={() => { this.reply(item) }}
+                    reply={(value) => this.replyHandler(value)}
+                    onLike={(params) => this.like(params)}
+                    onJoin={(params) => this.join(params)}
+                    style={{
+                      backgroundColor: 'white'
+                    }}
+                  />
+                )
+              })}
+            </View>
           }
           {this.state.message && this.popetwitter()}
           {this.state.community && this.communities()}
-          
+
         </ScrollView>
+        {isLoading ? <Spinner mode="overlay" /> : null}
+        <CreatePost
+          visible={createStatus}
+          close={() => this.setState({ createStatus: false })}
+          title={'Create Post'}
+        />
+        <TouchableOpacity
+          style={[Style.floatingButton, {
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            height: 60,
+            width: 60,
+            borderRadius: 30,
+            bottom: 70
+          }]}
+          onPress={() => {
+            this.setState({ createStatus: true });
+          }}>
+          <FontAwesomeIcon
+            icon={faPlus}
+            style={{
+              color: Color.white
+            }}
+            size={16}
+          />
+        </TouchableOpacity>
         <Footer layer={0} {...this.props} />
       </View>
     );
   }
 }
 
-const mapStateToProps = state => ({ state: state });
+const mapStateToProps = (state) => ({ state: state });
 
-export default connect(
-  mapStateToProps
-)(Community);
+const mapDispatchToProps = (dispatch) => {
+  const { actions } = require('@redux');
+  return {
+    setComments: (comments) => {
+      dispatch(actions.setComments(comments));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Community);

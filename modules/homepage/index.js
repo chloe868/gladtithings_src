@@ -76,7 +76,7 @@ class HomePage extends Component {
                 temp.push({
                   address: item.address,
                   logo: item.logo,
-                  title: i.name,
+                  name: i.name,
                   date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`
                 })
               })
@@ -146,7 +146,7 @@ class HomePage extends Component {
                 data={data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.subscribe}
-                redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: data[index] }) }}
+                redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
                 buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation' }) }}
               />
               {churches?.length > 0 && <View style={Style.title}>

@@ -16,7 +16,8 @@ const types = {
   SET_QR_CODE_MODAL: 'SET_QR_CODE_MODAL',
   SET_LEDGER: 'SET_LEDGER',
   SET_PAYPAL_URL: 'SET_PAYPAL_URL',
-  SET_LANGUAGE: 'SET_LANGUAGE'
+  SET_LANGUAGE: 'SET_LANGUAGE',
+  SET_COMMENTS: 'SET_COMMENTS'
 };
 
 export const actions = {
@@ -56,7 +57,10 @@ export const actions = {
   },
   setLanguage(language) {
     return { type: types.SET_LANGUAGE, language}
-  }
+  },
+  setComments(comments) {
+    return { type: types.SET_COMMENTS, comments }
+  },
 };
 
 const initialState = {
@@ -72,7 +76,8 @@ const initialState = {
   },
   ledger: null,
   paypalUrl: null,
-  language: null
+  language: null,
+  comments: [],
 };
 
 storeData = async (key, value) => {
@@ -90,6 +95,7 @@ const reducer = (state = initialState, action) => {
   const { ledger } = action;
   const { paypalUrl } = action;
   const { language } = action;
+  const { comments } = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
@@ -154,6 +160,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         language
+      }
+    case types.SET_COMMENTS:
+      return {
+        ...state,
+        comments
       }
     default:
       return { ...state, nav: state.nav };

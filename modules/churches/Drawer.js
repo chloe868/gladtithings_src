@@ -3,8 +3,9 @@ import { View, TouchableOpacity, Text, Dimensions, TextInput } from 'react-nativ
 import { createStackNavigator } from 'react-navigation-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronLeft, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Color, BasicStyles } from 'common';
+import { Color, BasicStyles, Routes } from 'common';
 import { connect } from 'react-redux';
+import Api from 'services/api/index.js';
 import Churches from './index.js';
 
 const width = Math.round(Dimensions.get('window').width)
@@ -21,8 +22,28 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop()
   };
 
+  search = () => {
+    let parameter = {
+      condition: [
+        {
+          value: '%' + this.state.input + '%',
+          column: 'name',
+          clause: 'like'
+        }
+      ]
+    }
+    console.log(parameter, '--')
+    Api.request(Routes.merchantsRetrieve, parameter, response => {
+      if (response.data.length > 0) {
+      }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
+  }
+
   render() {
-    const { theme, language } = this.props.state;
+    const { language } = this.props.state;
     const { showSearch, input } = this.state;
     return (
       <View style={{ flexDirection: 'row', width: width }}>
@@ -66,6 +87,7 @@ class HeaderOptions extends Component {
               onChangeText={(text) => this.setState({ input: text })}
               value={input}
               placeholder={language.search}
+              onSubmitEditing={this.search()}
             />
           </View> :
           <View style={{
