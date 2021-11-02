@@ -152,7 +152,6 @@ class Community extends Component {
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
-            navigation={this.props.navigation}
           />
         ))}
         <View style={{
@@ -168,7 +167,6 @@ class Community extends Component {
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
-            navigation={this.props.navigation}
           />
         ))}
         <View style={{
@@ -191,7 +189,6 @@ class Community extends Component {
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
-            navigation={this.props.navigation}
           />
         ))}
       </View>
@@ -212,8 +209,7 @@ class Community extends Component {
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: 20,
-            marginBottom: 20,
-            marginHorizontal: 15,
+            marginHorizontal: 20,
             overflow: 'hidden'
 
           }}>
