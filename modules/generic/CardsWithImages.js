@@ -71,7 +71,7 @@ class CardsWithImages extends Component {
           }}>
             <View style={[
               item.logo ? Styles.imageView : Styles.default, {
-                height: this.props.button ? '70%' : '85%'
+                height: '60%'
               }
             ]}>
               {
@@ -79,12 +79,14 @@ class CardsWithImages extends Component {
                   source={{ uri: Config.BACKEND_URL + item.logo }}
                   style={Styles.image} />
               }
-              <View style={Styles.textInImageView}>
-                <Text style={Styles.textShadow}>{item.name}</Text>
-                <Text style={Styles.textShadow}>{item.date}</Text>
-              </View>
             </View>
-            <View style={[Styles.bottomView, { height: '20%' }]}>
+            <View style={{
+              padding: 5
+            }}>
+              <Text style={Styles.address}>{item.name}</Text>
+              <Text style={Styles.address}>{item.date}</Text>
+            </View>
+            <View style={Styles.bottomView}>
               <FontAwesomeIcon
                 icon={faMapMarkerAlt}
                 size={15}
