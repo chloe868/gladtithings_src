@@ -8,12 +8,9 @@ class TermsAndConditions extends Component {
     return (
       <View style={{
         flex: 1,
-        marginTop: 25,
         backgroundColor: Color.containerBackground
       }}>
-        <ScrollView style={{
-          backgroundColor: Color.containerBackground
-        }}
+        <ScrollView
         showsVerticalScrollIndicator={false}
         >
           <View style={styles.TermsAndConditionsContainer}>

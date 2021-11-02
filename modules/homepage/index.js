@@ -95,14 +95,14 @@ class HomePage extends Component {
     const { churches, isLoading } = this.state;
     return (
       <View style={{
-        backgroundColor: Color.containerBackground,
+        backgroundColor: Color.containerBackground
       }}>
         {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
           <View style={{
-            height: height * 1.5
+            marginBottom: height /2
           }}>
             <CustomizedHeader
               version={2}

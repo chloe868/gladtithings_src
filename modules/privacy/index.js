@@ -13,12 +13,9 @@ class Privacy extends Component {
     return (
       <View style={{
         flex: 1,
-        backgroundColor: Color.containerBackground,
-        marginTop: 25
+        backgroundColor: Color.containerBackground
       }}>
-        <ScrollView style={{
-          backgroundColor: Color.containerBackground
-        }}
+        <ScrollView
         showsVerticalScrollIndicator={false}
         >
           <View style={styles.TermsAndConditionsContainer}>

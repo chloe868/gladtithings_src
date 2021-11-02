@@ -19,7 +19,8 @@ export default {
   },
   bottomView: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 5
   },
   textInImage: {
     color: Color.white,
@@ -42,12 +43,12 @@ export default {
     padding: 10
   },
   view: {
-    height: 200,
+    height: 250,
     width: '50%',
     padding: 10
   },
   view1: {
-    height: 150,
+    height: 200,
     width: '50%',
     padding: 10
   },
