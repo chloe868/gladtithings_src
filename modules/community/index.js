@@ -134,7 +134,6 @@ class Community extends Component {
 
   communities = () => {
     const { community } = this.state;
-
     return (
       <View style={{
         marginBottom: 100
@@ -195,8 +194,6 @@ class Community extends Component {
     )
   }
 
-
-
   render() {
     const { isLoading } = this.state;
     return (
@@ -211,13 +208,11 @@ class Community extends Component {
             marginTop: 20,
             marginHorizontal: 20,
             overflow: 'hidden'
-
           }}>
             <IncrementButton style={{
               backgroundColor: this.state.isActive2 == 1 ? Color.secondary : Color.white,
               width: '45%',
               borderWidth: 0.1,
-
             }}
               textStyle={{
                 color: this.state.isActive2 == 1 ? Color.white : Color.black
