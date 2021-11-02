@@ -76,7 +76,7 @@ class Card extends Component {
   render() {
     const { data } = this.props;
     return (
-      <View style={{
+      <TouchableOpacity style={{
         ...BasicStyles.standardWidth,
         borderRadius: BasicStyles.standardBorderRadius,
         borderColor: Color.gray,
@@ -84,10 +84,14 @@ class Card extends Component {
         marginBottom: 10,
         marginTop: 10,
         backgroundColor: 'white'
-      }}>
+      }}
+      onPress={() => {
+        this.props.navigation.navigate('pageScreen', {})
+      }}
+      >
         {this.renderHeader(data)}
         {this.renderBody(data)}
-      </View>
+      </TouchableOpacity>
     )
   }
 
