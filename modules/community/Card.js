@@ -86,7 +86,9 @@ class Card extends Component {
         backgroundColor: 'white'
       }}
       onPress={() => {
-        this.props.navigation.navigate('pageScreen', {})
+        this.props.navigation.navigate('pageScreen', {
+          data: data
+        })
       }}
       >
         {this.renderHeader(data)}
