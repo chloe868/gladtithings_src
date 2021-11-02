@@ -87,7 +87,10 @@ class Card extends Component {
       }}
       onPress={() => {
         this.props.navigation.navigate('pageScreen', {
-          data: data
+          data: {
+            ...data,
+            sub_title: 'Non Profit - 20k Followers - 10k Joined'
+          }
         })
       }}
       >

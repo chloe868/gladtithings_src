@@ -17,7 +17,7 @@ class HeaderOptions extends Component {
   render() {
     const { theme } = this.props.state;
     return (
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', zIndex: 999}}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
@@ -41,7 +41,7 @@ class HeaderRightOptions extends Component {
   render() {
     const { theme } = this.props.state;
     return (
-      <View style={{flexDirection: 'row', paddingRight: 20}}>
+      <View style={{flexDirection: 'row', paddingRight: 20, zIndex: 999}}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
@@ -71,25 +71,9 @@ const Stack = createStackNavigator({
     headerMode: Platform.OS === 'ios'?'float': 'screen',
     navigationOptions: ({navigation}) => ({
       // title: navigation.state.params && navigation.state.params.data ? navigation.state.params.data.title : 'Page',
-      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      headerRight: <HeaderRightOptionsConnect navigationProps={navigation} />,
-      headerStyle: {
-        elevation: 0,
-        backgroundColor: 'trasparent',
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 18
-      },
-      headerTitleContainerStyle: {
-        backgroundColor: 'trasparent',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingRight: 64
-      },
-      headerTitleStyle: {
-        fontFamily: 'Poppins-SemiBold',
-      },
+      // headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
+      // headerRight: <HeaderRightOptionsConnect navigationProps={navigation} />,
+      headerTransparent: true
     }),
   },
 });
