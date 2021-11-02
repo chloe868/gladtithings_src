@@ -27,6 +27,7 @@ import LanguageSettingsStack from 'src/modules/languageSettings/Drawer';
 import Drawer from './Drawer';
 import CreateCommunityStack from 'src/modules/community/createCommunityDrawer.js';
 import PaymentStack from 'src/modules/payments/Drawer';
+import PageStack from 'src/modules/community/page/Drawer'
 
 const WelcomeStack = createStackNavigator(
   {
@@ -103,7 +104,8 @@ const PrimaryNav = createStackNavigator(
     qrCodeScannerStack: {screen: QRCodeScannerStack},
     ewalletStack: {screen: EwalletStack},
     createCommunityStack: { screen: CreateCommunityStack },
-    languageSettingsStack: { screen: LanguageSettingsStack }
+    languageSettingsStack: { screen: LanguageSettingsStack },
+    pageStack: { screen: PageStack }
   },
   {
     // Default config for all screens
