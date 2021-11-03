@@ -28,6 +28,7 @@ import Drawer from './Drawer';
 import CreateCommunityStack from 'src/modules/community/createCommunityDrawer.js';
 import PaymentStack from 'src/modules/payments/Drawer';
 import PageStack from 'src/modules/community/page/Drawer'
+import PageSettingStack from 'src/modules/community/setting/Drawer'
 
 const WelcomeStack = createStackNavigator(
   {
@@ -105,7 +106,8 @@ const PrimaryNav = createStackNavigator(
     ewalletStack: {screen: EwalletStack},
     createCommunityStack: { screen: CreateCommunityStack },
     languageSettingsStack: { screen: LanguageSettingsStack },
-    pageStack: { screen: PageStack }
+    pageStack: { screen: PageStack },
+    pageSettingStack: { screen: PageSettingStack }
   },
   {
     // Default config for all screens
