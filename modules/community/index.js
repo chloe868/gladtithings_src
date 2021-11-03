@@ -93,7 +93,6 @@ class Community extends Component {
     });
   }
 
-
   popetwitterMessage = () => {
     this.setState({
       default: false,
