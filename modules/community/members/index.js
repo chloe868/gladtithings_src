@@ -40,9 +40,9 @@ class Index extends Component {
             paddingRight: 20
           }}>
             <InputFieldWithIcon
-              placeholder={language.pageRoles.placeholder}
+              placeholder={language.pageMembers.placeholder}
               icon={faUser}
-              label={language.pageRoles.user}
+              label={language.pageMembers.user}
               onTyping={(title) => {
                 this.setState({title})
               }}

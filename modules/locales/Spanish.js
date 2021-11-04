@@ -233,5 +233,9 @@ export default {
   pageRoles: {
     placeholder: 'Username or Email Address',
     user: 'Invite Member',
+  },
+  pageMembers: {
+    placeholder: 'Username or Email Address',
+    user: 'Invite Member',
   }
 }
