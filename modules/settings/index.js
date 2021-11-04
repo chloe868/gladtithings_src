@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, ScrollView, Dimensions, Linking } from 'react-native';
 import { Color } from 'common';
 import { connect } from 'react-redux';
-import CardsWithIcon from '../generic/CardsWithIcon';
+import CardsWithIcon from 'modules/generic/CardsWithIcon';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)

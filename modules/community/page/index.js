@@ -5,7 +5,7 @@ import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import IncrementButton from 'components/Form/Button';
 import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
-import {faChevronLeft, faShare} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Card from 'modules/community/Card'
 import Api from 'services/api';
@@ -84,11 +84,13 @@ class Page extends Component {
 
         <TouchableOpacity 
           onPress={() => {
-            // share
+            this.props.navigation.navigate('pageSettingScreen', {
+              data: this.props.navigation.state.params.data
+            })
           }}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
-            icon={faShare}
+            icon={faCog}
             size={BasicStyles.headerBackIconSize}
             style={BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary}}
           />

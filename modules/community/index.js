@@ -150,6 +150,7 @@ class Community extends Component {
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
+            navigation={this.props.navigation}
           />
         ))}
         <View style={{
@@ -165,6 +166,7 @@ class Community extends Component {
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
+            navigation={this.props.navigation}
           />
         ))}
         <View style={{
@@ -187,6 +189,7 @@ class Community extends Component {
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
+            navigation={this.props.navigation}
           />
         ))}
       </View>

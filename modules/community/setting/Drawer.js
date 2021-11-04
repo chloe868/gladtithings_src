@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Platform} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
-import Screen from 'modules/community/page';
+import Screen from 'modules/community/setting';
 import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
 
@@ -31,29 +31,6 @@ class HeaderOptions extends Component {
   }
 }
 
-class HeaderRightOptions extends Component {
-  constructor(props) {
-    super(props);
-  }
-  back = () => {
-    this.props.navigationProps.pop()
-  };
-  render() {
-    const { theme } = this.props.state;
-    return (
-      <View style={{flexDirection: 'row', paddingRight: 20, zIndex: 999}}>
-        <TouchableOpacity onPress={this.back.bind(this)}>
-          {/*Donute Button Image */}
-          <FontAwesomeIcon
-            icon={faCog}
-            size={BasicStyles.headerBackIconSize}
-            style={BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary}}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
 
 const mapStateToProps = (state) => ({state: state});
 
@@ -63,17 +40,15 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
-let HeaderRightOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderRightOptions);
 
 const Stack = createStackNavigator({
-  pageScreen: {
+  pageSettingScreen: {
     screen: Screen,
     headerMode: Platform.OS === 'ios'?'float': 'screen',
     navigationOptions: ({navigation}) => ({
-      // title: navigation.state.params && navigation.state.params.data ? navigation.state.params.data.title : 'Page',
-      // headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      // headerRight: <HeaderRightOptionsConnect navigationProps={navigation} />,
-      headerTransparent: true
+      title: 'Page Settings',
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });

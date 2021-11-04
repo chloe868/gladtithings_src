@@ -216,5 +216,21 @@ export default {
     logo: 'Logo(ES)',
     banner: 'Banner(ES)',
     submit: 'Submit(ES)'
+  },
+  pageMenuSetting: [{
+    title: 'About(ES)',
+    description: 'Manage information of this community',
+    route: 'pageAboutScreen'
+  }, {
+    title: 'Page Roles(ES)',
+    description: 'Roles management of the community',
+    route: 'pageRolesScreen'
+  }, {
+    title: 'Members(ES)',
+    description: 'View all members of this community',
+    route: 'pageMembersScreen'
+  }],
+  pageRoles: {
+    invite_member: 'Invite Members'
   }
 }
