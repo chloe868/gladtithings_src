@@ -51,6 +51,10 @@ class Deposit extends Component {
     }
   };
 
+  unsubscribe = () => {
+    console.log('[delete]')
+  }
+
   createPayment = async () => {
     if(this.state.amount !== null && this.state.amount > 0){
       await createToken({type: 'Card'}).then(res => {
@@ -284,20 +288,62 @@ class Deposit extends Component {
               paddingRight: 20,
               width: '100%',
             }}>
-            <IncrementButton
-              style={{
-                backgroundColor: Color.secondary,
-                width: '100%',
-              }}
-              textStyle={{
-                fontFamily: 'Poppins-SemiBold',
-              }}
-              onClick={() => {
-                this.createPayment()
-                // this.props.navigation.navigate('otpStack');
-              }}
-              title={'Proceed'}
-            />
+              {
+                (this.props.navigation?.state?.params?.type !==
+                'Edit Subscription Donation') ? (
+                  <IncrementButton
+                    style={{
+                      backgroundColor: Color.secondary,
+                      width: '100%',
+                    }}
+                    textStyle={{
+                      fontFamily: 'Poppins-SemiBold',
+                    }}
+                    onClick={() => {
+                      this.createPayment()
+                      // this.props.navigation.navigate('otpStack');
+                    }}
+                    title={'Proceed'}
+                  />
+                ) : (
+                  <View style={{
+                    width: '100%',
+                    flex: 1,
+                    flexDirection: 'row'
+                  }}>
+                    <IncrementButton
+                      style={{
+                        backgroundColor: Color.danger,
+                        width: '50%',
+                        marginRight: 5
+                      }}
+                      textStyle={{
+                        fontFamily: 'Poppins-SemiBold',
+                      }}
+                      onClick={() => {
+                        this.unsubscribe()
+                        // this.props.navigation.navigate('otpStack');
+                      }}
+                      title={'Cancel Subscription'}
+                    />
+                    <IncrementButton
+                      style={{
+                        backgroundColor: Color.secondary,
+                        width: '50%',
+                        marginLeft: 5
+                      }}
+                      textStyle={{
+                        fontFamily: 'Poppins-SemiBold',
+                      }}
+                      onClick={() => {
+                        // this.createPayment()
+                        console.log('[update]')
+                      }}
+                      title={'Save Changes'}
+                    />
+                  </View>
+                )
+              }
           </View>
         )}
         {isLoading ? <Spinner mode="overlay" /> : null}

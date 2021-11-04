@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { Color } from 'common';
-import Footer from 'modules/generic/Footer';
+import CardsWithIcon from 'modules/generic/CardsWithIcon';
 import { connect } from 'react-redux';
 import PaymentMethodCard from 'modules/generic/Cards';
-import CustomizedHeader from '../generic/CustomizedHeader';
-import Button from '../generic/Button';
+import CustomizedHeader from 'modules/generic/CustomizedHeader';
+import Button from 'modules/generic/Button';
+
+import Skeleton from 'components/Loading/Skeleton';
+import EmptyMessage from 'modules/generic/Empty.js'
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -29,12 +32,17 @@ class Subscriptions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      details: false
+      details: false,
+      payment: true,
+      subscription: false,
+      isLoading: false,
+      dataLimit: []
     }
   }
 
   render() {
-    const { user, theme } = this.props.state;
+    const { language, theme } = this.props.state;
+    const { subscription, payment, isLoading, dataLimit } = this.state;
     return (
       <View style={{
         height: height,
@@ -45,14 +53,12 @@ class Subscriptions extends Component {
             <ScrollView showsVerticalScrollIndicator={false}>
               <CustomizedHeader
                 version={1}
-                text={data === null ? `You don't have church selected for now. Kindly click the button below to look for church you are interested to automate your tithings.` : 
-                'Here are the list of churches you are subscribed. Click the button below to look for more churches you are interested to automate your tithings'}
+                text={data === null ? language.subscription.noChurchSelectedMessage : language.subscription.ChurchSelectedMessage}
                 redirect={() => {
                   this.props.navigation.navigate('churchesStack')
                 }}
               />
               <View style={{
-                marginBottom: 100,
                 paddingTop: 10,
                 paddingRight: 10,
                 paddingLeft: 10,
@@ -73,32 +79,93 @@ class Subscriptions extends Component {
                     }}>
                       <Text style={{
                         color: 'white',
-                        fontSize: 12
-                      }}>See your billing here...</Text>
+                        fontSize: 12,
+                        fontWeight: 'bold'
+                      }}>{language.subscription.seeBillings}</Text>
                     </View>
                   }
                   redirect={() => {
-                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: data})
+                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: 'all'})
                   }}
                 />
-                <View style={{
-                  width: width,
-                  flexDirection: 'row',
-                  padding: 9
-                }}>
-                </View>
-                {data.length > 0 && data.map((item, index) => {
-                  return (
-                    <CustomizedHeader
-                      version={3}
-                      redirect={() => {
-                        this.setState({details: true})
-                      }}
-                    />
-                  )
-                })
-                }
               </View>
+              {
+                (payment) && (
+                  <View style={{marginBottom: 100}}>
+                  <Text
+                  style={{
+                    color: Color.primary,
+                    fontSize: 14,
+                    padding: 9,
+                    paddingLeft: 10,
+                    paddingTop: 20,
+                    textAlign: 'left',
+                    fontWeight: 'bold'
+                  }}
+                  onPress={() => {this.setState({subscription: true , payment: false})}}>View Payment Methods</Text>
+                  <View style={{
+                    paddingTop: 10,
+                    paddingRight: 10,
+                    paddingLeft: 10,
+                    alignItems: 'center'
+                  }}>
+                    {data.length > 0 && data.map((item, index) => {
+                      return (
+                        <CustomizedHeader
+                          version={3}
+                          redirect={() => {
+                            this.setState({details: true})
+                          }}
+                        />
+                      )
+                    })
+                    }
+                  </View>
+                </View>
+                )
+              }
+              {
+                (subscription) && (
+                <View style={{
+                  marginBottom: 100, 
+                  paddingLeft: 15,
+                  paddingRight: 15}}>
+                  <Text
+                  style={{
+                    color: Color.primary,
+                    fontSize: 14,
+                    paddingTop: 20,
+                    fontWeight: 'bold'
+                  }}
+                  onPress={() => {this.setState({payment: true , subscription: false})}}>View Subscriptions List</Text>
+                  <View style={{
+                    flexDirection: 'row',
+                    paddingTop: 15,
+                    paddingBottom: 15
+                  }}>
+                    <View style={{ width: '50%' }}>
+                      <Text style={{fontFamily: 'Poppins-SemiBold'}}>Payment Methods</Text>
+                    </View>
+                    <TouchableOpacity style={{ width: '50%' }}
+                    onPress={() => {this.props.navigation.navigate('paymentStack')}}>
+                      <Text style={{
+                        color: theme ? theme.primary : Color.primary,
+                        fontFamily: 'Poppins-SemiBold',
+                        textAlign: 'right'
+                      }}>Add</Text>
+                    </TouchableOpacity>
+                  </View>
+                  {data.length > 0 && data.map((item, index) => {
+                    return (
+                      <PaymentMethodCard
+                        data={item}
+                      />
+                    )
+                  })
+                  }
+                </View>
+                )
+              }
             </ScrollView>
           ) : (
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -132,38 +199,52 @@ class Subscriptions extends Component {
                       <Text style={{
                         color: 'white',
                         fontSize: 12
-                      }}>See your billing here...</Text>
+                      }}>{language.subscription.seeBillings}</Text>
                     </View>
                   }
                   redirect={() => {
-                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: data})
+                    dataLimit.length === 0 ?
+                    Alert.alert('Message', 'You do not have any subscription on this church.', [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('Cancel Pressed'),
+                      },
+                    ]) :
+                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: 'personal'})
                   }}
                 />
                 <View style={{
-                  width: width,
-                  flexDirection: 'row',
-                  padding: 15
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  minHeight: height + (height * 0.5)
                 }}>
-                  <View style={{ width: '50%' }}>
-                    <Text style={{fontFamily: 'Poppins-SemiBold'}}>Payment Methods</Text>
-                  </View>
-                  <TouchableOpacity style={{ width: '50%' }}
-                  onPress={() => {this.props.navigation.navigate('paymentStack')}}>
-                    <Text style={{
-                      color: theme ? theme.primary : Color.primary,
-                      fontFamily: 'Poppins-SemiBold',
-                      textAlign: 'right'
-                    }}>Add</Text>
-                  </TouchableOpacity>
+
+                  {
+                    (isLoading) && (
+                      <Skeleton size={5} template={'block'} height={60}/>
+                    )
+                  }
+
+
+                  {!isLoading && dataLimit.length === 0 && <EmptyMessage message={language.emptyTithings}/>}
+                  {
+                    dataLimit.map((item, index) => {
+                      return (
+                        <CardsWithIcon
+                          redirect={() => {
+                            console.log('')
+                          }}
+                          version={3}
+                          // tentative
+                          description={item.description}
+                          title={item.receiver ? item.receiver.email : item.description}
+                          date={item.created_at_human}
+                          amount={item.currency + ' ' + item.amount?.toLocaleString()}
+                        />
+                      )
+                    })
+                  }
                 </View>
-                {data.length > 0 && data.map((item, index) => {
-                  return (
-                    <PaymentMethodCard
-                      data={item}
-                    />
-                  )
-                })
-                }
               </View>
             </ScrollView>
           )

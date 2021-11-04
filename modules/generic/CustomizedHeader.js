@@ -15,7 +15,7 @@ class CustomizedHeader extends Component {
   }
 
   versionOne = () => {
-    const { theme } = this.props.state;
+    const { theme, language } = this.props.state;
     const { text } = this.props;
     return (
       <View style={{
@@ -27,7 +27,7 @@ class CustomizedHeader extends Component {
           padding: 10,
           fontSize: 13
         }}>
-          Hi, Kennette Canales. How are you? {text}.
+          {language.subscription.hi}, Kennette Canales. {language.subscription.greet} {text}.
         </Text>
         <Button
           style={{
@@ -46,7 +46,7 @@ class CustomizedHeader extends Component {
                 color: 'white',
                 fontSize: 12,
                 fontFamily: 'Poppins-SemiBold'
-              }}>Find Church</Text>
+              }}>{language.findChurch}</Text>
             </View>
           }
           redirect={() => {
