@@ -18,16 +18,16 @@ const height = Math.round(Dimensions.get('window').height)
 
 const menu = [{
   title: 'About',
-  description: 'This is a test',
-  route: null
+  description: 'Manage information of this community',
+  route: 'pageAboutScreen'
 }, {
   title: 'Page Roles',
-  description: 'This is a test',
-  route: null
+  description: 'Roles management of the community',
+  route: 'pageRolesScreen'
 }, {
   title: 'Members',
-  description: 'This is a test',
-  route: null
+  description: 'View all members of this community',
+  route: 'pageMembersScreen'
 }]
 
 class Setting extends Component {
@@ -41,6 +41,7 @@ class Setting extends Component {
   render() {
     const { theme, comments } = this.props.state;
     const { isLoading } = this.state;
+    const { params } = this.props.navigation.state;
     return (
       <View style={{
         height: height,
@@ -55,16 +56,9 @@ class Setting extends Component {
               menu.map((item) => (
                 <CardsWithIcon
                   redirect={() => {
-                    if(item.route === 'website') {
-                      console.log('opening url')
-                      Linking.openURL('https://app.gladtithings.com');
-                    } else{
-                      this.props.navigation.navigate(item.route, {
-                        title: 'Success Page',
-                        message: 'Transaction was successful',
-                        payload: 'error'
-                      })
-                    }
+                    this.props.navigation.navigate(item.route, {
+                      data: params.data
+                    })
                   }}
                   version={2}
                   title={item.title}
