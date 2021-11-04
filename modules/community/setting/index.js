@@ -7,17 +7,28 @@ import IncrementButton from 'components/Form/Button';
 import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import Card from 'modules/community/Card'
 import Api from 'services/api';
 import _ from 'lodash';
 import { Spinner } from 'components';
-import PostCard from 'components/Comments/PostCard';
+import CardsWithIcon from 'modules/generic/CardsWithIcon';
 
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-
+const menu = [{
+  title: 'About',
+  description: 'This is a test',
+  route: null
+}, {
+  title: 'Page Roles',
+  description: 'This is a test',
+  route: null
+}, {
+  title: 'Members',
+  description: 'This is a test',
+  route: null
+}]
 
 class Setting extends Component {
   constructor(props) {
@@ -40,7 +51,27 @@ class Setting extends Component {
             minHeight: height * 1.5,
             width: '100%'
           }}>
-            
+            {
+              menu.map((item) => (
+                <CardsWithIcon
+                  redirect={() => {
+                    if(item.route === 'website') {
+                      console.log('opening url')
+                      Linking.openURL('https://app.gladtithings.com');
+                    } else{
+                      this.props.navigation.navigate(item.route, {
+                        title: 'Success Page',
+                        message: 'Transaction was successful',
+                        payload: 'error'
+                      })
+                    }
+                  }}
+                  version={2}
+                  title={item.title}
+                  description={item.description}
+                />
+              ))
+            }
           </View>
         </ScrollView>
       </View>
