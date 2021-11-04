@@ -45,7 +45,7 @@ class CardsWithIcon extends Component {
         onPress={() => {
           this.props.redirect()
         }}
-        style={[Styles.cardContainer, { height: 90 }]}>
+        style={[Styles.cardContainer, { minHeight: 30 }]}>
         <View style={{
           width: '100%',
           flexDirection: 'row'

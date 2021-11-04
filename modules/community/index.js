@@ -248,9 +248,9 @@ class Community extends Component {
           </View>
           {this.state.default == true &&
             <View style={{
-              height: height * 1.5
+              marginBottom: height /2
             }}>
-              <Comments/>
+              <Comments withImages={true}/>
             </View>
           }
           {this.state.message && this.popetwitter()}

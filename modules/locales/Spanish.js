@@ -223,5 +223,22 @@ export default {
     seeBillings: 'Vea su facturación aquí...',
     noChurchSelectedMessage: `No tienes una iglesia seleccionada por ahora. Por favor haga clic en el botón de abajo para buscar la iglesia que le interesa para automatizar sus diezmos.`,
     ChurchSelectedMessage: `Aquí está la lista de iglesias a las que está suscrito. Haga clic en el botón de abajo para buscar más iglesias que le interesen para automatizar sus diezmos.`
+  },
+  pageMenuSetting: [{
+    title: 'About(ES)',
+    description: 'Manage information of this community',
+    route: 'pageAboutScreen'
+  }, {
+    title: 'Page Roles(ES)',
+    description: 'Roles management of the community',
+    route: 'pageRolesScreen'
+  }, {
+    title: 'Members(ES)',
+    description: 'View all members of this community',
+    route: 'pageMembersScreen'
+  }],
+  pageRoles: {
+    placeholder: 'Username or Email Address',
+    user: 'Invite Member',
   }
 }

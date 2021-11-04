@@ -4,19 +4,18 @@ import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import IncrementButton from 'components/Form/Button';
-import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
-import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
+import {faUser, faEnvelope, faImage, faMapMarkerAlt, faGlobe, faSitemap} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Api from 'services/api';
 import _ from 'lodash';
 import { Spinner } from 'components';
-import CardsWithIcon from 'modules/generic/CardsWithIcon';
+import InputFieldWithIcon from 'modules/generic/InputFieldWithIcon';
 
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-class Setting extends Component {
+class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,20 +39,22 @@ class Setting extends Component {
             paddingLeft: 20,
             paddingRight: 20
           }}>
-            {
-              language.pageMenuSetting.map((item) => (
-                <CardsWithIcon
-                  redirect={() => {
-                    this.props.navigation.navigate(item.route, {
-                      data: params.data
-                    })
-                  }}
-                  version={2}
-                  title={item.title}
-                  description={item.description}
-                />
-              ))
-            }
+            <InputFieldWithIcon
+              placeholder={language.pageRoles.placeholder}
+              icon={faUser}
+              label={language.pageRoles.user}
+              onTyping={(title) => {
+                this.setState({title})
+              }}
+            />
+
+            <Text style={{
+              fontWeight: 'bold',
+              paddingTop: 20,
+              paddingBottom: 20
+            }}>
+              Accounts
+            </Text>
           </View>
         </ScrollView>
       </View>
@@ -69,4 +70,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Setting);
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

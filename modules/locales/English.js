@@ -223,5 +223,22 @@ export default {
     seeBillings: 'See your billings here...',
     noChurchSelectedMessage: `You don't have church selected for now. Kindly click the button below to look for church you are interested to automate your tithings.`,
     ChurchSelectedMessage: `Here are the list of churches you are subscribed. Click the button below to look for more churches you are interested to automate your tithings.`
+  },
+  pageMenuSetting: [{
+    title: 'About',
+    description: 'Manage information of this community',
+    route: 'pageAboutScreen'
+  }, {
+    title: 'Page Roles',
+    description: 'Roles management of the community',
+    route: 'pageRolesScreen'
+  }, {
+    title: 'Members',
+    description: 'View all members of this community',
+    route: 'pageMembersScreen'
+  }],
+  pageRoles: {
+    placeholder: 'Username or Email Address',
+    user: 'Invite Member',
   }
 }
