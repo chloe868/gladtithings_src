@@ -53,5 +53,9 @@ export default {
   pageDelete: apiUrl + 'pages/delete',
   pageRetrieve: apiUrl + 'pages/retrieve',
   paypalCreateOrder: apiUrl + 'paypal/create_order',
-  paypalCaptureOrder: apiUrl + 'paypal/capture_order'
+  paypalCaptureOrder: apiUrl + 'paypal/capture_order',
+  uploadImage: apiUrl + 'payloads/create',
+  imageUploadBase64: apiUrl + 'images/upload_base64',
+  imageUploadUnLink: apiUrl + 'images/upload_un_link',
+  commentsRetrieveWithImages: apiUrl + 'comments/retrieve_comments_with_images'
 };
