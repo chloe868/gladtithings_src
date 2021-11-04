@@ -16,20 +16,6 @@ import CardsWithIcon from 'modules/generic/CardsWithIcon';
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-const menu = [{
-  title: 'About',
-  description: 'Manage information of this community',
-  route: 'pageAboutScreen'
-}, {
-  title: 'Page Roles',
-  description: 'Roles management of the community',
-  route: 'pageRolesScreen'
-}, {
-  title: 'Members',
-  description: 'View all members of this community',
-  route: 'pageMembersScreen'
-}]
-
 class Setting extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +25,7 @@ class Setting extends Component {
   }
 
   render() {
-    const { theme, comments } = this.props.state;
+    const { theme, language } = this.props.state;
     const { isLoading } = this.state;
     const { params } = this.props.navigation.state;
     return (
@@ -53,7 +39,7 @@ class Setting extends Component {
             width: '100%'
           }}>
             {
-              menu.map((item) => (
+              language.pageMenuSetting.map((item) => (
                 <CardsWithIcon
                   redirect={() => {
                     this.props.navigation.navigate(item.route, {

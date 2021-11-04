@@ -216,5 +216,18 @@ export default {
     logo: 'Logo',
     banner: 'Banner',
     submit: 'Submit'
-  }
+  },
+  pageMenuSetting: [{
+    title: 'About',
+    description: 'Manage information of this community',
+    route: 'pageAboutScreen'
+  }, {
+    title: 'Page Roles',
+    description: 'Roles management of the community',
+    route: 'pageRolesScreen'
+  }, {
+    title: 'Members',
+    description: 'View all members of this community',
+    route: 'pageMembersScreen'
+  }]
 }
