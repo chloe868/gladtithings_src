@@ -53,5 +53,6 @@ export default {
   pageDelete: apiUrl + 'pages/delete',
   pageRetrieve: apiUrl + 'pages/retrieve',
   paypalCreateOrder: apiUrl + 'paypal/create_order',
-  paypalCaptureOrder: apiUrl + 'paypal/capture_order'
+  paypalCaptureOrder: apiUrl + 'paypal/capture_order',
+  SubscriptionCreate: apiUrl + 'subscription/create'
 };

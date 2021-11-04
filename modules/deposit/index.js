@@ -103,8 +103,29 @@ class Deposit extends Component {
     });
   };
 
-  handlePayment = async (data, source) => {
+  subscribe = (source, paymentIntent) => {
+    const {user} = this.props.state;
     const {params} = this.props.navigation.state;
+    let parameter = {
+      account_id: user.id,
+      plan: params.data.name,
+      amount: this.state.amount,
+      currency: paymentIntent.currency
+    };
+    console.log('[Subscription PARAMETER]', Routes.SubscriptionCreate, params);
+    Api.request(Routes.SubscriptionCreate, parameter, response => {
+      console.log('[CHARGE RESPONSE]', response);
+      this.setState({isLoading: true})
+      if (response.data != null) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+      }
+      if (respose.error !== null) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
+      }
+    });
+  }
+
+  handlePayment = async (data, source) => {
     const {user} = this.props.state;
     const {error, paymentIntent} = await confirmPayment(data.client_secret, {
       type: 'Card',
@@ -122,8 +143,13 @@ class Deposit extends Component {
       console.log('[ERROR]', error);
     }
     if (paymentIntent) {
-      await this.createLedger(source, paymentIntent);
-      console.log('[SUCCESS]', paymentIntent);
+      if(this.props.navigation?.state?.params?.type !== 'Subscription Donation'){
+        await this.createLedger(source, paymentIntent);
+        console.log('[SUCCESS]', paymentIntent);
+      }else{
+        await this.subscribe(source, paymentIntent);
+        console.log('[SUCCESS]', paymentIntent);
+      }
     }
   };
 
@@ -270,7 +296,7 @@ class Deposit extends Component {
                 this.createPayment()
                 // this.props.navigation.navigate('otpStack');
               }}
-              title={'Continue'}
+              title={'Proceed'}
             />
           </View>
         )}

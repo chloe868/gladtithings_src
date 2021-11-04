@@ -63,11 +63,12 @@ class CardsWithImages extends Component {
 
   versionOne = () => {
     const { theme } = this.props.state;
+    console.log('[data>>>>>>>>>>>>]', this.props.data)
     return (
       <View style={Styles.container}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => (
           <TouchableOpacity style={this.props.button ? Styles.view : Styles.view1} onPress={() => {
-            this.props.redirect(item)
+            this.props.redirect()
           }}>
             <View style={[
               item.logo ? Styles.imageView : Styles.default, {
@@ -118,7 +119,7 @@ class CardsWithImages extends Component {
                 </View>
               }
               redirect={() => {
-                this.props.buttonClick()
+                this.props.buttonClick(item)
               }}
             />}
           </TouchableOpacity>

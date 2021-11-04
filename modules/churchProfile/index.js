@@ -21,8 +21,8 @@ const data1 = [
     type: 'Recollection'
   },
   {
-    id: 0,
-    name: 'Theme 1',
+    id: 1,
+    name: 'Theme 2',
     address: 'Cebu, Cebu City, Philippines',
     description: "Receives email address every time there's a login of the account.",
     date: 'July 23, 2021 5:00 PM',
