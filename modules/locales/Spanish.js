@@ -231,6 +231,7 @@ export default {
     route: 'pageMembersScreen'
   }],
   pageRoles: {
-    invite_member: 'Invite Members'
+    placeholder: 'Username or Email Address',
+    user: 'Invite Member',
   }
 }

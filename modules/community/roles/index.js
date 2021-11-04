@@ -24,7 +24,7 @@ class Index extends Component {
   }
 
   render() {
-    const { theme, comments, language } = this.props.state;
+    const { theme, language } = this.props.state;
     const { isLoading } = this.state;
     const { params } = this.props.navigation.state;
     return (
@@ -40,13 +40,21 @@ class Index extends Component {
             paddingRight: 20
           }}>
             <InputFieldWithIcon
-              placeholder={language.community.name_placeholder}
+              placeholder={language.pageRoles.placeholder}
               icon={faUser}
-              label={language.community.name}
+              label={language.pageRoles.user}
               onTyping={(title) => {
                 this.setState({title})
               }}
             />
+
+            <Text style={{
+              fontWeight: 'bold',
+              paddingTop: 20,
+              paddingBottom: 20
+            }}>
+              Accounts
+            </Text>
           </View>
         </ScrollView>
       </View>

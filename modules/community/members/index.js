@@ -24,7 +24,7 @@ class Index extends Component {
   }
 
   render() {
-    const { theme, comments, language } = this.props.state;
+    const { theme, language } = this.props.state;
     const { isLoading } = this.state;
     const { params } = this.props.navigation.state;
     return (
@@ -40,109 +40,21 @@ class Index extends Component {
             paddingRight: 20
           }}>
             <InputFieldWithIcon
-              placeholder={language.community.name_placeholder}
+              placeholder={language.pageRoles.placeholder}
               icon={faUser}
-              label={language.community.name}
+              label={language.pageRoles.user}
               onTyping={(title) => {
                 this.setState({title})
               }}
             />
 
-            <InputFieldWithIcon
-              placeholder={language.community.address_placeholder}
-              icon={faMapMarkerAlt}
-              label={language.community.address}
-              onTyping={(address) => {
-                this.setState({address})
-              }}
-            />
-
-            <InputFieldWithIcon
-              placeholder={language.community.category_placeholder}
-              icon={faSitemap}
-              label={language.community.category}
-              onTyping={(category) => {
-                this.setState({category})
-              }}
-            />
-
-            <InputFieldWithIcon
-              placeholder={language.community.website_placeholder}
-              icon={faGlobe}
-              label={language.community.website}
-              onTyping={(website) => {
-                this.setState({website})
-              }}
-            />
-
-            <InputFieldWithIcon
-              placeholder={language.community.email_placeholder}
-              icon={faEnvelope}
-              label={language.community.email}
-              onTyping={(email) => {
-                this.setState({email})
-              }}
-            />
-            
-            <Text
-              style={{marginTop: 22}}
-            >{language.community.logo}</Text>
-
             <Text style={{
-              marginTop: 5,
-              fontSize: BasicStyles.standardFontSize - 2
-            }}>512px x 512px</Text>
-            <FontAwesomeIcon
-              icon={faImage}
-              size={150}
-              paddingHorizontal={200}
-              style={{
-                width: '100%',
-                borderWidth: 0.1,
-                marginTop: 20,
-                backgroundColor: Color.white,
-                borderRadius: 5,
-                
-              }}
-            />
-
-            <Text
-              style={{marginTop: 22}}
-            >{language.community.banner}</Text>
-            <FontAwesomeIcon
-              icon={faImage}
-              size={150}
-              paddingHorizontal={200}
-              style={{
-                width: '100%',
-                borderWidth: 0.1,
-                marginTop: 20,
-                backgroundColor: Color.white,
-                borderRadius: 5,
-                
-              }}
-            />
-
-            <View style={{
-              marginTop: 20,
-              marginBottom: 20
+              fontWeight: 'bold',
+              paddingTop: 20,
+              paddingBottom: 20
             }}>
-              
-              <IncrementButton style={{
-                  backgroundColor: Color.secondary,
-                  width: '100%',
-                  marginTop: 20,
-                  marginBottom: 100
-                }}
-                textStyle={{
-                  fontFamily: 'Poppins-SemiBold'
-                }}
-                onClick={() => {
-                  this.submit()
-                }}
-                title={language.community.submit}
-              />
-            </View>
+              Accounts
+            </Text>
           </View>
         </ScrollView>
       </View>
