@@ -4,8 +4,7 @@ import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
 import IncrementButton from 'components/Form/Button';
-import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
-import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
+import {faUser, faEnvelope, faImage, faMapMarkerAlt, faGlobe, faSitemap} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Api from 'services/api';
 import _ from 'lodash';
@@ -36,7 +35,9 @@ class About extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             minHeight: height * 1.5,
-            width: '100%'
+            width: '100%',
+            paddingLeft: 20,
+            paddingRight: 20
           }}>
             <InputFieldWithIcon
               placeholder={language.community.name_placeholder}

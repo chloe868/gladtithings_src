@@ -36,7 +36,9 @@ class Setting extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             minHeight: height * 1.5,
-            width: '100%'
+            width: '100%',
+            paddingLeft: 20,
+            paddingRight: 20
           }}>
             {
               language.pageMenuSetting.map((item) => (
