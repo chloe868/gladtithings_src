@@ -218,15 +218,15 @@ export default {
     submit: 'Submit(ES)'
   },
   pageMenuSetting: [{
-    title: 'About',
+    title: 'About(ES)',
     description: 'Manage information of this community',
     route: 'pageAboutScreen'
   }, {
-    title: 'Page Roles',
+    title: 'Page Roles(ES)',
     description: 'Roles management of the community',
     route: 'pageRolesScreen'
   }, {
-    title: 'Members',
+    title: 'Members(ES)',
     description: 'View all members of this community',
     route: 'pageMembersScreen'
   }]
