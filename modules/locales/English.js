@@ -229,5 +229,8 @@ export default {
     title: 'Members',
     description: 'View all members of this community',
     route: 'pageMembersScreen'
-  }]
+  }],
+  pageRoles: {
+    invite_member: 'Invite Members'
+  }
 }
