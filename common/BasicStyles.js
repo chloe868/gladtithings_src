@@ -172,13 +172,15 @@ export default {
       height: 60,
       justifyContent: 'center',
       alignItems: 'center',
-      fontSize: 18
+      fontSize: 18,
+      width: width
     },
     headerTitleContainerStyle: {
       backgroundColor: Color.containerBackground,
       justifyContent: 'center',
       alignItems: 'center',
-      paddingRight: 64
+      paddingRight: 64,
+      width: '90%'
     },
     headerTitleStyle: {
       fontFamily: 'Poppins-SemiBold',
