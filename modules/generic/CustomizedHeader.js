@@ -16,7 +16,7 @@ class CustomizedHeader extends Component {
   }
 
   versionOne = () => {
-    const { theme, language } = this.props.state;
+    const { theme, language, user } = this.props.state;
     const { text } = this.props;
     return (
       <View style={{
@@ -28,7 +28,7 @@ class CustomizedHeader extends Component {
           padding: 10,
           fontSize: 13
         }}>
-          {language.subscription.hi}, Kennette Canales. {language.subscription.greet} {text}.
+          {language.subscription.hi}, {user.account_information.first_name + ' ' + user.account_information.last_name}. {language.subscription.greet} {text}.
         </Text>
         <Button
           style={{
@@ -60,6 +60,7 @@ class CustomizedHeader extends Component {
 
   versionTwo = () => {
     const { theme, language } = this.props.state;
+    const { data } = this.props;
     return (
       <View style={{
         justifyContent: 'center',
@@ -73,7 +74,7 @@ class CustomizedHeader extends Component {
           height: (height / 4) - 40
         }}>
           <Image
-            source={require('assets/test.jpg')}
+            source={{uri: Config.BACKEND_URL  + data?.merchant_details?.logo}}
             style={{
               height: '100%',
               width: '100%',
@@ -89,7 +90,7 @@ class CustomizedHeader extends Component {
           <Text style={{
             color: Color.white,
             fontFamily: 'Poppins-SemiBold'
-          }}>Church 1</Text>
+          }}>{data?.merchant_details != null ? data?.merchant_details?.name : 'Chapel 1'}</Text>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -102,7 +103,7 @@ class CustomizedHeader extends Component {
             />
             <Text style={{
               fontFamily: 'Poppins-SemiBold'
-            }}>$ 10.00 / {language.month}</Text>
+            }}>$ {data != null ? data?.amount.toFixed(2) : 10.00} / {language.month}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -134,7 +135,7 @@ class CustomizedHeader extends Component {
             <Text style={{
               fontSize: 10,
               fontFamily: 'Poppins-SemiBold'
-            }}>Cebu</Text>
+            }}>{data?.merchant_details != null ? data?.merchant_details?.address : 'Cebu'}</Text>
           </View>
 
           {!this.props.showButton && <Button
@@ -169,7 +170,6 @@ class CustomizedHeader extends Component {
   versionThree = () => {
     const { theme, language } = this.props.state;
     const { data } = this.props;
-    console.log('[data>>>>>]', data)
     return (
       <View style={{
         justifyContent: 'center',
@@ -268,9 +268,9 @@ class CustomizedHeader extends Component {
                 }}>{language.goToSubscription}</Text>
               </View>
             }
-            redirect={() => {
-              this.props.redirect()
-            }}
+            redirect={() =>
+              {this.props.redirect()}
+            }
           />}
         </View>
       </View>

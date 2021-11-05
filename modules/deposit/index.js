@@ -163,6 +163,7 @@ class Deposit extends Component {
     const {theme, language, paypalUrl} = this.props.state;
     const {method, amount, isLoading} = this.state;
     const { data } = this.props.navigation?.state?.params;
+    console.log('[data>>>>>>>>>>>>>>>]', data)
     return (
       <View
         style={{
@@ -220,14 +221,14 @@ class Deposit extends Component {
                         color: 'white',
                         fontFamily: 'Poppins-SemiBold',
                       }}>
-                      {data?.name}
+                      {data?.merchant_details != null ? data?.merchant_details?.name : data?.name}
                     </Text>
                     <Text
                       style={{
                         color: 'white',
                         fontFamily: 'Poppins-SemiBold',
                       }}>
-                      {data?.address}
+                      {data?.merchant_details != null ? data?.merchant_details?.address : data?.address}
                     </Text>
                   </View>
                 )}

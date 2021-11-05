@@ -24,7 +24,8 @@ class Subscriptions extends Component {
       isLoading: false,
       dataLimit: [],
       data: [],
-      dataPayment: []
+      dataPayment: [],
+      items: null
     }
   }
 
@@ -40,7 +41,6 @@ class Subscriptions extends Component {
     }
     this.setState({isLoading: true})
     Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
-      console.log('[ALL SUBSCRIPTION BY PARAMS REPONSE]', response.data.length);
       this.setState({data: response.data})
     });
   }
@@ -48,9 +48,44 @@ class Subscriptions extends Component {
   retrieveAllPayment = () => {
     const {user} = this.props.state;
     let parameter = {
-      account_id: user.id
+      account_id: user.id,
+      account_code: user.code
     }
-    // waiting for the retrieve
+    Api.request(Routes.paymentMethodsRetrieve, parameter, response => {
+      this.setState({dataPayment: response.data})
+    })
+  }
+
+  retrieveLTransaction = (flag) => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        column: 'account_id',
+        value: user.id,
+        clause: '='
+      }, {
+        column: 'description',
+        value: 'subscription',
+        clause: '='
+      }],
+      sort: {created_at: 'desc'},
+      limit: 5,
+      offset: 0
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.transactionHistoryRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      console.log('[=', response)
+      // if (response.data.length > 0) {
+      //   this.setState({
+      //     dataLimit: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+      //   })
+      // } else {
+      //   this.setState({
+      //     dataLimit: flag == false ? [] : this.state.data
+      //   })
+      // }
+    });
   }
 
   render() {
@@ -128,7 +163,8 @@ class Subscriptions extends Component {
                           version={3}
                           data={item}
                           redirect={() => {
-                            this.setState({details: true})
+                            this.setState({details: true, items: item})
+                            this.retrieveLTransaction(false)
                           }}
                         />
                       )
@@ -191,9 +227,10 @@ class Subscriptions extends Component {
             <ScrollView showsVerticalScrollIndicator={false}>
               <CustomizedHeader
                 version={2}
+                data={this.state.items}
                 buttonText={language.edit}
                 redirect={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Edit Subscription Donation' })
+                  this.props.navigation.navigate('depositStack', { type: 'Edit Subscription Donation', data: this.state.items })
                 }}
               />
               <View style={{

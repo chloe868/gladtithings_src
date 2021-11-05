@@ -60,4 +60,5 @@ export default {
   commentsRetrieveWithImages: apiUrl + 'comments/retrieve_comments_with_images',
   SubscriptionCreate: apiUrl + 'subscriptions/create',
   SubscriptionRetrieveByParams: apiUrl + 'subscriptions/retrieve_by_params',
+  paymentMethodsRetrieve: apiUrl + 'payment_methods/retrieve',
 };
