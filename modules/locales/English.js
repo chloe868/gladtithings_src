@@ -21,6 +21,10 @@ export default {
   upcomingEvents: 'Upcoming Events',
   donate: 'Donate',
   goToSubscription: 'Go to Subscription',
+  add: 'Add',
+  month: 'Month',
+  nextDonation: 'Next donation on',
+  cancelConfirmation: 'Are you sure you want to cancel ?',
   DrawerMenu: [
     {
       title: 'Homepage',
@@ -219,8 +223,18 @@ export default {
   },
   subscription: {
     hi: 'Hi',
+    proceed: 'Proceed',
+    cancelSubscription: 'Cancel Subscription',
+    saveChanges: 'Save Changes',
     greet: 'how are you ?',
     seeBillings: 'See your billings here...',
+    viewSubscriptionList: 'View Subscriptions List',
+    viewPaymentMethods: 'View Payment Methods',
+    paymentMethods: 'Payment Methods',
+    noSubscription: 'No Subscription Available',
+    noPayment: 'No Payment Methods Available',
+    message: 'Message',
+    noBillings: 'You do not have any subscription on this church.',
     noChurchSelectedMessage: `You don't have church selected for now. Kindly click the button below to look for church you are interested to automate your tithings.`,
     ChurchSelectedMessage: `Here are the list of churches you are subscribed. Click the button below to look for more churches you are interested to automate your tithings.`
   },

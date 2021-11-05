@@ -54,9 +54,10 @@ export default {
   pageRetrieve: apiUrl + 'pages/retrieve',
   paypalCreateOrder: apiUrl + 'paypal/create_order',
   paypalCaptureOrder: apiUrl + 'paypal/capture_order',
-  SubscriptionCreate: apiUrl + 'subscription/create',
   uploadImage: apiUrl + 'payloads/create',
   imageUploadBase64: apiUrl + 'images/upload_base64',
   imageUploadUnLink: apiUrl + 'images/upload_un_link',
-  commentsRetrieveWithImages: apiUrl + 'comments/retrieve_comments_with_images'
+  commentsRetrieveWithImages: apiUrl + 'comments/retrieve_comments_with_images',
+  SubscriptionCreate: apiUrl + 'subscriptions/create',
+  SubscriptionRetrieveByParams: apiUrl + 'subscriptions/retrieve_by_params',
 };

@@ -57,6 +57,7 @@ class HomePage extends Component {
     }
     this.setState({ isLoading: true })
     Api.request(Routes.merchantsRetrieve, parameter, response => {
+      console.log('[RESPONSE]', response)
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         let temp = [];
@@ -74,6 +75,7 @@ class HomePage extends Component {
                 let aIsAm = parseInt(a[0]) <= 12 ? 'AM' : 'PM'
                 let bIsAm = parseInt(b[0]) <= 12 ? 'AM' : 'PM'
                 temp.push({
+                  id: item.id,
                   address: item.address,
                   logo: item.logo,
                   name: i.name,
@@ -93,6 +95,7 @@ class HomePage extends Component {
   render() {
     const { theme, user, language } = this.props.state;
     const { churches, isLoading } = this.state;
+    console.log('[CHURCHES]', churches)
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -143,7 +146,7 @@ class HomePage extends Component {
               <CardsWithImages
                 version={1}
                 button={true}
-                data={data}
+                data={churches}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.subscribe}
                 redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
