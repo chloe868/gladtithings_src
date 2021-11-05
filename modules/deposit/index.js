@@ -51,6 +51,10 @@ class Deposit extends Component {
     }
   };
 
+  unsubscribe = () => {
+    console.log('[delete]')
+  }
+
   createPayment = async () => {
     if(this.state.amount !== null && this.state.amount > 0){
       await createToken({type: 'Card'}).then(res => {
@@ -103,8 +107,29 @@ class Deposit extends Component {
     });
   };
 
-  handlePayment = async (data, source) => {
+  subscribe = (source, paymentIntent) => {
+    const {user} = this.props.state;
     const {params} = this.props.navigation.state;
+    let parameter = {
+      account_id: user.id,
+      plan: params.data.name,
+      amount: this.state.amount,
+      currency: paymentIntent.currency
+    };
+    console.log('[Subscription PARAMETER]', Routes.SubscriptionCreate, params);
+    Api.request(Routes.SubscriptionCreate, parameter, response => {
+      console.log('[CHARGE RESPONSE]', response);
+      this.setState({isLoading: true})
+      if (response.data != null) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+      }
+      if (respose.error !== null) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
+      }
+    });
+  }
+
+  handlePayment = async (data, source) => {
     const {user} = this.props.state;
     const {error, paymentIntent} = await confirmPayment(data.client_secret, {
       type: 'Card',
@@ -122,8 +147,13 @@ class Deposit extends Component {
       console.log('[ERROR]', error);
     }
     if (paymentIntent) {
-      await this.createLedger(source, paymentIntent);
-      console.log('[SUCCESS]', paymentIntent);
+      if(this.props.navigation?.state?.params?.type !== 'Subscription Donation'){
+        await this.createLedger(source, paymentIntent);
+        console.log('[SUCCESS]', paymentIntent);
+      }else{
+        await this.subscribe(source, paymentIntent);
+        console.log('[SUCCESS]', paymentIntent);
+      }
     }
   };
 
@@ -258,20 +288,62 @@ class Deposit extends Component {
               paddingRight: 20,
               width: '100%',
             }}>
-            <IncrementButton
-              style={{
-                backgroundColor: Color.secondary,
-                width: '100%',
-              }}
-              textStyle={{
-                fontFamily: 'Poppins-SemiBold',
-              }}
-              onClick={() => {
-                this.createPayment()
-                // this.props.navigation.navigate('otpStack');
-              }}
-              title={'Continue'}
-            />
+              {
+                (this.props.navigation?.state?.params?.type !==
+                'Edit Subscription Donation') ? (
+                  <IncrementButton
+                    style={{
+                      backgroundColor: Color.secondary,
+                      width: '100%',
+                    }}
+                    textStyle={{
+                      fontFamily: 'Poppins-SemiBold',
+                    }}
+                    onClick={() => {
+                      this.createPayment()
+                      // this.props.navigation.navigate('otpStack');
+                    }}
+                    title={'Proceed'}
+                  />
+                ) : (
+                  <View style={{
+                    width: '100%',
+                    flex: 1,
+                    flexDirection: 'row'
+                  }}>
+                    <IncrementButton
+                      style={{
+                        backgroundColor: Color.danger,
+                        width: '50%',
+                        marginRight: 5
+                      }}
+                      textStyle={{
+                        fontFamily: 'Poppins-SemiBold',
+                      }}
+                      onClick={() => {
+                        this.unsubscribe()
+                        // this.props.navigation.navigate('otpStack');
+                      }}
+                      title={'Cancel Subscription'}
+                    />
+                    <IncrementButton
+                      style={{
+                        backgroundColor: Color.secondary,
+                        width: '50%',
+                        marginLeft: 5
+                      }}
+                      textStyle={{
+                        fontFamily: 'Poppins-SemiBold',
+                      }}
+                      onClick={() => {
+                        // this.createPayment()
+                        console.log('[update]')
+                      }}
+                      title={'Save Changes'}
+                    />
+                  </View>
+                )
+              }
           </View>
         )}
         {isLoading ? <Spinner mode="overlay" /> : null}

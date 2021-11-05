@@ -11,6 +11,7 @@ class HeaderOptions extends Component {
   constructor(props) {
     super(props);
   }
+  
   back = () => {
     this.props.navigationProps.pop();
   };
@@ -46,7 +47,7 @@ const Stack = createStackNavigator({
   displayScreen: {
     screen: Screen,
     navigationOptions: ({navigation}) => ({
-      title: 'Transactions',
+      title: navigation?.state?.params?.title === null ? 'Transactions' : navigation.state.params.title,
       drawerLabel: 'Transactions',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
