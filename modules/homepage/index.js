@@ -3,12 +3,14 @@ import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-nati
 import { Color, Routes } from 'common';
 import Style from './Style.js';
 import { connect } from 'react-redux';
-import CardsWithImages from '../generic/CardsWithImages';
-import CustomizedHeader from '../generic/CustomizedHeader';
+import CardsWithImages from 'src/modules/generic/CardsWithImages';
+import CustomizedHeader from 'src/modules/generic/CustomizedHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
 import { Spinner } from 'components';
+import AccountCard from 'src/modules/generic/AccountCard.js';
+import Config from 'src/config.js';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -44,7 +46,7 @@ class HomePage extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.retrieveChurches()
   }
 
@@ -63,12 +65,12 @@ class HomePage extends Component {
         let temp = [];
         response.data.map((item, index) => {
           let sched = [];
-          if(item.schedule) {
+          if (item.schedule) {
             sched = JSON.parse(item.schedule)
           }
           sched.length > 0 && sched.map((items, inde) => {
             let currentDay = new Date().getDay();
-            if(items.title === days[currentDay]) {
+            if (items.title === days[currentDay]) {
               items.schedule.length > 0 && items.schedule.map((i, ind) => {
                 let a = i.startTime.split(':')
                 let b = i.endTime.split(':')
@@ -105,7 +107,7 @@ class HomePage extends Component {
           showsVerticalScrollIndicator={false}
         >
           <View style={{
-            marginBottom: height /2
+            marginBottom: height / 2
           }}>
             <CustomizedHeader
               version={2}
@@ -114,6 +116,11 @@ class HomePage extends Component {
               }}
             />
             <View>
+              <AccountCard
+                name={'Full Name'}
+                address={'Cebu City'}
+                profile={Config.BACKEND_URL + churches[0]?.logo}
+              />
               <View style={Style.title}>
                 <Text
                   numberOfLines={1}
