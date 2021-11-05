@@ -1,32 +1,18 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
-import { Color } from 'common';
+import { Color, Routes } from 'common';
 import CardsWithIcon from 'modules/generic/CardsWithIcon';
 import { connect } from 'react-redux';
 import PaymentMethodCard from 'modules/generic/Cards';
 import CustomizedHeader from 'modules/generic/CustomizedHeader';
 import Button from 'modules/generic/Button';
+import Api from 'services/api/index.js';
 
 import Skeleton from 'components/Loading/Skeleton';
 import EmptyMessage from 'modules/generic/Empty.js'
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
-
-const data = [
-  {
-    username: 'Han',
-    payment_method: 'paypal',
-    status: 'Authorized',
-    end_date: 'November 30, 2020'
-  },
-  {
-    username: 'Kai',
-    payment_method: 'credit_card',
-    status: 'Authorized',
-    end_date: 'November 30, 2020'
-  }
-]
 
 class Subscriptions extends Component {
   constructor(props) {
@@ -36,13 +22,40 @@ class Subscriptions extends Component {
       payment: true,
       subscription: false,
       isLoading: false,
-      dataLimit: []
+      dataLimit: [],
+      data: [],
+      dataPayment: []
     }
+  }
+
+  componentDidMount = () => {
+    this.retrieveAllSubscriptions()
+    this.retrieveAllPayment()
+  }
+
+  retrieveAllSubscriptions = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      account_id: user.id  
+    }
+    this.setState({isLoading: true})
+    Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
+      console.log('[ALL SUBSCRIPTION BY PARAMS REPONSE]', response.data.length);
+      this.setState({data: response.data})
+    });
+  }
+
+  retrieveAllPayment = () => {
+    const {user} = this.props.state;
+    let parameter = {
+      account_id: user.id
+    }
+    // waiting for the retrieve
   }
 
   render() {
     const { language, theme } = this.props.state;
-    const { subscription, payment, isLoading, dataLimit } = this.state;
+    const { subscription, payment, isLoading, dataLimit, data, dataPayment } = this.state;
     return (
       <View style={{
         height: height,
@@ -85,7 +98,7 @@ class Subscriptions extends Component {
                     </View>
                   }
                   redirect={() => {
-                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: 'all'})
+                    this.props.navigation.navigate('transactionsStack', {title: 'Subscription Billings', parameter: 'all'})
                   }}
                 />
               </View>
@@ -102,7 +115,7 @@ class Subscriptions extends Component {
                     textAlign: 'left',
                     fontWeight: 'bold'
                   }}
-                  onPress={() => {this.setState({subscription: true , payment: false})}}>View Payment Methods</Text>
+                  onPress={() => {this.setState({subscription: true , payment: false})}}>{language.subscription.viewPaymentMethods}</Text>
                   <View style={{
                     paddingTop: 10,
                     paddingRight: 10,
@@ -113,12 +126,16 @@ class Subscriptions extends Component {
                       return (
                         <CustomizedHeader
                           version={3}
+                          data={item}
                           redirect={() => {
                             this.setState({details: true})
                           }}
                         />
                       )
                     })
+                    }
+                    {
+                      data.length === 0 && <EmptyMessage message={language.subscription.noSubscription}/>
                     }
                   </View>
                 </View>
@@ -137,14 +154,14 @@ class Subscriptions extends Component {
                     paddingTop: 20,
                     fontWeight: 'bold'
                   }}
-                  onPress={() => {this.setState({payment: true , subscription: false})}}>View Subscriptions List</Text>
+                  onPress={() => {this.setState({payment: true , subscription: false})}}>{language.subscription.viewSubscriptionList}</Text>
                   <View style={{
                     flexDirection: 'row',
                     paddingTop: 15,
                     paddingBottom: 15
                   }}>
                     <View style={{ width: '50%' }}>
-                      <Text style={{fontFamily: 'Poppins-SemiBold'}}>Payment Methods</Text>
+                      <Text style={{fontFamily: 'Poppins-SemiBold'}}>{language.subscription.paymentMethods}</Text>
                     </View>
                     <TouchableOpacity style={{ width: '50%' }}
                     onPress={() => {this.props.navigation.navigate('paymentStack')}}>
@@ -152,16 +169,19 @@ class Subscriptions extends Component {
                         color: theme ? theme.primary : Color.primary,
                         fontFamily: 'Poppins-SemiBold',
                         textAlign: 'right'
-                      }}>Add</Text>
+                      }}>{language.add}</Text>
                     </TouchableOpacity>
                   </View>
-                  {data.length > 0 && data.map((item, index) => {
+                  {dataPayment.length > 0 && data.map((item, index) => {
                     return (
                       <PaymentMethodCard
                         data={item}
                       />
                     )
                   })
+                  }
+                  {
+                    dataPayment.length === 0 && <EmptyMessage message={language.subscription.noPayment}/>
                   }
                 </View>
                 )
@@ -171,7 +191,7 @@ class Subscriptions extends Component {
             <ScrollView showsVerticalScrollIndicator={false}>
               <CustomizedHeader
                 version={2}
-                buttonText={'edit'}
+                buttonText={language.edit}
                 redirect={() => {
                   this.props.navigation.navigate('depositStack', { type: 'Edit Subscription Donation' })
                 }}
@@ -204,7 +224,7 @@ class Subscriptions extends Component {
                   }
                   redirect={() => {
                     dataLimit.length === 0 ?
-                    Alert.alert('Message', 'You do not have any subscription on this church.', [
+                    Alert.alert(language.subscription.message, language.subscription.noBillings, [
                       {
                         text: 'OK',
                         onPress: () => console.log('Cancel Pressed'),
@@ -226,7 +246,7 @@ class Subscriptions extends Component {
                   }
 
 
-                  {!isLoading && dataLimit.length === 0 && <EmptyMessage message={language.emptyTithings}/>}
+                  {!isLoading && dataLimit.length === 0 && <EmptyMessage message={language.subscription.noSubscription}/>}
                   {
                     dataLimit.map((item, index) => {
                       return (
