@@ -51,6 +51,22 @@ class Payments extends Component {
     }
   };
 
+  createPayment = async () => {
+    const {user} = this.props.state;
+    await createToken({type: 'Card'}).then(res => {
+      console.log('[TOKEN]', res);
+      let params = {
+        account_id: user.id,
+        account_code: user.code,
+        payload: 'stripe',
+        payload_value: JSON.stringify(res),
+      };
+      this.setState({isLoading: true})
+      Api.request(Routes.createPaymentMethod, params, response => {
+      });
+    });
+  };
+
   render() {
     const {theme, user, paypalUrl} = this.props.state;
     console.log('[pay]', paypalUrl)

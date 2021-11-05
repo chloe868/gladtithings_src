@@ -28,7 +28,8 @@ class Deposit extends Component {
     this.state = {
       amount: 0,
       card: null,
-      isLoading: false
+      isLoading: false,
+      subscribeId: null
     };
   }
 
@@ -91,8 +92,8 @@ class Deposit extends Component {
       account_code: user.code,
       amount: this.state.amount,
       currency: paymentIntent.currency,
-      details: params.page === 'withdrawStack' ? 'withdraw' : 'deposit',
-      description: params.page === 'withdrawStack' ? 'withdraw' : 'deposit',
+      details: this.state.subscribeId === null ? ((params.page === 'withdrawStack') ? 'withdraw' : 'deposit') : this.state.subscribeId,
+      description: this.state.subscribeId === null ? (params.page === 'withdrawStack' ? 'withdraw' : 'deposit') : 'subscription',
     };
     console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
     Api.request(Routes.ledgerCreate, parameter, response => {
@@ -112,16 +113,17 @@ class Deposit extends Component {
     const {params} = this.props.navigation.state;
     let parameter = {
       account_id: user.id,
-      plan: params.data.name,
+      merchant: params.data.id,
       amount: this.state.amount,
       currency: paymentIntent.currency
     };
-    console.log('[Subscription PARAMETER]', Routes.SubscriptionCreate, params);
+    console.log('[Subscription PARAMETER]', Routes.SubscriptionCreate, parameter);
     Api.request(Routes.SubscriptionCreate, parameter, response => {
-      console.log('[CHARGE RESPONSE]', response);
+      console.log('[Subscribe RESPONSE]', response);
       this.setState({isLoading: true})
       if (response.data != null) {
-        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+        this.setState({subscribeId: response.data})
+        this.createLedger('subscribe', paymentIntent)
       }
       if (respose.error !== null) {
         this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
@@ -149,7 +151,7 @@ class Deposit extends Component {
     if (paymentIntent) {
       if(this.props.navigation?.state?.params?.type !== 'Subscription Donation'){
         await this.createLedger(source, paymentIntent);
-        console.log('[SUCCESS]', paymentIntent);
+        console.log('[SUCCESS this is]', paymentIntent);
       }else{
         await this.subscribe(source, paymentIntent);
         console.log('[SUCCESS]', paymentIntent);
@@ -158,7 +160,7 @@ class Deposit extends Component {
   };
 
   render() {
-    const {theme, user, paypalUrl} = this.props.state;
+    const {theme, language, paypalUrl} = this.props.state;
     const {method, amount, isLoading} = this.state;
     const { data } = this.props.navigation?.state?.params;
     return (
@@ -263,7 +265,7 @@ class Deposit extends Component {
                       color: theme ? theme.primary : Color.primary,
                       fontFamily: 'Poppins-SemiBold',
                     }}>
-                    USD
+                    {this.props.navigation?.state?.params?.type === 'Subscription Donation' ? 'USD /' + ' ' + language.month : 'USD'}
                   </Text>
                 </View>
               </View>
@@ -303,7 +305,7 @@ class Deposit extends Component {
                       this.createPayment()
                       // this.props.navigation.navigate('otpStack');
                     }}
-                    title={'Proceed'}
+                    title={language.subscription.proceed}
                   />
                 ) : (
                   <View style={{
@@ -324,7 +326,7 @@ class Deposit extends Component {
                         this.unsubscribe()
                         // this.props.navigation.navigate('otpStack');
                       }}
-                      title={'Cancel Subscription'}
+                      title={language.subscription.cancelSubscription}
                     />
                     <IncrementButton
                       style={{
@@ -339,7 +341,7 @@ class Deposit extends Component {
                         // this.createPayment()
                         console.log('[update]')
                       }}
-                      title={'Save Changes'}
+                      title={language.subscription.saveChanges}
                     />
                   </View>
                 )

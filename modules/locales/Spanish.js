@@ -21,6 +21,10 @@ export default {
   upcomingEvents: 'Próximos Eventos',
   donate: 'Donar',
   goToSubscription: 'Ir a Suscripción',
+  add: 'Agregar',
+  month: 'Mes',
+  nextDonation: 'Próxima donación el',
+  cancelConfirmation: 'Estas seguro que quieres cancelar ?',
   DrawerMenu: [
     {
       title: 'Página principal',
@@ -219,8 +223,18 @@ export default {
   },
   subscription: {
     hi: 'Hola',
+    proceed: 'Continuar',
     greet: 'cómo estás ?',
+    cancelSubscription: 'Cancelar suscripción',
+    saveChanges: 'Guardar cambios',
     seeBillings: 'Vea su facturación aquí...',
+    viewSubscriptionList: 'Ver lista de suscripciones',
+    viewPaymentMethods: 'Ver métodos de pago',
+    paymentMethods: 'Métodos de pago',
+    noSubscription: 'No hay suscripción disponible',
+    noPayment: 'No hay métodos de pago disponibles',
+    message: 'Mensaje',
+    noBillings: 'No tienes ninguna suscripción en esta iglesia.',
     noChurchSelectedMessage: `No tienes una iglesia seleccionada por ahora. Por favor haga clic en el botón de abajo para buscar la iglesia que le interesa para automatizar sus diezmos.`,
     ChurchSelectedMessage: `Aquí está la lista de iglesias a las que está suscrito. Haga clic en el botón de abajo para buscar más iglesias que le interesen para automatizar sus diezmos.`
   },

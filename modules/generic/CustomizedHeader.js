@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendarCheck, faChurch, faExclamationTriangle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import Button from '../generic/Button.js'
+import Config from 'src/config.js';
 
 const width = Math.round(Dimensions.get('window').width)
 
@@ -101,7 +102,7 @@ class CustomizedHeader extends Component {
             />
             <Text style={{
               fontFamily: 'Poppins-SemiBold'
-            }}>$ 10.00 / Month</Text>
+            }}>$ 10.00 / {language.month}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -118,7 +119,7 @@ class CustomizedHeader extends Component {
                 fontSize: 10,
                 width: '90%',
                 fontFamily: 'Poppins-SemiBold'
-              }}>Next donation on August 16, 2021</Text>
+              }}>{language.nextDonation} August 16, 2021</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -153,7 +154,7 @@ class CustomizedHeader extends Component {
                   color: 'white',
                   fontSize: 12,
                   fontFamily: 'Poppins-SemiBold'
-                }}>{(this.props.buttonText != null || this.props.buttonText !== undefined) ? 'Edit' : language.goToSubscription}</Text>
+                }}>{(this.props.buttonText != null || this.props.buttonText !== undefined) ? language.edit : language.goToSubscription}</Text>
               </View>
             }
             redirect={() => {
@@ -167,6 +168,8 @@ class CustomizedHeader extends Component {
 
   versionThree = () => {
     const { theme, language } = this.props.state;
+    const { data } = this.props;
+    console.log('[data>>>>>]', data)
     return (
       <View style={{
         justifyContent: 'center',
@@ -181,7 +184,7 @@ class CustomizedHeader extends Component {
           height: (height / 4) - 40
         }}>
           <Image
-            source={require('assets/test.jpg')}
+            source={{uri: Config.BACKEND_URL  + data.merchant_details.logo}}
             style={{
               height: '100%',
               width: '100%',
@@ -197,7 +200,7 @@ class CustomizedHeader extends Component {
           <Text style={{
             color: Color.white,
             fontFamily: 'Poppins-SemiBold'
-          }}>Church 1</Text>
+          }}>{data.merchant_details.name}</Text>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -210,7 +213,7 @@ class CustomizedHeader extends Component {
             />
             <Text style={{
               fontFamily: 'Poppins-SemiBold'
-            }}>$ 10.00 / Month</Text>
+            }}>$ {data.amount.toFixed(2)} / {language.month}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -227,7 +230,7 @@ class CustomizedHeader extends Component {
                 fontSize: 10,
                 width: '90%',
                 fontFamily: 'Poppins-SemiBold'
-              }}>Next donation on August 16, 2021</Text>
+              }}>{language.nextDonation} August 16, 2021</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -242,7 +245,7 @@ class CustomizedHeader extends Component {
             <Text style={{
               fontSize: 10,
               fontFamily: 'Poppins-SemiBold'
-            }}>Cebu</Text>
+            }}>{data.merchant_details.address}</Text>
           </View>
 
           {!this.props.showButton && <Button
@@ -276,15 +279,14 @@ class CustomizedHeader extends Component {
 
   render() {
     const { theme } = this.props.state;
-    console.log('[>>>>>>>>>>>>>]', this.props.navigation)
     return (
       <View style={{
         height: height / 4,
         backgroundColor: this.props.version != 3 ? (theme ? theme.primary : Color.primary) : (Color.gray),
-        borderBottomRightRadius: this.props.version != 3 ? 30 : 50,
-        borderBottomLeftRadius: this.props.version != 3 ? 30 : 50,
-        borderTopRightRadius: this.props.version != 3 ? 0 : 50,
-        borderTopLeftRadius: this.props.version != 3 ? 0 : 50,
+        borderBottomRightRadius: this.props.version != 3 ? 30 : 65,
+        borderBottomLeftRadius: this.props.version != 3 ? 30 : 65,
+        borderTopRightRadius: this.props.version != 3 ? 0 : 65,
+        borderTopLeftRadius: this.props.version != 3 ? 0 : 65,
         paddingLeft: 15,
         paddingRight: 15,
         marginBottom: this.props.version != 3 ? 0 : 15
