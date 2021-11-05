@@ -67,11 +67,13 @@ class CustomizedHeader extends Component {
         alignItems: 'center',
         width: width,
         flexDirection: 'row',
-        marginTop: 10
+        marginTop: 10,
       }}>
         <View style={{
           width: '50%',
-          height: (height / 4) - 40
+          height: (height / 4) - 40,
+          backgroundColor: 'white',
+          borderRadius: 10
         }}>
           <Image
             source={{uri: Config.BACKEND_URL  + data?.merchant_details?.logo}}
@@ -120,7 +122,7 @@ class CustomizedHeader extends Component {
                 fontSize: 10,
                 width: '90%',
                 fontFamily: 'Poppins-SemiBold'
-              }}>{language.nextDonation} August 16, 2021</Text>
+              }}>{language.nextDonation} {data?.next_month != null ? data?.next_month : 'August 11, 2021'}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -176,7 +178,8 @@ class CustomizedHeader extends Component {
         alignItems: 'center',
         width: width,
         flexDirection: 'row',
-        paddingLeft: 25,
+        paddingLeft: 10,
+        paddingRight: 10,
         paddingTop: 18
       }}>
         <View style={{
@@ -230,7 +233,7 @@ class CustomizedHeader extends Component {
                 fontSize: 10,
                 width: '90%',
                 fontFamily: 'Poppins-SemiBold'
-              }}>{language.nextDonation} August 16, 2021</Text>
+              }}>{language.nextDonation} {data.next_month}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -282,11 +285,12 @@ class CustomizedHeader extends Component {
     return (
       <View style={{
         height: height / 4,
-        backgroundColor: this.props.version != 3 ? (theme ? theme.primary : Color.primary) : (Color.gray),
-        borderBottomRightRadius: this.props.version != 3 ? 30 : 65,
-        borderBottomLeftRadius: this.props.version != 3 ? 30 : 65,
-        borderTopRightRadius: this.props.version != 3 ? 0 : 65,
-        borderTopLeftRadius: this.props.version != 3 ? 0 : 65,
+        backgroundColor: this.props.version != 3 ? (theme ? theme.primary : Color.primary) : ('#C4C4C4'),
+        borderBottomRightRadius: this.props.version != 3 ? 30 : 50,
+        borderBottomLeftRadius: this.props.version != 3 ? 30 : 50,
+        borderTopRightRadius: this.props.version != 3 ? 0 : 50,
+        borderTopLeftRadius: this.props.version != 3 ? 0 : 50,
+        width: width,
         paddingLeft: 15,
         paddingRight: 15,
         marginBottom: this.props.version != 3 ? 0 : 15

@@ -26,7 +26,12 @@ class Transactions extends Component {
   }
 
   componentDidMount() {
-    this.retrieve(false);
+    let item = this.props.navigation.state?.params?.data;
+    if(item != null || item != undefined){
+      this.setState({data: item})
+    }else{
+      this.retrieve(false);
+    }
   }
 
   retrieve = (flag) => {

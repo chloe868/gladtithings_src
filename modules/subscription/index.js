@@ -23,6 +23,7 @@ class Subscriptions extends Component {
       subscription: false,
       isLoading: false,
       dataLimit: [],
+      dataNoLimit: [],
       data: [],
       dataPayment: [],
       items: null
@@ -41,7 +42,11 @@ class Subscriptions extends Component {
     }
     this.setState({isLoading: true})
     Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
-      this.setState({data: response.data})
+      if(response.data.length > 0){
+        this.setState({data: response.data})
+      }else{
+        this.setState({data: []})
+      }
     });
   }
 
@@ -52,7 +57,11 @@ class Subscriptions extends Component {
       account_code: user.code
     }
     Api.request(Routes.paymentMethodsRetrieve, parameter, response => {
-      this.setState({dataPayment: response.data})
+      if(response.data.length > 0){
+        this.setState({dataPayment: response.data})
+      }else{
+        this.setState({dataPayment: []})
+      }
     })
   }
 
@@ -73,24 +82,52 @@ class Subscriptions extends Component {
       offset: 0
     }
     this.setState({ isLoading: true })
-    Api.request(Routes.transactionHistoryRetrieve, parameter, response => {
+    Api.request(Routes.ledgerRetrieve, parameter, response => {
       this.setState({ isLoading: false })
-      console.log('[=', response)
-      // if (response.data.length > 0) {
-      //   this.setState({
-      //     dataLimit: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-      //   })
-      // } else {
-      //   this.setState({
-      //     dataLimit: flag == false ? [] : this.state.data
-      //   })
-      // }
+      if (response.data.length > 0) {
+        this.setState({
+          dataLimit: response.data,
+        })
+      } else {
+        this.setState({
+          dataLimit: []
+        })
+      }
+    });
+  }
+
+  retrieveAllSub = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        column: 'account_id',
+        value: user.id,
+        clause: '='
+      }, {
+        column: 'description',
+        value: 'subscription',
+        clause: '='
+      }],
+      sort: {created_at: 'desc'}
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.ledgerRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({
+          dataNoLimit: response.data,
+        })
+      } else {
+        this.setState({
+          dataNoLimit: []
+        })
+      }
     });
   }
 
   render() {
     const { language, theme } = this.props.state;
-    const { subscription, payment, isLoading, dataLimit, data, dataPayment } = this.state;
+    const { subscription, payment, isLoading, dataLimit, data, dataPayment, dataNoLimit } = this.state;
     return (
       <View style={{
         height: height,
@@ -133,7 +170,7 @@ class Subscriptions extends Component {
                     </View>
                   }
                   redirect={() => {
-                    this.props.navigation.navigate('transactionsStack', {title: 'Subscription Billings', parameter: 'all'})
+                    this.props.navigation.navigate('transactionsStack', {title: 'Subscription Billings', data: dataNoLimit})
                   }}
                 />
               </View>
@@ -165,6 +202,7 @@ class Subscriptions extends Component {
                           redirect={() => {
                             this.setState({details: true, items: item})
                             this.retrieveLTransaction(false)
+                            this.retrieveAllSub(false)
                           }}
                         />
                       )
@@ -267,7 +305,7 @@ class Subscriptions extends Component {
                         onPress: () => console.log('Cancel Pressed'),
                       },
                     ]) :
-                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: 'personal'})
+                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', data: dataLimit})
                   }}
                 />
                 <View style={{
@@ -295,7 +333,7 @@ class Subscriptions extends Component {
                           // tentative
                           description={item.description}
                           title={item.receiver ? item.receiver.email : item.description}
-                          date={item.created_at_human}
+                          date={item.created_at}
                           amount={item.currency + ' ' + item.amount?.toLocaleString()}
                         />
                       )
