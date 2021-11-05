@@ -60,5 +60,9 @@ export default {
   imageUploadUnLink: apiUrl + 'images/upload_un_link',
   commentsRetrieveWithImages: apiUrl + 'comments/retrieve_comments_with_images',
   SubscriptionCreate: apiUrl + 'subscriptions/create',
+  SubscriptionUpdate: apiUrl + 'subscriptions/update',
+  SubscriptionDelete: apiUrl + 'subscriptions/delete',
   SubscriptionRetrieveByParams: apiUrl + 'subscriptions/retrieve_by_params',
+  paymentMethodsRetrieve: apiUrl + 'payment_methods/retrieve',
+  ledgerRetrieve: apiUrl + 'ledger/retrieve',
 };

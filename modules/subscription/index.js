@@ -23,8 +23,10 @@ class Subscriptions extends Component {
       subscription: false,
       isLoading: false,
       dataLimit: [],
+      dataNoLimit: [],
       data: [],
-      dataPayment: []
+      dataPayment: [],
+      items: null
     }
   }
 
@@ -40,22 +42,92 @@ class Subscriptions extends Component {
     }
     this.setState({isLoading: true})
     Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
-      console.log('[ALL SUBSCRIPTION BY PARAMS REPONSE]', response.data.length);
-      this.setState({data: response.data})
+      if(response.data.length > 0){
+        this.setState({data: response.data})
+      }else{
+        this.setState({data: []})
+      }
     });
   }
 
   retrieveAllPayment = () => {
     const {user} = this.props.state;
     let parameter = {
-      account_id: user.id
+      account_id: user.id,
+      account_code: user.code
     }
-    // waiting for the retrieve
+    Api.request(Routes.paymentMethodsRetrieve, parameter, response => {
+      if(response.data.length > 0){
+        this.setState({dataPayment: response.data})
+      }else{
+        this.setState({dataPayment: []})
+      }
+    })
+  }
+
+  retrieveLTransaction = (flag) => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        column: 'account_id',
+        value: user.id,
+        clause: '='
+      }, {
+        column: 'description',
+        value: 'subscription',
+        clause: '='
+      }],
+      sort: {created_at: 'desc'},
+      limit: 5,
+      offset: 0
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.ledgerRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({
+          dataLimit: response.data,
+        })
+      } else {
+        this.setState({
+          dataLimit: []
+        })
+      }
+    });
+  }
+
+  retrieveAllSub = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        column: 'account_id',
+        value: user.id,
+        clause: '='
+      }, {
+        column: 'description',
+        value: 'subscription',
+        clause: '='
+      }],
+      sort: {created_at: 'desc'}
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.ledgerRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({
+          dataNoLimit: response.data,
+        })
+      } else {
+        this.setState({
+          dataNoLimit: []
+        })
+      }
+    });
   }
 
   render() {
     const { language, theme } = this.props.state;
-    const { subscription, payment, isLoading, dataLimit, data, dataPayment } = this.state;
+    const { subscription, payment, isLoading, dataLimit, data, dataPayment, dataNoLimit } = this.state;
     return (
       <View style={{
         height: height,
@@ -98,7 +170,7 @@ class Subscriptions extends Component {
                     </View>
                   }
                   redirect={() => {
-                    this.props.navigation.navigate('transactionsStack', {title: 'Subscription Billings', parameter: 'all'})
+                    this.props.navigation.navigate('transactionsStack', {title: 'Subscription Billings', data: dataNoLimit})
                   }}
                 />
               </View>
@@ -128,7 +200,9 @@ class Subscriptions extends Component {
                           version={3}
                           data={item}
                           redirect={() => {
-                            this.setState({details: true})
+                            this.setState({details: true, items: item})
+                            this.retrieveLTransaction(false)
+                            this.retrieveAllSub(false)
                           }}
                         />
                       )
@@ -191,9 +265,10 @@ class Subscriptions extends Component {
             <ScrollView showsVerticalScrollIndicator={false}>
               <CustomizedHeader
                 version={2}
+                data={this.state.items}
                 buttonText={language.edit}
                 redirect={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Edit Subscription Donation' })
+                  this.props.navigation.navigate('depositStack', { type: 'Edit Subscription Donation', data: this.state.items })
                 }}
               />
               <View style={{
@@ -230,7 +305,7 @@ class Subscriptions extends Component {
                         onPress: () => console.log('Cancel Pressed'),
                       },
                     ]) :
-                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', parameter: 'personal'})
+                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', data: dataLimit})
                   }}
                 />
                 <View style={{
@@ -258,7 +333,7 @@ class Subscriptions extends Component {
                           // tentative
                           description={item.description}
                           title={item.receiver ? item.receiver.email : item.description}
-                          date={item.created_at_human}
+                          date={item.created_at}
                           amount={item.currency + ' ' + item.amount?.toLocaleString()}
                         />
                       )

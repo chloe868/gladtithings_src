@@ -15,7 +15,7 @@ export default {
   },
   address: {
     width: '85%',
-    fontSize: 12
+    fontSize: 10
   },
   bottomView: {
     flexDirection: 'row',
