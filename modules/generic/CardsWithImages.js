@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import Button from '../generic/Button';
 import Styles from './CardsWithImagesStyles';
 import Config from 'src/config.js';
+import ImageModal from 'components/Modal/ImageModal.js';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -15,6 +16,17 @@ const height = Math.round(Dimensions.get('window').height)
 class CardsWithImages extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      imageModalUrl: null,
+      isImageModal: false
+    }
+  }
+
+  setImage = (url) => {
+    this.setState({ imageModalUrl: url })
+    setTimeout(() => {
+      this.setState({ isImageModal: true })
+    }, 500)
   }
 
   versionTwo = () => {
@@ -63,7 +75,6 @@ class CardsWithImages extends Component {
 
   versionOne = () => {
     const { theme } = this.props.state;
-    console.log('[data>>>>>>>>>>>>]', this.props.data)
     return (
       <View style={Styles.container}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => (
@@ -167,15 +178,23 @@ class CardsWithImages extends Component {
                 }}>
                   {item.featured_photos?.length > 0 && item.featured_photos.map((image, index) => {
                     return (
-                      <Image
-                        source={{ uri: Config.BACKEND_URL + image.url }}
+                      <TouchableOpacity
                         style={{
                           height: 40,
                           width: '31%',
                           marginRight: '3%',
                           borderRadius: 5
                         }}
-                      />
+                        onPress={() => this.setImage(Config.BACKEND_URL + image.url)}>
+                        <Image
+                          source={{ uri: Config.BACKEND_URL + image.url }}
+                          style={{
+                            height:'100%',
+                            width: '100%',
+                            borderRadius: 5
+                          }}
+                        />
+                      </TouchableOpacity>
                     )
                   })}
                   {item.featured_photos?.length < 1 &&
@@ -270,11 +289,17 @@ class CardsWithImages extends Component {
   }
 
   render() {
+    const { isImageModal, imageModalUrl } = this.state;
     return (
       <View>
         {this.props.version === 1 && this.versionOne()}
         {this.props.version === 2 && this.versionTwo()}
         {this.props.version === 3 && this.versionThree()}
+        <ImageModal
+          visible={isImageModal}
+          url={imageModalUrl}
+          action={() => this.setState({ isImageModal: false })}
+        ></ImageModal>
       </View>
     )
   }
