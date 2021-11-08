@@ -116,11 +116,11 @@ class HomePage extends Component {
               }}
             />
             <View>
-              <AccountCard
+              {/* <AccountCard
                 name={'Full Name'}
                 address={'Cebu City'}
                 profile={Config.BACKEND_URL + churches[0]?.logo}
-              />
+              /> */}
               <View style={Style.title}>
                 <Text
                   numberOfLines={1}
