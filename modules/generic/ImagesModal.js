@@ -30,25 +30,30 @@ class ImageModal extends Component {
         height={height}
       >
         <ScrollView
-        showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}>
           <View style={{
             marginBottom: 100,
             backgroundColor: Color.gray
           }}>
-          {images.length > 0 && images.map((item, index) => {
-            return (
-              <Image
-                source={{ uri: Config.BACKEND_URL + item.category }}
-                style={{
+            {images.length > 0 && images.map((item, index) => {
+              return (
+                <View style={{
                   width: width,
                   height: 300,
-                  resizeMode: 'stretch',
                   borderColor: Color.white,
                   borderWidth: 1
-                }}
-              />
-            )
-          })}
+                }}>
+                  <Image
+                    source={{ uri: Config.BACKEND_URL + item.category }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      resizeMode: 'stretch',
+                    }}
+                  />
+                </View>
+              )
+            })}
           </View>
         </ScrollView>
       </RBSheet>
