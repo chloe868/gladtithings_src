@@ -29,7 +29,8 @@ class ImageModal extends Component {
         closeOnPressMask={false}
         height={height}
       >
-        <ScrollView>
+        <ScrollView
+        showsVerticalScrollIndicator={false}>
           <View style={{
             marginBottom: 100,
             backgroundColor: Color.gray
