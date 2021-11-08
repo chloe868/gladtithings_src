@@ -61,22 +61,24 @@ class AccountCard extends Component {
               <Text style={{ fontFamily: 'Poppins-Italic' }}>{address}</Text>
               <Text style={{ color: 'gray', fontSize: 10 }}>similar connection(s)</Text>
             </View>
-            <TouchableOpacity
-              onPress={() => this.storePeople(el)}
-              style={{
-                backgroundColor: theme ? theme.primary : Color.primary,
-                width: 80,
-                height: 30,
-                backgroundColor: Color.primary,
-                borderRadius: 25,
-                alignItems: 'center',
-                justifyContent: 'center',
-                elevation: BasicStyles.elevation
-              }}
-            >
-              <Text style={{color: 'white'}}>Action</Text>
-            </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            onPress={() => this.props.action()}
+            style={{
+              backgroundColor: theme ? theme.primary : Color.primary,
+              width: 80,
+              height: 30,
+              backgroundColor: Color.primary,
+              borderRadius: 25,
+              alignItems: 'center',
+              justifyContent: 'center',
+              elevation: BasicStyles.elevation,
+              position: 'absolute',
+              right: 10
+            }}
+          >
+            <Text style={{ color: 'white' }}>Action</Text>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     )
