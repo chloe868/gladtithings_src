@@ -63,7 +63,7 @@ class AccountCard extends Component {
             </View>
           </View>
           <TouchableOpacity
-            onPress={() => this.storePeople(el)}
+            onPress={() => this.props.action()}
             style={{
               backgroundColor: theme ? theme.primary : Color.primary,
               width: 80,
