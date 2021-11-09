@@ -139,13 +139,24 @@ class Page extends Component {
           alignItems: 'center',
           backgroundColor: theme ? theme.primary : Color.primary
         }}>
-          <Image
-            style={{
-              width: 50,
-              height: 50
-            }}
-            source={require('assets/iconlogo.png')}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({
+                menuData: profilePhotoMenu
+              })
+              this.myRef.current.openBottomSheet()
+            }}>
+            <Image
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                borderWidth: 0.5,
+                borderColor: Color.secondary
+              }}
+              source={require('assets/iconlogo.png')}
+            />
+          </TouchableOpacity>
           {
             params.data && (
               <View style={{
