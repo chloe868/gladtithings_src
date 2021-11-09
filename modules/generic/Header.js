@@ -77,7 +77,7 @@ class Header extends Component {
             style={[
               BasicStyles.iconStyle,
               {
-                color: Color.gray
+                color: routeName === 'Homepage' ? Color.white : Color.gray
               },
             ]}
           />

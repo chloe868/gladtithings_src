@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ import Api from 'services/api';
 import _ from 'lodash';
 import Comments from 'src/components/Comments/index';
 import { Spinner } from 'components';
+import BottomSheetOptions  from 'src/components/BottomSheet/index';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -42,6 +43,7 @@ const dataPope = [
 class Community extends Component {
   constructor(props) {
     super(props);
+    this.myRef = React.createRef()
     this.state = {
       default: true,
       community: false,
@@ -204,6 +206,15 @@ class Community extends Component {
         backgroundColor: Color.containerBackground
       }}>
         <ScrollView showsVerticalScrollIndicator={false}>
+          <TouchableOpacity
+            style={{
+              margin: 10
+            }} onPress={() => {
+              console.log('hi')
+              this.myRef.current.openBottomSheet()
+            }} >
+            <Text>Test Bottom Sheet</Text>
+          </TouchableOpacity>
           <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -258,6 +269,9 @@ class Community extends Component {
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
         <Footer layer={0} {...this.props} />
+        <BottomSheetOptions
+          ref={this.myRef}
+        ></BottomSheetOptions>
       </View>
     );
   }
