@@ -111,7 +111,7 @@ class Transactions extends Component {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      console.log('')
+                      this.props.navigation.navigate('transactionDetailsStack', {data: item});
                     }}
                     version={3}
                     description={item.description}
