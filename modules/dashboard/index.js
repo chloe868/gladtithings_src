@@ -175,7 +175,7 @@ class Dashboard extends Component {
               }}>{language.tithings}</Text>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('transactionsStack')
+                  this.props.navigation.navigate('transactionsStack', {title: 'Transactions'})
                 }}
               >
 
