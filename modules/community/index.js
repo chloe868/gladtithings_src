@@ -206,7 +206,7 @@ class Community extends Component {
         backgroundColor: Color.containerBackground
       }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               margin: 10
             }} onPress={() => {
@@ -214,7 +214,7 @@ class Community extends Component {
               this.myRef.current.openBottomSheet()
             }} >
             <Text>Test Bottom Sheet</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -269,9 +269,9 @@ class Community extends Component {
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
         <Footer layer={0} {...this.props} />
-        <BottomSheetOptions
+        {/* <BottomSheetOptions
           ref={this.myRef}
-        ></BottomSheetOptions>
+        ></BottomSheetOptions> */}
       </View>
     );
   }
