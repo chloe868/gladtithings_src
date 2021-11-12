@@ -281,7 +281,7 @@ class Community extends Component {
           {this.state.community && this.communities()}
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
-        <Footer layer={0} {...this.props} />
+        {/* <Footer layer={0} {...this.props} /> */}
         {/* <BottomSheetOptions
           ref={this.myRef}
         ></BottomSheetOptions> */}
