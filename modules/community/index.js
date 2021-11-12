@@ -10,7 +10,6 @@ import Api from 'services/api';
 import _ from 'lodash';
 import Comments from 'src/components/Comments/index';
 import { Spinner } from 'components';
-import BottomSheetOptions  from 'src/components/BottomSheet/index';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -43,7 +42,6 @@ const dataPope = [
 class Community extends Component {
   constructor(props) {
     super(props);
-    this.myRef = React.createRef()
     this.state = {
       default: true,
       community: false,
@@ -61,7 +59,8 @@ class Community extends Component {
     this.setState({
       default: true,
       community: false,
-      message: false
+      message: false,
+      shouldRetrieve: false
     })
   }
 
@@ -199,13 +198,27 @@ class Community extends Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, shouldRetrieve } = this.state;
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if (event.nativeEvent.contentOffset.y <= 0) {
+              if (isLoading == false) {
+              }
+            }
+            if (Math.round(scrollingHeight) >= Math.round(totalHeight)) {
+              console.log(Math.round(scrollingHeight), Math.round(totalHeight), this.commentRef)
+              this.setState({shouldRetrieve: true})
+            } else [
+              this.setState({shouldRetrieve: false})
+            ]
+          }}>
           {/* <TouchableOpacity
             style={{
               margin: 10
@@ -259,9 +272,9 @@ class Community extends Component {
           </View>
           {this.state.default == true &&
             <View style={{
-              marginBottom: height /2
+              marginBottom: height / 2
             }}>
-              <Comments withImages={true}/>
+              <Comments withImages={true} shouldRetrieve={shouldRetrieve} />
             </View>
           }
           {this.state.message && this.popetwitter()}
