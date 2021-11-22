@@ -24,6 +24,8 @@ export default {
   add: 'Add',
   month: 'Month',
   nextDonation: 'Next donation on',
+  Donation: 'Donation',
+  Follow: 'Follow',
   cancelConfirmation: 'Are you sure you want to cancel ?',
   DrawerMenu: [
     {
