@@ -65,4 +65,5 @@ export default {
   SubscriptionRetrieveByParams: apiUrl + 'subscriptions/retrieve_by_params',
   paymentMethodsRetrieve: apiUrl + 'payment_methods/retrieve',
   ledgerRetrieve: apiUrl + 'ledger/retrieve',
+  imageUploadArray: apiUrl + 'images/upload_image64_array'
 };
