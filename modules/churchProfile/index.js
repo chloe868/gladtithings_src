@@ -55,7 +55,7 @@ class ChurchProfile extends Component {
   }
 
   render() {
-    const { theme, user } = this.props.state;
+    const { theme, user, language } = this.props.state;
     const { data } = this.props.navigation.state.params
     return (
       <View style={{
@@ -103,9 +103,9 @@ class ChurchProfile extends Component {
                 marginRight: 20
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Send Tithings' })
+                  this.props.navigation.navigate('depositStack', { type: 'Subscription Donation', data: data })
                 }}
-                title={'Follow'}
+                title={language.Follow}
               />
 
               <IncrementButton style={{
@@ -115,7 +115,7 @@ class ChurchProfile extends Component {
                 onClick={() => {
                   this.props.navigation.navigate('depositStack', { type: 'Send Tithings', data: data})
                 }}
-                title={'Donation'}
+                title={language.Donation}
               />
             </View>
             <View style={{
@@ -148,7 +148,7 @@ class ChurchProfile extends Component {
                 version={2}
                 data={data1}
                 buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={'Subscribe'}
+                buttonTitle={language.subscribe}
               />
             </View>
           </View>
