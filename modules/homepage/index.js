@@ -6,35 +6,13 @@ import { connect } from 'react-redux';
 import CardsWithImages from 'src/modules/generic/CardsWithImages';
 import CustomizedHeader from 'src/modules/generic/CustomizedHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
 import { Spinner } from 'components';
-import AccountCard from 'src/modules/generic/AccountCard.js';
-import Config from 'src/config.js';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-const data = [
-  {
-    id: 0,
-    name: 'Theme 1',
-    address: 'Cebu, Cebu City, Philippines',
-    description: "Receivess email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00',
-    type: 'Recollection'
-  },
-  {
-    id: 1,
-    name: 'Theme 2',
-    address: 'Cebu, Cebu City, Philippines',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00',
-    type: 'Recollection'
-  }
-]
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -42,12 +20,43 @@ class HomePage extends Component {
       input: null,
       churches: [],
       days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      isLoading: false
+      isLoading: false,
+      events: [],
+      offset: 0,
+      limit: 5
     }
   }
 
   componentDidMount() {
     this.retrieveChurches()
+    this.retrieveEvents()
+  }
+
+  retrieveEvents = () => {
+    const { user } = this.props.state;
+    const { limit, offset } = this.state;
+    let parameter = {
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '='
+      }],
+      sort: {created_at: 'asc'},
+      limit: limit,
+      offset: offset
+    }
+    Api.request(Routes.eventsRetrieve, parameter, response => {
+      if(response.data.length > 0) {
+        response.data.map((item, index) => {
+          item['logo'] = item.image[0].category
+          item['address'] = item.location
+          item['date'] = item.start_date
+        })
+        this.setState({events: response.data})
+      }
+    }, error => {
+      console.log(error)
+    })
   }
 
   retrieveChurches = () => {
@@ -96,7 +105,7 @@ class HomePage extends Component {
 
   render() {
     const { theme, user, language } = this.props.state;
-    const { churches, isLoading } = this.state;
+    const { churches, isLoading, events } = this.state;
     console.log('[CHURCHES]', churches)
     return (
       <View style={{
@@ -116,11 +125,6 @@ class HomePage extends Component {
               }}
             />
             <View>
-              {/* <AccountCard
-                name={'Full Name'}
-                address={'Cebu City'}
-                profile={Config.BACKEND_URL + churches[0]?.logo}
-              /> */}
               <View style={Style.title}>
                 <Text
                   numberOfLines={1}
@@ -212,7 +216,7 @@ class HomePage extends Component {
               <CardsWithImages
                 button={true}
                 version={1}
-                data={data}
+                data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
                 redirect={() => { return }}
