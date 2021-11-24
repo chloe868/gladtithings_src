@@ -64,6 +64,9 @@ class Transactions extends Component {
           offset: flag == false ? 0 : this.state.offset
         })
       }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading: false })
     });
   }
 
