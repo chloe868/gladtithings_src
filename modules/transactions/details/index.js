@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions } from 'react-native';
-import { Color } from 'common';
+import { Color, BasicStyles } from 'common';
 import { connect } from 'react-redux';
 
 const width = Math.round(Dimensions.get('window').width)
@@ -12,77 +12,116 @@ class TransactionDetails extends Component {
   }
 
   render() {
+    const { theme } = this.props.state;
     const { data } = this.props.navigation.state?.params;
     try {
       data['details'] = JSON.parse(data.details)
-    } catch(e) {
+    } catch (e) {
       console.log(e)
     }
+    console.log(data.details);
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{
-            paddingLeft: 20,
-            paddingRight: 20,
-            minHeight: height + (height * 0.5)
-          }}>
-            <Text>Here are the further details of this tithings.</Text>
+          <View
+            style={{
+              minHeight: height + (height * 0.5)
+            }}>
             <View style={{
-              paddingTop: 10,
-              paddingBottom: 10
+              alignItems: 'center',
             }}>
               <Text style={{
-                fontFamily: 'Poppins-SemiBold'
-              }}>Date</Text>
-              <Text>{data.created_at_human}</Text>
+                fontSize: 52,
+                marginTop: 50,
+                color: data.amount > 0 ? (theme ? theme.primary : Color.primary) : Color.danger
+              }}>{data.amount}</Text>
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                marginTop: 10,
+                fontWeight: 'bold'
+              }}>{data.currency.toUpperCase()}</Text>
+
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                marginTop: 10,
+              }}>{data.created_at_human}</Text>
+
+
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                fontStyle: 'italic',
+                fontWeight: 'bold',
+                marginTop: 25,
+                textAlign: 'center'
+              }}>{'"' + data.description + '"'}</Text>
             </View>
             <View style={{
-              paddingTop: 10,
-              paddingBottom: 10
+              padding: 10
             }}>
-              <Text style={{
-                fontFamily: 'Poppins-SemiBold'
-              }}>Amount</Text>
-              <Text>{data.currency} {data.amount}</Text>
-            </View>
-            <View style={{
-              paddingTop: 10,
-              paddingBottom: 10
-            }}>
-              <Text style={{
-                fontFamily: 'Poppins-SemiBold'
-              }}>Transaction Type</Text>
-              <Text>{data.description}</Text>
-            </View>
-            <View style={{
-              paddingTop: 10,
-              paddingBottom: 10
-            }}>
-              <Text style={{
-                fontFamily: 'Poppins-SemiBold'
-              }}>Reference</Text>
-              <Text>{data.code.substring(4)}</Text>
-            </View>
-            <View style={{
-              paddingTop: 10,
-              paddingBottom: 10
-            }}>
-              <Text style={{
-                fontFamily: 'Poppins-SemiBold'
-              }}>{data.details ? data.details.type === 'receive' ? 'Sender' : 'Receiver' : 'Sender'}</Text>
-              <Text>{data.details ? data.details.account.id : 'Own transaction'}</Text>
-            </View>
-            <View style={{
-              paddingTop: 10,
-              paddingBottom: 10
-            }}>
-              <Text style={{
-                fontFamily: 'Poppins-SemiBold'
-              }}>Recipient Address</Text>
-              <Text>{data.created_at_human}</Text>
+              <View style={{
+                height: 50,
+                justifyContent: 'center',
+                borderBottomWidth: 1,
+                borderBottomColor: Color.lightGray
+              }}>
+                <Text style={{
+                  fontWeight: 'bold',
+                  fontSize: BasicStyles.standardFontSize
+                }}>More details</Text>
+              </View>
+
+              <View style={{
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row'
+              }}>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%'
+                }}>Transaction #:</Text>
+
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%',
+                  textAlign: 'right'
+                }}
+                  numberOfLines={1}
+                >****{data.code.substr(data.code.length - 16, data.code.length - 1)}</Text>
+              </View>
+              <View style={{
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row'
+              }}>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%'
+                }}>Transaction Type:</Text>
+
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%',
+                  textAlign: 'right'
+                }}
+                  numberOfLines={1}
+                >{data.description?.toUpperCase()}</Text>
+              </View>
+              <View style={{
+                height: 50,
+                justifyContent: 'center',
+                borderBottomWidth: 1,
+                borderBottomColor: Color.lightGray
+              }}>
+                <Text style={{
+                  fontWeight: 'bold',
+                  fontSize: BasicStyles.standardFontSize
+                }}>{'To'}</Text>
+              </View>
             </View>
           </View>
         </ScrollView>
