@@ -49,10 +49,6 @@ class Events extends Component {
     const { limit, offset, events } = this.state;
     let parameter = {
       condition: [{
-        value: user.id,
-        column: 'account_id',
-        clause: '='
-      }, {
         value: new Date(),
         column: 'start_date',
         clause: '>'
