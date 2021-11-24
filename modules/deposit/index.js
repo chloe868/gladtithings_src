@@ -109,13 +109,31 @@ class Deposit extends Component {
   createLedger = (source, paymentIntent) => {
     const {user} = this.props.state;
     const {params} = this.props.navigation.state;
+    let tempDetails = null;
+    let tempDesc = null;
+    if(this.state.subscribeId !== null){
+      tempDetails = 'subscription'  //this.state.subscribeId
+      tempDesc = 'Subscription'
+    }else{
+      if(params?.page === 'withdrawStack'){
+        tempDetails = 'withdraw'
+        tempDesc = 'withdraw'
+      }else if(params?.page === 'depositStack'){
+        tempDetails = 'deposit'
+        tempDesc = 'deposit'
+      }
+      if(params?.type === 'Send Tithings'){
+        tempDetails = 'donaition'
+        tempDesc = 'donation'
+      }
+    }
     let parameter = {
       account_id: user.id,
       account_code: user.code,
       amount: this.state.amount,
       currency: paymentIntent.currency,
-      details: this.state.subscribeId === null ? ((params.page === 'withdrawStack') ? 'withdraw' : 'deposit') : 'subscription',
-      description: this.state.subscribeId === null ? (params.page === 'withdrawStack' ? 'Withdraw' : 'Deposit') : 'Subscription',
+      details: tempDetails,
+      description: tempDesc,
     };
     Api.request(Routes.ledgerCreate, parameter, response => {
       this.setState({isLoading: true})
