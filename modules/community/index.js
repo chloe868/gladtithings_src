@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
@@ -59,7 +59,8 @@ class Community extends Component {
     this.setState({
       default: true,
       community: false,
-      message: false
+      message: false,
+      shouldRetrieve: false
     })
   }
 
@@ -197,13 +198,36 @@ class Community extends Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, shouldRetrieve } = this.state;
     return (
       <View style={{
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if (event.nativeEvent.contentOffset.y <= 0) {
+              if (isLoading == false) {
+              }
+            }
+            if (Math.round(scrollingHeight) >= Math.round(totalHeight)) {
+              console.log(Math.round(scrollingHeight), Math.round(totalHeight), this.commentRef)
+              this.setState({shouldRetrieve: true})
+            } else [
+              this.setState({shouldRetrieve: false})
+            ]
+          }}>
+          {/* <TouchableOpacity
+            style={{
+              margin: 10
+            }} onPress={() => {
+              console.log('hi')
+              this.myRef.current.openBottomSheet()
+            }} >
+            <Text>Test Bottom Sheet</Text>
+          </TouchableOpacity> */}
           <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -248,16 +272,19 @@ class Community extends Component {
           </View>
           {this.state.default == true &&
             <View style={{
-              marginBottom: height /2
+              marginBottom: height / 2
             }}>
-              <Comments withImages={true}/>
+              <Comments withImages={true} shouldRetrieve={shouldRetrieve} />
             </View>
           }
           {this.state.message && this.popetwitter()}
           {this.state.community && this.communities()}
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
-        <Footer layer={0} {...this.props} />
+        {/* <Footer layer={0} {...this.props} /> */}
+        {/* <BottomSheetOptions
+          ref={this.myRef}
+        ></BottomSheetOptions> */}
       </View>
     );
   }

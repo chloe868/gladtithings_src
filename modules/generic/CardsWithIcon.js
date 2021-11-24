@@ -74,11 +74,16 @@ class CardsWithIcon extends Component {
   versionThree = () => {
     const { theme } = this.props.state;
     return (
-      <View
+      <TouchableOpacity
         style={{
           ...Styles.cardContainer,
           height: 80,
           ...this.props.style
+        }}
+        onPress={() => {
+          if(this.props.redirect) {
+            this.props.redirect()
+          }
         }}
       >
         <View style={{
@@ -105,7 +110,7 @@ class CardsWithIcon extends Component {
             fontFamily: 'Poppins-SemiBold'
           }}>{this.props.amount}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 

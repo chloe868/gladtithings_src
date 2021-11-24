@@ -37,7 +37,6 @@ class Deposit extends Component {
     const {setPaypalUrl} = this.props;
     setPaypalUrl(null);
     this.props.navigation.addListener('didFocus', () => {
-      console.log('[INIT STRIPE]');
       initStripe({
         publishableKey: Config.stripe.dev_pk,
         merchantIdentifier: 'merchant.identifier',
@@ -46,26 +45,49 @@ class Deposit extends Component {
   }
 
   setDetails = (complete, details) => {
-    console.log('[CARD DETAILS]', complete, details);
     if (complete === true) {
       this.setState({card: details});
     }
   };
 
   unsubscribe = () => {
-    console.log('[delete]')
+    Alert.alert('Confirmation', 'Are you sure you want to cancel your subscription ?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => this.proceed(),
+      },
+    ]);
+  }
+
+  proceed = () => {
+    const { params } = this.props.navigation.state;
+    let parameter = {
+      id:  params.data.id,
+    };
+    this.setState({isLoading: true})
+    Api.request(Routes.SubscriptionDelete, parameter, response => {
+      this.setState({isLoading: false})
+      if(response.data != null){
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+      }else{
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
+      }
+    });
   }
 
   createPayment = async () => {
     if(this.state.amount !== null && this.state.amount > 0){
       await createToken({type: 'Card'}).then(res => {
-        console.log('[TOKEN]', res);
         let params = {
           amount: this.state.amount,
         };
         this.setState({isLoading: true})
         Api.request(Routes.createPaymentIntent, params, response => {
-          console.log('[PAYMENT REPONSE]', response.data);
           this.handlePayment(response.data, res.token);
         });
       });
@@ -90,8 +112,8 @@ class Deposit extends Component {
     let tempDetails = null;
     let tempDesc = null;
     if(this.state.subscribeId !== null){
-      tempDetails = this.state.subscribeId
-      tempDesc = 'subscription'
+      tempDetails = 'subscription'  //this.state.subscribeId
+      tempDesc = 'Subscription'
     }else{
       if(params?.page === 'withdrawStack'){
         tempDetails = 'withdraw'
@@ -113,9 +135,7 @@ class Deposit extends Component {
       details: tempDetails,
       description: tempDesc,
     };
-    console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
     Api.request(Routes.ledgerCreate, parameter, response => {
-      console.log('[CHARGE RESPONSE]', response);
       this.setState({isLoading: true})
       if (response.data != null) {
         this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
@@ -135,13 +155,36 @@ class Deposit extends Component {
       amount: this.state.amount,
       currency: paymentIntent.currency
     };
-    console.log('[Subscription PARAMETER]', Routes.SubscriptionCreate, parameter);
     Api.request(Routes.SubscriptionCreate, parameter, response => {
-      console.log('[Subscribe RESPONSE]', response);
       this.setState({isLoading: true})
       if (response.data != null) {
         this.setState({subscribeId: response.data})
         this.createLedger('subscribe', paymentIntent)
+      }
+      if (respose.error !== null) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
+      }
+    });
+  }
+
+  updatePayment = () => {
+    const {user} = this.props.state;
+    const {params} = this.props.navigation.state;
+    let parameter = {
+      id: params.data.id,
+      code: params.data.code,
+      account_id: user.id,
+      merchant: params.data.merchant,
+      amount: this.state.amount === 0 ? params.data.amount : this.state.amount,
+      currency: params.data.currency
+    };
+    this.setState({isLoading: true})
+    Api.request(Routes.SubscriptionUpdate, parameter, response => {
+      this.setState({isLoading: false})
+      if (response.data == true) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+      }else{
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
       }
       if (respose.error !== null) {
         this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
@@ -169,10 +212,8 @@ class Deposit extends Component {
     if (paymentIntent) {
       if(this.props.navigation?.state?.params?.type !== 'Subscription Donation'){
         await this.createLedger(source, paymentIntent);
-        console.log('[SUCCESS this is]', paymentIntent);
       }else{
         await this.subscribe(source, paymentIntent);
-        console.log('[SUCCESS]', paymentIntent);
       }
     }
   };
@@ -238,14 +279,14 @@ class Deposit extends Component {
                         color: 'white',
                         fontFamily: 'Poppins-SemiBold',
                       }}>
-                      {data?.name}
+                      {data?.merchant_details != null ? data?.merchant_details?.name : data?.name}
                     </Text>
                     <Text
                       style={{
                         color: 'white',
                         fontFamily: 'Poppins-SemiBold',
                       }}>
-                      {data?.address}
+                      {data?.merchant_details != null ? data?.merchant_details?.address : data?.address}
                     </Text>
                   </View>
                 )}
@@ -271,13 +312,24 @@ class Deposit extends Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <TextInput
-                    style={{fontSize: 30}}
-                    onChangeText={input => this.setState({amount: input})}
-                    value={amount}
-                    placeholder={'0.0'}
-                    keyboardType={'numeric'}
-                  />
+                    {
+                      (this.props.navigation?.state?.params?.type === 'Edit Subscription Donation') ?
+                      <TextInput
+                        style={{fontSize: 50, marginTop: 50}}
+                        onChangeText={input => this.setState({amount: input})}
+                        value={amount}
+                        placeholder={data?.amount != null ? data.amount.toString() : '0.0'}
+                        keyboardType={'numeric'}
+                      />
+                      :
+                      <TextInput
+                        style={{fontSize: 30}}
+                        onChangeText={input => this.setState({amount: input})}
+                        value={amount}
+                        placeholder={'0.0'}
+                        keyboardType={'numeric'}
+                      />
+                    }
                   <Text
                     style={{
                       color: theme ? theme.primary : Color.primary,
@@ -288,12 +340,16 @@ class Deposit extends Component {
                 </View>
               </View>
 
-              <View
-                style={{
-                  padding: 20,
-                }}>
-                <StripeCard amount={amount} setCardDetails={(complete, cardDetails) => this.setDetails(complete, cardDetails)}/>
-              </View>
+              {
+                (this.props.navigation?.state?.params?.type !== 'Edit Subscription Donation') && (
+                  <View
+                    style={{
+                      padding: 20,
+                    }}>
+                    <StripeCard amount={amount} setCardDetails={(complete, cardDetails) => this.setDetails(complete, cardDetails)}/>
+                  </View>
+                )
+              }
             </View>
           )}
         </ScrollView>
@@ -342,7 +398,6 @@ class Deposit extends Component {
                       }}
                       onClick={() => {
                         this.unsubscribe()
-                        // this.props.navigation.navigate('otpStack');
                       }}
                       title={language.subscription.cancelSubscription}
                     />
@@ -356,8 +411,7 @@ class Deposit extends Component {
                         fontFamily: 'Poppins-SemiBold',
                       }}
                       onClick={() => {
-                        // this.createPayment()
-                        console.log('[update]')
+                        this.updatePayment()
                       }}
                       title={language.subscription.saveChanges}
                     />

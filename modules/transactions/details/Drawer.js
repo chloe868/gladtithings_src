@@ -47,8 +47,8 @@ const Stack = createStackNavigator({
   displayScreen: {
     screen: Screen,
     navigationOptions: ({navigation}) => ({
-      title: navigation?.state?.params?.title === null ? 'Transactions' : navigation.state.params?.title,
-      drawerLabel: 'Transactions',
+      title: 'Transaction Details',
+      drawerLabel: 'Transaction Details',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),

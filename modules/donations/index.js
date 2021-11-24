@@ -56,6 +56,9 @@ class Donations extends Component {
           offset: flag == false ? 0 : this.state.offset
         })
       }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading: false })
     });
   }
 
@@ -95,7 +98,7 @@ class Donations extends Component {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      console.log('')
+                      this.props.navigation.navigate('transactionDetailsStack', {data: item});
                     }}
                     version={3}
                     description={item.description}

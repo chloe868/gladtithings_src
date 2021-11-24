@@ -16,7 +16,7 @@ class CustomizedHeader extends Component {
   }
 
   versionOne = () => {
-    const { theme, language } = this.props.state;
+    const { theme, language, user } = this.props.state;
     const { text } = this.props;
     return (
       <View style={{
@@ -28,7 +28,7 @@ class CustomizedHeader extends Component {
           padding: 10,
           fontSize: 13
         }}>
-          {language.subscription.hi}, Kennette Canales. {language.subscription.greet} {text}.
+          {language.subscription.hi}, {user.account_information.first_name + ' ' + user.account_information.last_name}. {language.subscription.greet} {text}.
         </Text>
         <Button
           style={{
@@ -60,20 +60,23 @@ class CustomizedHeader extends Component {
 
   versionTwo = () => {
     const { theme, language } = this.props.state;
+    const { data } = this.props;
     return (
       <View style={{
         justifyContent: 'center',
         alignItems: 'center',
         width: width,
         flexDirection: 'row',
-        marginTop: 10
+        marginTop: 10,
       }}>
         <View style={{
           width: '50%',
-          height: (height / 4) - 40
+          height: (height / 4) - 40,
+          backgroundColor: 'white',
+          borderRadius: 10
         }}>
           <Image
-            source={require('assets/test.jpg')}
+            source={{uri: Config.BACKEND_URL  + data?.merchant_details?.logo}}
             style={{
               height: '100%',
               width: '100%',
@@ -89,7 +92,7 @@ class CustomizedHeader extends Component {
           <Text style={{
             color: Color.white,
             fontFamily: 'Poppins-SemiBold'
-          }}>Church 1</Text>
+          }}>{data?.merchant_details != null ? data?.merchant_details?.name : 'Chapel 1'}</Text>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -102,7 +105,7 @@ class CustomizedHeader extends Component {
             />
             <Text style={{
               fontFamily: 'Poppins-SemiBold'
-            }}>$ 10.00 / {language.month}</Text>
+            }}>$ {data != null ? data?.amount.toFixed(2) : 10.00} / {language.month}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -119,7 +122,7 @@ class CustomizedHeader extends Component {
                 fontSize: 10,
                 width: '90%',
                 fontFamily: 'Poppins-SemiBold'
-              }}>{language.nextDonation} August 16, 2021</Text>
+              }}>{language.nextDonation} {data?.next_month != null ? data?.next_month : 'August 11, 2021'}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -134,7 +137,7 @@ class CustomizedHeader extends Component {
             <Text style={{
               fontSize: 10,
               fontFamily: 'Poppins-SemiBold'
-            }}>Cebu</Text>
+            }}>{data?.merchant_details != null ? data?.merchant_details?.address : 'Cebu'}</Text>
           </View>
 
           {!this.props.showButton && <Button
@@ -169,14 +172,14 @@ class CustomizedHeader extends Component {
   versionThree = () => {
     const { theme, language } = this.props.state;
     const { data } = this.props;
-    console.log('[data>>>>>]', data)
     return (
       <View style={{
         justifyContent: 'center',
         alignItems: 'center',
         width: width,
         flexDirection: 'row',
-        paddingLeft: 25,
+        paddingLeft: 10,
+        paddingRight: 10,
         paddingTop: 18
       }}>
         <View style={{
@@ -230,7 +233,7 @@ class CustomizedHeader extends Component {
                 fontSize: 10,
                 width: '90%',
                 fontFamily: 'Poppins-SemiBold'
-              }}>{language.nextDonation} August 16, 2021</Text>
+              }}>{language.nextDonation} {data.next_month}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -268,9 +271,9 @@ class CustomizedHeader extends Component {
                 }}>{language.goToSubscription}</Text>
               </View>
             }
-            redirect={() => {
-              this.props.redirect()
-            }}
+            redirect={() =>
+              {this.props.redirect()}
+            }
           />}
         </View>
       </View>
@@ -282,11 +285,12 @@ class CustomizedHeader extends Component {
     return (
       <View style={{
         height: height / 4,
-        backgroundColor: this.props.version != 3 ? (theme ? theme.primary : Color.primary) : (Color.gray),
-        borderBottomRightRadius: this.props.version != 3 ? 30 : 65,
-        borderBottomLeftRadius: this.props.version != 3 ? 30 : 65,
-        borderTopRightRadius: this.props.version != 3 ? 0 : 65,
-        borderTopLeftRadius: this.props.version != 3 ? 0 : 65,
+        backgroundColor: this.props.version != 3 ? (theme ? theme.primary : Color.primary) : ('#C4C4C4'),
+        borderBottomRightRadius: this.props.version != 3 ? 30 : 50,
+        borderBottomLeftRadius: this.props.version != 3 ? 30 : 50,
+        borderTopRightRadius: this.props.version != 3 ? 0 : 50,
+        borderTopLeftRadius: this.props.version != 3 ? 0 : 50,
+        width: width,
         paddingLeft: 15,
         paddingRight: 15,
         marginBottom: this.props.version != 3 ? 0 : 15

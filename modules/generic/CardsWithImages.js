@@ -93,7 +93,8 @@ class CardsWithImages extends Component {
               }
             </View>
             <View style={{
-              padding: 5
+              padding: 5,
+              width: '100%'
             }}>
               <Text style={Styles.address}>{item.name}</Text>
               <Text style={Styles.address}>{item.date}</Text>

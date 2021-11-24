@@ -6,7 +6,7 @@ import CardsWithIcon from '../generic/CardsWithIcon';
 import Api from 'services/api/index.js';
 import { Routes } from 'common';
 import { Spinner } from 'components';
-
+import _ from 'lodash';
 import Skeleton from 'components/Loading/Skeleton';
 import EmptyMessage from 'modules/generic/Empty.js'
 
@@ -26,7 +26,12 @@ class Transactions extends Component {
   }
 
   componentDidMount() {
-    this.retrieve(false);
+    let item = this.props.navigation.state?.params?.data;
+    if(item != null || item != undefined){
+      this.setState({data: item})
+    }else{
+      this.retrieve(false);
+    }
   }
 
   retrieve = (flag) => {
@@ -59,6 +64,9 @@ class Transactions extends Component {
           offset: flag == false ? 0 : this.state.offset
         })
       }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading: false })
     });
   }
 
@@ -106,7 +114,7 @@ class Transactions extends Component {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      console.log('')
+                      this.props.navigation.navigate('transactionDetailsStack', {data: item});
                     }}
                     version={3}
                     description={item.description}

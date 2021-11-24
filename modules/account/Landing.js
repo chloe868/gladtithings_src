@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, Image, Text, ScrollView, Linking } from 'react-native';
+import { View, Image, Text, ScrollView, Linking, TouchableOpacity } from 'react-native';
 import { Color, Helper, BasicStyles } from 'common';
 import LinearGradient from 'react-native-linear-gradient'
 import { Dimensions } from 'react-native';
@@ -123,19 +123,21 @@ class Landing extends Component {
               }
               redirect={() => this.props.navigation.navigate('registerStack')}
             />
-                <Text style={{
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('loginStack')}>
+              <Text style={{
                 color: 'white',
                 fontSize: BasicStyles.standardFontSize + 2
-              }}>{language?.alreadyHaveAnAccount}&nbsp;&nbsp;
-                <Text
-                  style={{
-                    fontFamily: 'Poppins-SemiBold',
-                    fontSize: BasicStyles.standardFontSize + 2
-                  }}
-                  onPress={() => this.props.navigation.navigate('loginStack')}>
-                  {language?.signIn}
+                }}>{language?.alreadyHaveAnAccount}&nbsp;&nbsp;
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-SemiBold',
+                      fontSize: BasicStyles.standardFontSize + 2
+                    }}>
+                    {language?.signIn}
+                  </Text>
                 </Text>
-              </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>

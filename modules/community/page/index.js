@@ -11,7 +11,32 @@ import Card from 'modules/community/Card'
 import Api from 'services/api';
 import _ from 'lodash';
 import { Spinner } from 'components';
-import PostCard from 'components/Comments/PostCard';
+import Comments from 'src/components/Comments/index';
+import BottomSheetOptions  from 'src/components/BottomSheet/index';
+
+const coverPhotoMenu = [{
+  title: 'View Photo',
+  route: 'view_photo',
+  type: 'callback',
+  icon: faChevronLeft
+}, {
+  title: 'Change Photo',
+  route: 'change_photo',
+  type: 'callback',
+  icon: faCog
+}];
+
+const profilePhotoMenu = [{
+  title: 'View Photo',
+  route: 'view_photo',
+  type: 'callback',
+  icon: faCog
+}, {
+  title: 'Change Photo',
+  route: 'change_photo',
+  type: 'callback',
+  icon: faCog
+}];
 
 
 const width = Math.round(Dimensions.get('window').width)
@@ -22,37 +47,12 @@ const height = Math.round(Dimensions.get('window').height)
 class Page extends Component {
   constructor(props) {
     super(props);
+    this.myRef = React.createRef()
     this.state = {
       isLoading: false,
-      data: []
+      data: [],
+      menuData: null
     }
-  }
-
-  componentDidMount() {
-    this.retrieve(false)
-  }
-
-  retrieve = (flag) => {
-    const { setComments } = this.props;
-    let parameter = {
-      limit: this.state.limit,
-      offset: flag === true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
-      sort: {
-        created_at: "desc"
-      }
-    }
-    this.setState({ isLoading: true });
-    Api.request(Routes.commentsRetrieve, parameter, response => {
-      this.setState({ isLoading: false });
-      if (response.data.length > 0) {
-        this.setState({ offset: flag === false ? 1 : (this.state.offset + 1) })
-        setComments(flag === false ? response.data : _.uniqBy([...this.props.state.comments, ...response.data], 'id'));
-        console.log(this.props.state.comments);
-      } else {
-        this.setState({ offset: flag == false ? 0 : this.state.offset, })
-        setComments(flag == false ? [] : this.props.state.comments);
-      }
-    })
   }
 
   header() {
@@ -106,14 +106,25 @@ class Page extends Component {
       <View style={{
         marginBottom: 25
       }}>
-        <Image
-          style={{
-            width: width,
-            height: height / 3
-          }}
+        <TouchableOpacity style={{
+          width: '100%'
+        }}
+        onPress={() => {
+          this.setState({
+            menuData: coverPhotoMenu
+          })
+          this.myRef.current.openBottomSheet()
+        }}
+        >
+          <Image
+            style={{
+              width: width,
+              height: height / 3
+            }}
 
-          source={require('assets/logo.png')}
-          />
+            source={require('assets/logo.png')}
+            />
+        </TouchableOpacity>
 
         <View style={{
           width: '90%',
@@ -128,13 +139,24 @@ class Page extends Component {
           alignItems: 'center',
           backgroundColor: theme ? theme.primary : Color.primary
         }}>
-          <Image
-            style={{
-              width: 50,
-              height: 50
-            }}
-            source={require('assets/iconlogo.png')}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({
+                menuData: profilePhotoMenu
+              })
+              this.myRef.current.openBottomSheet()
+            }}>
+            <Image
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                borderWidth: 0.5,
+                borderColor: Color.secondary
+              }}
+              source={require('assets/iconlogo.png')}
+            />
+          </TouchableOpacity>
           {
             params.data && (
               <View style={{
@@ -158,8 +180,8 @@ class Page extends Component {
 
 
   render() {
-    const { theme, comments } = this.props.state;
-    const { isLoading } = this.state;
+    const { theme } = this.props.state;
+    const { isLoading, menuData } = this.state;
     return (
       <View style={{
         height: height,
@@ -168,6 +190,10 @@ class Page extends Component {
         {
           this.header()
         }
+        <BottomSheetOptions
+          data={menuData}
+          ref={this.myRef}
+        ></BottomSheetOptions>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             minHeight: height * 1.5,
@@ -178,33 +204,7 @@ class Page extends Component {
               this.pageImage()
             }
 
-            {comments.length > 0 && comments.map((item, index) => {
-              return (
-                <PostCard
-                  navigation={this.props.navigation}
-                  loader={this.loader}
-                  data={{
-                    user: item.account,
-                    comments: item.comment_replies,
-                    message: item.text,
-                    date: item.created_at_human,
-                    id: item.id,
-                    liked: item.liked,
-                    joined: item.joined,
-                    members: item.members,
-                    index: index
-                  }}
-                  images={item.images?.length > 0 ? item.images : []}
-                  postReply={() => { this.reply(item) }}
-                  reply={(value) => this.replyHandler(value)}
-                  onLike={(params) => this.like(params)}
-                  onJoin={(params) => this.join(params)}
-                  style={{
-                    backgroundColor: 'white'
-                  }}
-                />
-              )
-            })}
+            <Comments withImages={true}/>
           </View>
         </ScrollView>
       </View>

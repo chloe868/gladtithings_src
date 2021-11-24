@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TextInput } from 'react-native';
-import { Color } from 'common';
+import { Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import CardsWithImages from '../generic/CardsWithImages';
 import CustomizedHeader from '../generic/CustomizedHeader';
@@ -9,70 +9,12 @@ import StripeCard from 'components/Payments/Stripe/Stripe.js';
 import { WebView } from 'react-native-webview';
 import Api from 'services/api/index.js';
 import Config from 'src/config.js';
-import {
-	confirmPayment,
-	createToken,
-	initStripe
-} from '@stripe/stripe-react-native';
+import { Spinner } from 'components'
+import _ from 'lodash';
+import { confirmPayment, createToken, initStripe } from '@stripe/stripe-react-native';
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-const data = [
-	{
-		id: 0,
-		title: 'Theme 1',
-		address: 'Cebu, Cebu City, Philippines',
-		description: "Receives email address every time there's a login of the account.",
-		date: 'July 23, 2021 5:00 PM',
-		amount: 'USD 10.00',
-		type: 'Recollection'
-	},
-	{
-		id: 0,
-		title: 'Theme 1',
-		address: 'Cebu, Cebu City, Philippines',
-		description: "Receives email address every time there's a login of the account.",
-		date: 'July 23, 2021 5:00 PM',
-		amount: 'USD 10.00',
-		type: 'Recollection'
-	},
-	{
-		id: 0,
-		title: 'Theme 1',
-		address: 'Cebu, Cebu City, Philippines',
-		description: "Receives email address every time there's a login of the account.",
-		date: 'July 23, 2021 5:00 PM',
-		amount: 'USD 10.00',
-		type: 'Recollection'
-	},
-	{
-		id: 0,
-		title: 'Theme 1',
-		address: 'Cebu, Cebu City, Philippines',
-		description: "Receives email address every time there's a login of the account.",
-		date: 'July 23, 2021 5:00 PM',
-		amount: 'USD 10.00',
-		type: 'Recollection'
-	},
-	{
-		id: 0,
-		title: 'Theme 1',
-		address: 'Cebu, Cebu City, Philippines',
-		description: "Receives email address every time there's a login of the account.",
-		date: 'July 23, 2021 5:00 PM',
-		amount: 'USD 10.00',
-		type: 'Recollection'
-	},
-	{
-		id: 0,
-		title: 'Theme 1',
-		address: 'Cebu, Cebu City, Philippines',
-		description: "Receives email address every time there's a login of the account.",
-		date: 'July 23, 2021 5:00 PM',
-		amount: 'USD 10.00',
-		type: 'Recollection'
-	}
-]
 class Events extends Component {
 	constructor(props) {
 		super(props);
@@ -82,11 +24,15 @@ class Events extends Component {
 			donate: false,
 			amount: 0,
 			card: null,
-			isLoading: false
+			isLoading: false,
+      events: [],
+      limit: 8,
+      offset: 0
 		}
 	}
 
 	componentDidMount() {
+    this.retrieveEvents(false)
 		const { setPaypalUrl } = this.props;
 		setPaypalUrl(null);
 		this.props.navigation.addListener('didFocus', () => {
@@ -97,6 +43,43 @@ class Events extends Component {
 			})
 		})
 	}
+
+  retrieveEvents = (flag) => {
+    const { user } = this.props.state;
+    const { limit, offset, events } = this.state;
+    let parameter = {
+      condition: [{
+        value: new Date(),
+        column: 'start_date',
+        clause: '>'
+      }],
+      sort: {created_at: 'asc'},
+      limit: limit,
+      offset: flag == true && offset > 0 ? (offset * this.state.limit) : offset
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.eventsRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if(response.data.length > 0) {
+        response.data.map((item, index) => {
+          item['logo'] = item.image[0].category
+          item['address'] = item.location
+          item['date'] = item.start_date
+        })
+        this.setState({
+          events: flag == false ? response.data : _.uniqBy([...events, ...response.data], 'id'),
+          offset: flag == false ? 1 : (offset + 1)
+        })
+      }
+    }, error => {
+      console.log(error)
+      this.setState({
+        data: flag == false ? [] : events,
+        offset: flag == false ? 0 : offset,
+        isLoading: false
+      })
+    })
+  }
 
 	setDetails = (complete, details) => {
 		console.log('[CARD DETAILS]', complete, details);
@@ -181,10 +164,24 @@ class Events extends Component {
 
 	render() {
 		const { theme, user, paypalUrl } = this.props.state;
-		const { donate, amount } = this.state;
+		const { donate, amount, events, isLoading } = this.state;
 		return (
 			<View style={{ backgroundColor: Color.containerBackground }}>
 				<ScrollView showsVerticalScrollIndicator={false}
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if (event.nativeEvent.contentOffset.y <= 0) {
+              if (isLoading == false) {
+                // this.retrieve(false)
+              }
+            }
+            if (scrollingHeight >= (totalHeight)) {
+              if (isLoading == false) {
+                this.retrieveEvents(true)
+              }
+            }
+          }}
 					style={{
 						backgroundColor: Color.containerBackground
 					}}>
@@ -204,11 +201,11 @@ class Events extends Component {
 								<Text style={{
 									fontFamily: 'Poppins-SemiBold'
 								}}>Upcoming Events</Text>
-								{this.state.isLoading ? <Spinner mode="overlay" /> : null}
 							</View>
 							<CardsWithImages
+                button={true}
 								version={1}
-								data={data}
+								data={events}
 								buttonColor={theme ? theme.secondary : Color.secondary}
 								buttonTitle={'Donate'}
 								redirect={() => { return }}
@@ -260,6 +257,7 @@ class Events extends Component {
 						}
 					</View>
 				</ScrollView>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
 				{donate && paypalUrl === null && <View style={{
 					position: 'absolute',
 					bottom: 10,
