@@ -44,6 +44,27 @@ class NotificationSettings extends Component {
     });
   }
 
+  create = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      email_login: 0,
+      email_otp: 0,
+      sms_otp: 0,
+      sms_login: 0,
+      code: 0,
+      account_id: user.id,
+      email_pin: 0,
+      devices: 0
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.notificationSettingsCreate, parameter, response => {
+      this.setState({ isLoading: false });
+      this.retrieve();
+    }, error => {
+      this.setState({ isLoading: false });
+    });
+  }
+
   retrieve = () => {
     const { user } = this.props.state;
     let parameter = {
@@ -66,6 +87,8 @@ class NotificationSettings extends Component {
           data: data,
           id: response.data[0].id
         })
+      } else {
+        this.create()
       }
     }, error => {
       this.setState({isLoading: false})
@@ -80,7 +103,6 @@ class NotificationSettings extends Component {
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             paddingLeft: 20,
@@ -105,9 +127,8 @@ class NotificationSettings extends Component {
             })
           }
           </View>
-          
         </ScrollView>
-
+        {isLoading ? <Spinner mode="overlay" /> : null}
       </View>
     );
   }
