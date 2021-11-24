@@ -52,6 +52,10 @@ class Events extends Component {
         value: user.id,
         column: 'account_id',
         clause: '='
+      }, {
+        value: new Date(),
+        column: 'start_date',
+        clause: '>'
       }],
       sort: {created_at: 'asc'},
       limit: limit,
