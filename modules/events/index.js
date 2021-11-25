@@ -188,6 +188,7 @@ class Events extends Component {
 					<View style={{ height: height * 1.5, }}>
 						{paypalUrl === null && <CustomizedHeader
 							version={2}
+							donate={true}
 							redirect={() => {
 								this.setState({ donate: true })
 							}}

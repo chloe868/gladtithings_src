@@ -87,9 +87,16 @@ class CardsWithImages extends Component {
               }
             ]}>
               {
-                item.logo && <Image
+                item.logo ? <Image
                   source={{ uri: Config.BACKEND_URL + item.logo }}
-                  style={Styles.image} />
+                  style={Styles.image} /> :
+                <View style={{
+                  height: '100%',
+                  width: '100%',
+                  backgroundColor: Color.white,
+                  borderRadius: 5
+                }}>
+                </View>
               }
             </View>
             <View style={{

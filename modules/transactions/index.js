@@ -78,7 +78,6 @@ class Transactions extends Component {
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}
         onScroll={(event) => {
           let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y

@@ -1,67 +1,107 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions } from 'react-native';
-import { Color } from 'common';
+import { Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import CardsWithImages from '../generic/CardsWithImages';
 import IncrementButton from 'components/Form/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
 import CardsWithIcon from '../generic/CardsWithIcon';
+import Api from 'services/api/index.js';
+import { Spinner } from 'components';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
-const data1 = [
-  {
-    id: 0,
-    name: 'Theme 1',
-    address: 'Cebu, Cebu City, Philippines',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00',
-    type: 'Recollection'
-  },
-  {
-    id: 1,
-    name: 'Theme 2',
-    address: 'Cebu, Cebu City, Philippines',
-    description: "Receives email address every time there's a login of the account.",
-    date: 'July 23, 2021 5:00 PM',
-    amount: 'USD 10.00',
-    type: 'Recollection'
-  }
-]
+
 const donations = [
   {
-    title: 'Display Settings',
+    title: 'July 23, 2021 5:00 PM',
     description: "Change your theme colors here",
-    route: 'displayStack'
+    route: null
   },
   {
-    title: 'Error Message',
+    title: 'July 23, 2021 5:00 PM',
     description: "Change your theme colors here",
-    route: 'pageMessageStack'
+    route: null
   }
 ]
 class ChurchProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: null
+      input: null,
+      data: [],
+      isLoading: false,
+      limit: 4,
+      offset: 0
     }
   }
 
   componentDidMount(){
-    console.log(this.props.navigation.state.params, '----')
+    this.retrieveEvents(false)
+  }
+
+  retrieveEvents = (flag) => {
+    const { data } = this.props.navigation.state.params
+    const { limit, offset } = this.state;
+    let parameter = {
+      condition: [{
+        value: data?.account_id,
+        column: 'account_id',
+        clause: '='
+      }],
+      sort: {created_at: 'asc'},
+      limit: limit,
+      offset: flag == true && offset > 0 ? (offset * limit) : offset
+    }
+    this.setState({isLoading: true});
+    Api.request(Routes.eventsRetrieve, parameter, response => {
+      this.setState({isLoading: false});
+      if(response.data.length > 0) {
+        response.data.map((item, index) => {
+          item['logo'] = item.image?.length > 0 ? item.image[0].category : null
+          item['address'] = item.location
+          item['date'] = item.start_date
+        })
+        this.setState({
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          offset: flag == false ? 1 : (this.state.offset + 1)
+        })
+      } else {
+        this.setState({
+          data: flag == false ? [] : this.state.data,
+          offset: flag == false ? 0 : this.state.offset
+        })
+      }
+    }, error => {
+      console.log(error)
+      console.log(Routes.eventsRetrieve, parameter, '---')
+    })
   }
 
   render() {
     const { theme, user, language } = this.props.state;
     const { data } = this.props.navigation.state.params
+    const { isLoading } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground,
       }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}
+        onScroll={(event) => {
+          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+          let totalHeight = event.nativeEvent.contentSize.height
+          if (event.nativeEvent.contentOffset.y <= 0) {
+            if (isLoading == false) {
+              // this.retrieve(false)
+            }
+          }
+          if (scrollingHeight >= (totalHeight)) {
+            if (isLoading == false) {
+              this.retrieveEvents(true)
+            }
+          }
+        }}>
           <View style={{
             height: height * 1.5
           }}>
@@ -130,6 +170,9 @@ class ChurchProfile extends Component {
                 donations.map((item, index) => {
                   return (
                     <CardsWithIcon
+                      redirect={() => {
+                        return
+                      }}
                       version={5}
                       title={item.title}
                       description={item.description}
@@ -145,14 +188,18 @@ class ChurchProfile extends Component {
                 fontFamily: 'Poppins-SemiBold'
               }}>Events</Text>
               <CardsWithImages
-                version={2}
-                data={data1}
+                button={true}
+                version={1}
+                data={this.state.data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={language.subscribe}
+                buttonTitle={language.donate}
+                redirect={() => { return }}
+                buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings' }) }}
               />
             </View>
           </View>
         </ScrollView>
+        {isLoading ? <Spinner mode="overlay" /> : null}
       </View>
     );
   }
