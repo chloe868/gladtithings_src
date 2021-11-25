@@ -115,7 +115,7 @@ class Events extends Component {
 			amount: this.state.amount,
 			currency: paymentIntent.currency,
 			details: events[0]?.id,
-			description: 'Donation',
+			description: 'Event Donation',
 		};
 		console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
 		Api.request(Routes.ledgerCreate, params, response => {

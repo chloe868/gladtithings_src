@@ -117,14 +117,14 @@ class Deposit extends Component {
     }else{
       if(params?.page === 'withdrawStack'){
         tempDetails = 'withdraw'
-        tempDesc = 'withdraw'
+        tempDesc = 'Withdraw'
       }else if(params?.page === 'depositStack'){
         tempDetails = 'deposit'
-        tempDesc = 'deposit'
+        tempDesc = 'Deposit'
       }
       if(params?.type === 'Send Tithings'){
         tempDetails = 'donation'
-        tempDesc = 'donation'
+        tempDesc = 'Church Donation'
       }
     }
     let parameter = {
