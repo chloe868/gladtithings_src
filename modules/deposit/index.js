@@ -123,7 +123,7 @@ class Deposit extends Component {
         tempDesc = 'Deposit'
       }
       if(params?.type === 'Send Tithings'){
-        tempDetails = 'donation'
+        tempDetails = 'donation' //this should be the id of ther church
         tempDesc = 'Church Donation'
       }
     }
