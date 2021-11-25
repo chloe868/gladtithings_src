@@ -123,8 +123,8 @@ class Events extends Component {
 			account_code: user.code,
 			amount: this.state.amount,
 			currency: paymentIntent.currency,
-			details: 'deposit',
-			description: 'deposit',
+			details: 'donation',
+			description: 'Donation',
 		};
 		console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
 		Api.request(Routes.ledgerCreate, params, response => {
