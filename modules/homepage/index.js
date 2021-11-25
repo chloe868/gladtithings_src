@@ -121,6 +121,18 @@ class HomePage extends Component {
           }}>
             <CustomizedHeader
               version={2}
+              data={
+                events.length > 0 ?
+                  {
+                    merchant_details: {
+                      name: events[0].name,
+                      logo: events[0].logo,
+                      address: events[0].address
+                    },
+                    amount: 0
+                  }
+                : null
+              }
               redirect={() => {
                 this.props.navigation.navigate('subscriptionStack')
               }}
