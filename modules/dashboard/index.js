@@ -38,7 +38,7 @@ class Dashboard extends Component {
     this.retrieveLedgerHistory()
   }
 
-  retrieveLedgerHistory = (flag) => {
+  retrieveLedgerHistory = () => {
     const { user } = this.props.state;
     let parameter = {
       condition: [{
@@ -51,23 +51,20 @@ class Dashboard extends Component {
         clause: 'or'
       }],
       sort: { created_at: 'desc' },
-      limit: this.state.limit,
-      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
+      limit: 5,
+      offset: 0
     }
     this.setState({ transactionLoading: true })
     Api.request(Routes.transactionHistoryRetrieve, parameter, response => {
       this.setState({ transactionLoading: false })
       if (response.data.length > 0) {
         this.setState({
-          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-          offset: flag == false ? 1 : (this.state.offset + 1)
-        })
-      } else {
-        this.setState({
-          data: flag == false ? [] : this.state.data,
-          offset: flag == false ? 0 : this.state.offset
+          data: response.data
         })
       }
+    }, error => {
+      console.log(error)
+      this.setState({ transactionLoading: false })
     });
   }
 
@@ -190,9 +187,9 @@ class Dashboard extends Component {
               data.map((item, index) => {
                 return (
                   <CardsWithIcon
-                    redirect={() => {
-                      console.log('')
-                    }}
+                  redirect={() => {
+                    this.props.navigation.navigate('transactionDetailsStack', {data: item});
+                  }}
                     version={3}
                     description={item.description}
                     title={item.receiver ? item.receiver.email : item.description}

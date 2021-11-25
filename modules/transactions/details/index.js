@@ -111,17 +111,39 @@ class TransactionDetails extends Component {
                   numberOfLines={1}
                 >{data.description?.toUpperCase()}</Text>
               </View>
-              <View style={{
-                height: 50,
-                justifyContent: 'center',
-                borderBottomWidth: 1,
-                borderBottomColor: Color.lightGray
-              }}>
-                <Text style={{
-                  fontWeight: 'bold',
-                  fontSize: BasicStyles.standardFontSize
-                }}>{'To'}</Text>
-              </View>
+              { data?.details?.account &&
+                <View>
+                  <View style={{
+                    height: 50,
+                    justifyContent: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: Color.lightGray
+                  }}>
+                    <Text style={{
+                      fontWeight: 'bold',
+                      fontSize: BasicStyles.standardFontSize
+                    }}>{data?.details?.type === 'receive' ? 'From' : 'To'}</Text>
+                  </View>
+                  <View style={{
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'row'
+                  }}>
+                    <Text style={{
+                      fontSize: BasicStyles.standardFontSize,
+                      width: '50%'
+                    }}>Account Code:</Text>
+
+                    <Text style={{
+                      fontSize: BasicStyles.standardFontSize,
+                      width: '50%',
+                      textAlign: 'right'
+                    }}
+                      numberOfLines={1}
+                    >****{data?.details?.account?.code.substr(data?.details?.account?.code.length - 16, data?.details?.account?.code.length - 1)}</Text>
+                  </View>
+                </View>}
             </View>
           </View>
         </ScrollView>

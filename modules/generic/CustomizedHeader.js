@@ -157,7 +157,7 @@ class CustomizedHeader extends Component {
                   color: 'white',
                   fontSize: 12,
                   fontFamily: 'Poppins-SemiBold'
-                }}>{(this.props.buttonText != null || this.props.buttonText !== undefined) ? language.edit : language.goToSubscription}</Text>
+                }}>{(this.props.buttonText != null || this.props.buttonText !== undefined) ? language.edit : this.props.donate ? language.donate : language.goToSubscription}</Text>
               </View>
             }
             redirect={() => {

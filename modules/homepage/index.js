@@ -48,7 +48,7 @@ class HomePage extends Component {
     Api.request(Routes.eventsRetrieve, parameter, response => {
       if(response.data.length > 0) {
         response.data.map((item, index) => {
-          item['logo'] = item.image[0].category
+          item['logo'] = item.image?.length > 0 ? item.image[0].category : null
           item['address'] = item.location
           item['date'] = item.start_date
         })
@@ -90,7 +90,8 @@ class HomePage extends Component {
                   address: item.address,
                   logo: item.logo,
                   name: i.name,
-                  date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`
+                  date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`,
+                  account_id: item.account_id
                 })
               })
             }
