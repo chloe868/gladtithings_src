@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TextInput } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TextInput, Alert } from 'react-native';
 import { Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import CardsWithImages from '../generic/CardsWithImages';
@@ -62,7 +62,7 @@ class Events extends Component {
       this.setState({ isLoading: false })
       if(response.data.length > 0) {
         response.data.map((item, index) => {
-          item['logo'] = item.image[0].category
+          item['logo'] = item.image?.length > 0 ? item.image[0].category : null
           item['address'] = item.location
           item['date'] = item.start_date
         })
@@ -102,29 +102,20 @@ class Events extends Component {
 				});
 			});
 		} else {
-			Alert.alert('Payment Error', 'You are missing your amount', [
-				{
-					text: 'Cancel',
-					onPress: () => console.log('Cancel Pressed'),
-					style: 'cancel',
-				},
-				{
-					text: 'OK',
-					onPress: () => console.log('Cancel Pressed'),
-				},
-			]);
+			Alert.alert('Donation Error', 'You are missing your amount.');
 		}
 	};
 
 	createLedger = (source, paymentIntent) => {
 		const { user } = this.props.state;
+    const { events } = this.state;
 		let params = {
 			account_id: user.id,
 			account_code: user.code,
 			amount: this.state.amount,
 			currency: paymentIntent.currency,
-			details: 'deposit',
-			description: 'deposit',
+			details: events[0]?.id,
+			description: 'Event Donation',
 		};
 		console.log('[CHARGE PARAMETER]', Routes.ledgerCreate, params);
 		Api.request(Routes.ledgerCreate, params, response => {
@@ -192,6 +183,18 @@ class Events extends Component {
 							redirect={() => {
 								this.setState({ donate: true })
 							}}
+              data={
+                events.length > 0 ?
+                  {
+                    merchant_details: {
+                      name: events[0].name,
+                      logo: events[0].logo,
+                      address: events[0].address
+                    },
+                    amount: 0
+                  }
+                : null
+              }
 							showButton={donate}
 						/>}
 						{!donate ? <View style={{ marginTop: 20 }}>

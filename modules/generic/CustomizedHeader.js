@@ -92,7 +92,7 @@ class CustomizedHeader extends Component {
           <Text style={{
             color: Color.white,
             fontFamily: 'Poppins-SemiBold'
-          }}>{data?.merchant_details != null ? data?.merchant_details?.name : 'Chapel 1'}</Text>
+          }}>{data?.merchant_details != null ? data?.merchant_details?.name : ''}</Text>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -105,7 +105,7 @@ class CustomizedHeader extends Component {
             />
             <Text style={{
               fontFamily: 'Poppins-SemiBold'
-            }}>$ {data != null ? data?.amount.toFixed(2) : 10.00} / {language.month}</Text>
+            }}>$ {data != null ? data?.amount.toFixed(2) : 0} / {language.month}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -122,7 +122,7 @@ class CustomizedHeader extends Component {
                 fontSize: 10,
                 width: '90%',
                 fontFamily: 'Poppins-SemiBold'
-              }}>{language.nextDonation} {data?.next_month != null ? data?.next_month : 'August 11, 2021'}</Text>
+              }}>{language.nextDonation} {data?.next_month != null ? data?.next_month : ''}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -137,7 +137,7 @@ class CustomizedHeader extends Component {
             <Text style={{
               fontSize: 10,
               fontFamily: 'Poppins-SemiBold'
-            }}>{data?.merchant_details != null ? data?.merchant_details?.address : 'Cebu'}</Text>
+            }}>{data?.merchant_details != null ? data?.merchant_details?.address : ''}</Text>
           </View>
 
           {!this.props.showButton && <Button
