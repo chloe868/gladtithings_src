@@ -113,14 +113,37 @@ class Deposit extends Component {
         tempDetails = 'deposit'
         tempDesc = 'Deposit'
         this.sendTransfer(paymentIntent, tempDetails, tempDesc)
-      }
-      if(params?.type === 'Send Tithings'){
-        tempDetails = 'donation'
+      }else if(params?.type === 'Send Tithings'){
+        tempDetails = 'church_donation'
         tempDesc = 'Church Donation'
         this.sendDirectTransfer(params.data, tempDetails, tempDesc, paymentIntent)
+      } else if(params?.type === 'Send Event Tithings') {
+        tempDetails = 'event_donation'
+        tempDesc = 'Event Donation'
+        this.sendEvent(paymentIntent, tempDesc, params?.data)
       }
     }
   };
+
+  sendEvent(paymentIntent, tempDesc, data){
+    const {user} = this.props.state;
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code,
+      amount: this.state.amount * -1,
+      currency: paymentIntent.currency,
+      details: data.id,
+      description: tempDesc,
+    };
+    Api.request(Routes.ledgerCreate, parameter, response => {
+      this.setState({isLoading: true})
+      if (response.data) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+      } else {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
+      }
+    });
+  }
 
   sendTransfer(paymentIntent, tempDetails, tempDesc){
     const {user} = this.props.state;
@@ -134,7 +157,7 @@ class Deposit extends Component {
     };
     Api.request(Routes.ledgerCreate, parameter, response => {
       this.setState({isLoading: true})
-      if (response.error == null) {
+      if (response.data) {
         this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
       } else {
         this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
@@ -158,11 +181,10 @@ class Deposit extends Component {
       currency: paymentIntent.currency,
       description: tempDesc,
     }
-    console.log(parameter, '---------')
     this.setState({ isLoading: true });
     Api.request(Routes.sendDirectCreate, parameter, response => {
       this.setState({ isLoading: false });
-      if (response.error == null) {
+      if (response.data) {
         this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
       } else {
         this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
