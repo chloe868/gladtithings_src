@@ -114,7 +114,7 @@ class Deposit extends Component {
       account_code: user.code,
       amount: this.state.amount,
       currency: paymentIntent.currency,
-      details: this.state.subscribeId === null ? ((params.page === 'withdrawStack') ? 'withdraw' : 'deposit') : 'subscription',
+      details: this.state.subscribeId === null ? ((params.page === 'withdrawStack') ? 'withdraw' : 'deposit') : this.state.subscribeId,
       description: this.state.subscribeId === null ? (params.page === 'withdrawStack' ? 'Withdraw' : 'Deposit') : 'Subscription',
     };
     Api.request(Routes.ledgerCreate, parameter, response => {
