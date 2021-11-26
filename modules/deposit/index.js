@@ -92,17 +92,7 @@ class Deposit extends Component {
         });
       });
     }else{
-      Alert.alert('Payment Error', 'You are missing your amount', [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => console.log('Cancel Pressed'),
-        },
-      ]);
+      Alert.alert('Payment Error', 'You are missing your amount');
     }
   };
 
@@ -167,6 +157,7 @@ class Deposit extends Component {
       details: tempDetails,
       description: tempDesc,
     }
+    console.log(parameter, '---------')
     this.setState({ isLoading: true });
     Api.request(Routes.sendDirectCreate, parameter, response => {
       this.setState({ isLoading: false });
