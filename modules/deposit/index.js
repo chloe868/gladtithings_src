@@ -103,7 +103,7 @@ class Deposit extends Component {
     if(this.state.subscribeId !== null){
       tempDetails = 'subscription'  //this.state.subscribeId
       tempDesc = 'Subscription'
-      this.sendDirectTransfer(params.data, tempDetails, tempDesc)
+      this.sendDirectTransfer(params.data, tempDetails, tempDesc, paymentIntent)
     }else{
       if(params?.page === 'withdrawStack'){
         tempDetails = 'withdraw'
@@ -117,7 +117,7 @@ class Deposit extends Component {
       if(params?.type === 'Send Tithings'){
         tempDetails = 'donation'
         tempDesc = 'Church Donation'
-        this.sendDirectTransfer(params.data, tempDetails, tempDesc)
+        this.sendDirectTransfer(params.data, tempDetails, tempDesc, paymentIntent)
       }
     }
   };
@@ -142,7 +142,7 @@ class Deposit extends Component {
     });
   }
 
-  sendDirectTransfer = (data, tempDetails, tempDesc) => {
+  sendDirectTransfer = (data, tempDetails, tempDesc, paymentIntent) => {
     const {user} = this.props.state;
     console.log('OTP Create Request API Call', data)
     let parameter = {
@@ -155,6 +155,7 @@ class Deposit extends Component {
       },
       amount: this.state.amount,
       details: tempDetails,
+      currency: paymentIntent.currency,
       description: tempDesc,
     }
     console.log(parameter, '---------')
