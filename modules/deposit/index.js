@@ -163,7 +163,7 @@ class Deposit extends Component {
       to: {
         id: data.account_id
       },
-      amount: data.amount,
+      amount: this.state.amount,
       details: tempDetails,
       description: tempDesc,
     }
