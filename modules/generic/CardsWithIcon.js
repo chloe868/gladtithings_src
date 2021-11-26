@@ -73,6 +73,10 @@ class CardsWithIcon extends Component {
 
   versionThree = () => {
     const { theme } = this.props.state;
+    let amount = null
+    if(this.props.amount) {
+      amount = this.props.amount.split(' ')[1]
+    }
     return (
       <TouchableOpacity
         style={{
@@ -106,7 +110,7 @@ class CardsWithIcon extends Component {
           justifyContent: 'center'
         }}>
           <Text style={{
-            color: theme ? theme.primary : Color.primary,
+            color: amount && amount > 0 ? (theme ? theme.primary : Color.primary) : Color.danger,
             fontFamily: 'Poppins-SemiBold'
           }}>{this.props.amount}</Text>
         </View>

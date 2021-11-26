@@ -6,7 +6,7 @@ import CardsWithIcon from '../generic/CardsWithIcon';
 import Api from 'services/api/index.js';
 import { Routes } from 'common';
 import { Spinner } from 'components';
-
+import _ from 'lodash';
 import Skeleton from 'components/Loading/Skeleton';
 import EmptyMessage from 'modules/generic/Empty.js'
 
@@ -64,6 +64,9 @@ class Transactions extends Component {
           offset: flag == false ? 0 : this.state.offset
         })
       }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading: false })
     });
   }
 
@@ -75,7 +78,6 @@ class Transactions extends Component {
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}
         onScroll={(event) => {
           let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y

@@ -42,6 +42,7 @@ export default {
   notificationSettingsRetrieve: apiUrl + 'notification_settings/retrieve',
   notificationSettingsUpdate: apiUrl + 'notification_settings/update',
   notificationSettingOtp: apiUrl + 'notification_settings/update_otp',
+  notificationSettingsCreate: apiUrl + 'notification_settings/create',
   ledgerDashboard: apiUrl + 'ledger/dashboard',
   ledgerSummary: apiUrl + 'ledger/summary',
   ledgerTransfer: apiUrl + 'ledger/transfer',
@@ -65,5 +66,6 @@ export default {
   SubscriptionRetrieveByParams: apiUrl + 'subscriptions/retrieve_by_params',
   paymentMethodsRetrieve: apiUrl + 'payment_methods/retrieve',
   ledgerRetrieve: apiUrl + 'ledger/retrieve',
-  imageUploadArray: apiUrl + 'images/upload_image64_array'
+  imageUploadArray: apiUrl + 'images/upload_image64_array',
+  eventsRetrieve: apiUrl + 'events/retrieve',
 };
