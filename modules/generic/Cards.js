@@ -16,6 +16,7 @@ class Cards extends Component {
 
   render() {
     const { data } = this.props;
+    console.log('---------->>>', data);
     return (
       <View style={{
         flexDirection: 'row',
@@ -33,7 +34,7 @@ class Cards extends Component {
         }}>
           <Text style={{
             fontFamily: 'Poppins-SemiBold'
-          }}>{data.username}</Text>
+          }}>{data?.username || data?.name}</Text>
 
           <View style={{
             flexDirection: 'row'
@@ -46,7 +47,7 @@ class Cards extends Component {
                 marginRight: 10
               }}
             />
-            <Text>{data.payment_method}</Text>
+            <Text>{data?.payment_method || data?.payload}</Text>
           </View>
 
           <TouchableOpacity style={{

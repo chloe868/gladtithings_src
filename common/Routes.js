@@ -66,6 +66,7 @@ export default {
   SubscriptionDelete: apiUrl + 'subscriptions/delete',
   SubscriptionRetrieveByParams: apiUrl + 'subscriptions/retrieve_by_params',
   paymentMethodsRetrieve: apiUrl + 'payment_methods/retrieve',
+  paymentRetrieveMethods: apiUrl + 'payment_methods/retrieve_methods',
   ledgerRetrieve: apiUrl + 'ledger/retrieve',
   imageUploadArray: apiUrl + 'images/upload_image64_array',
   eventsRetrieve: apiUrl + 'events/retrieve',
