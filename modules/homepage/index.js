@@ -233,7 +233,7 @@ class HomePage extends Component {
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
                 redirect={() => { return }}
-                buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings' }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings', data: item }) }}
               />
             </View>
           </View>
