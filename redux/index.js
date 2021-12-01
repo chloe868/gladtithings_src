@@ -17,7 +17,8 @@ const types = {
   SET_LEDGER: 'SET_LEDGER',
   SET_PAYPAL_URL: 'SET_PAYPAL_URL',
   SET_LANGUAGE: 'SET_LANGUAGE',
-  SET_COMMENTS: 'SET_COMMENTS'
+  SET_COMMENTS: 'SET_COMMENTS',
+  SET_SEARCH_CHURCH: 'SET_SEARCH_CHURCH'
 };
 
 export const actions = {
@@ -61,6 +62,9 @@ export const actions = {
   setComments(comments) {
     return { type: types.SET_COMMENTS, comments }
   },
+  setSearchChurch(searchChurch) {
+    return { type: types.SET_SEARCH_CHURCH, searchChurch }
+  },
 };
 
 const initialState = {
@@ -78,6 +82,7 @@ const initialState = {
   paypalUrl: null,
   language: null,
   comments: [],
+  searchChurch: null
 };
 
 storeData = async (key, value) => {
@@ -96,6 +101,7 @@ const reducer = (state = initialState, action) => {
   const { paypalUrl } = action;
   const { language } = action;
   const { comments } = action;
+  const { searchChurch } = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
@@ -165,6 +171,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         comments
+      }
+    case types.SET_SEARCH_CHURCH: 
+      return {
+        ...state,
+        searchChurch
       }
     default:
       return { ...state, nav: state.nav };

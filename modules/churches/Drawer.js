@@ -14,37 +14,17 @@ class HeaderOptions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSearch: false,
-      input: null
+      showSearch: false
     }
   }
   back = () => {
     this.props.navigationProps.pop()
   };
 
-  search = () => {
-    let parameter = {
-      condition: [
-        {
-          value: '%' + this.state.input + '%',
-          column: 'name',
-          clause: 'like'
-        }
-      ]
-    }
-    console.log(parameter, '--')
-    Api.request(Routes.merchantsRetrieve, parameter, response => {
-      if (response.data.length > 0) {
-      }
-    }, error => {
-      console.log(error);
-      this.setState({ isLoading: false });
-    });
-  }
-
   render() {
-    const { language } = this.props.state;
-    const { showSearch, input } = this.state;
+    const { language, searchChurch } = this.props.state;
+    const { showSearch } = this.state;
+    const { setSearchChurch } = this.props;
     return (
       <View style={{ flexDirection: 'row', width: width }}>
         <TouchableOpacity onPress={this.back.bind(this)}>
@@ -84,10 +64,9 @@ class HeaderOptions extends Component {
                 height: 35,
                 width: '100%'
               }}
-              onChangeText={(text) => this.setState({ input: text })}
-              value={input}
+              onChangeText={(text) => setSearchChurch(text)}
+              value={searchChurch}
               placeholder={language.search}
-              onSubmitEditing={this.search()}
             />
           </View> :
           <View style={{
@@ -141,6 +120,7 @@ const mapDispatchToProps = (dispatch) => {
   const { actions } = require('@redux');
   return {
     logout: () => dispatch(actions.logout()),
+    setSearchChurch: (searchChurch) => dispatch(actions.setSearchChurch(searchChurch)),
   };
 };
 
