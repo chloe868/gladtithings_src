@@ -60,9 +60,13 @@ class Payments extends Component {
         account_code: user.code,
         payload: 'stripe',
         payload_value: JSON.stringify(res),
+        status: 'authorize'
       };
       this.setState({isLoading: true})
       Api.request(Routes.createPaymentMethod, params, response => {
+        this.setState({isLoading: false})
+        this.props.navigation.navigate('subscriptionStack')
+        console.log(response);
       });
     });
   };

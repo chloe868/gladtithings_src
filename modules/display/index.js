@@ -25,7 +25,7 @@ class Display extends Component {
 
   selectHandler = (index) => {
     const { language } = this.props.state;
-    let _theme = language.colorList.[index].colors
+    let _theme = language.colorList[index].colors
     const {setTheme} = this.props;
     let temGrad = []
     if(_theme[0] === '#4CCBA6' || _theme[0] === '#000000'){

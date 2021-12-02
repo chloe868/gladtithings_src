@@ -54,10 +54,10 @@ class Subscriptions extends Component {
     const {user} = this.props.state;
     let parameter = {
       account_id: user.id,
-      account_code: user.code
     }
-    Api.request(Routes.paymentMethodsRetrieve, parameter, response => {
+    Api.request(Routes.paymentRetrieveMethods, parameter, response => {
       if(response.data.length > 0){
+        console.log('========');
         this.setState({dataPayment: response.data})
       }else{
         this.setState({dataPayment: []})
@@ -246,7 +246,7 @@ class Subscriptions extends Component {
                       }}>{language.add}</Text>
                     </TouchableOpacity>
                   </View>
-                  {dataPayment.length > 0 && data.map((item, index) => {
+                  {dataPayment.length > 0 && dataPayment.map((item, index) => {
                     return (
                       <PaymentMethodCard
                         data={item}
