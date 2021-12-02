@@ -31,37 +31,47 @@ class Subscriptions extends Component {
   }
 
   componentDidMount = () => {
+    this.props.navigation.addListener( 'didFocus', () => {
+      this.retrieveAllPayment()
+    })
     this.retrieveAllSubscriptions()
-    this.retrieveAllPayment()
   }
 
   retrieveAllSubscriptions = () => {
     const { user } = this.props.state;
     let parameter = {
-      account_id: user.id  
+      account_id: user.id
     }
-    this.setState({isLoading: true})
+    this.setState({ isLoading: true })
     Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
-      if(response.data.length > 0){
-        this.setState({data: response.data})
-      }else{
-        this.setState({data: []})
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({ data: response.data })
+      } else {
+        this.setState({ data: [] })
       }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false })
     });
   }
 
   retrieveAllPayment = () => {
-    const {user} = this.props.state;
+    const { user } = this.props.state;
     let parameter = {
       account_id: user.id,
-      account_code: user.code
     }
-    Api.request(Routes.paymentMethodsRetrieve, parameter, response => {
-      if(response.data.length > 0){
-        this.setState({dataPayment: response.data})
-      }else{
-        this.setState({dataPayment: []})
+    this.setState({ isLoading: true })
+    Api.request(Routes.paymentRetrieveMethods, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({ dataPayment: response.data })
+      } else {
+        this.setState({ dataPayment: [] })
       }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false })
     })
   }
 
@@ -77,7 +87,7 @@ class Subscriptions extends Component {
         value: 'subscription',
         clause: '='
       }],
-      sort: {created_at: 'desc'},
+      sort: { created_at: 'desc' },
       limit: 5,
       offset: 0
     }
@@ -108,7 +118,7 @@ class Subscriptions extends Component {
         value: 'subscription',
         clause: '='
       }],
-      sort: {created_at: 'desc'}
+      sort: { created_at: 'desc' }
     }
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerRetrieve, parameter, response => {
@@ -116,10 +126,6 @@ class Subscriptions extends Component {
       if (response.data.length > 0) {
         this.setState({
           dataNoLimit: response.data,
-        })
-      } else {
-        this.setState({
-          dataNoLimit: []
         })
       }
     });
@@ -170,94 +176,105 @@ class Subscriptions extends Component {
                     </View>
                   }
                   redirect={() => {
-                    this.props.navigation.navigate('transactionsStack', {title: 'Subscription Billings', data: dataNoLimit})
+                    this.props.navigation.navigate('transactionsStack', { title: 'Subscription Billings', data: dataNoLimit })
                   }}
                 />
               </View>
               {
                 (payment) && (
-                  <View style={{marginBottom: 100}}>
-                  <Text
-                  style={{
-                    color: Color.primary,
-                    fontSize: 14,
-                    padding: 9,
-                    paddingLeft: 10,
-                    paddingTop: 20,
-                    textAlign: 'left',
-                    fontWeight: 'bold'
-                  }}
-                  onPress={() => {this.setState({subscription: true , payment: false})}}>{language.subscription.viewPaymentMethods}</Text>
+                  <View style={{ marginBottom: 100 }}>
+                    <Text
+                      style={{
+                        color: Color.primary,
+                        fontSize: 14,
+                        padding: 9,
+                        paddingLeft: 10,
+                        paddingTop: 20,
+                        textAlign: 'left',
+                        fontWeight: 'bold'
+                      }}
+                      onPress={() => { this.setState({ subscription: true, payment: false }) }}>{language.subscription.viewPaymentMethods}</Text>
+                    <View style={{
+                      paddingTop: 10,
+                      paddingRight: 10,
+                      paddingLeft: 10,
+                      alignItems: 'center'
+                    }}>
+                      {data.length > 0 && data.map((item, index) => {
+                        return (
+                          <CustomizedHeader
+                            version={3}
+                            data={item}
+                            redirect={() => {
+                              this.setState({ details: true, items: item })
+                              this.retrieveLTransaction(false)
+                              this.retrieveAllSub(false)
+                            }}
+                          />
+                        )
+                      })
+                      }
+                      {
+                        data.length === 0 && !isLoading && <EmptyMessage message={language.subscription.noSubscription} />
+                      }
+                      {
+                        (isLoading && data.length === 0) && (
+                          <Skeleton size={1} template={'block'} height={100} />
+                        )
+                      }
+                    </View>
+                  </View>
+                )
+              }
+              {
+                (subscription) && (
                   <View style={{
-                    paddingTop: 10,
-                    paddingRight: 10,
-                    paddingLeft: 10,
-                    alignItems: 'center'
+                    marginBottom: 100,
+                    paddingLeft: 15,
+                    paddingRight: 15
                   }}>
-                    {data.length > 0 && data.map((item, index) => {
+                    <Text
+                      style={{
+                        color: Color.primary,
+                        fontSize: 14,
+                        paddingTop: 20,
+                        fontWeight: 'bold'
+                      }}
+                      onPress={() => { this.setState({ payment: true, subscription: false }) }}>{language.subscription.viewSubscriptionList}</Text>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingTop: 15,
+                      paddingBottom: 15
+                    }}>
+                      <View style={{ width: '50%' }}>
+                        <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{language.subscription.paymentMethods}</Text>
+                      </View>
+                      <TouchableOpacity style={{ width: '50%' }}
+                        onPress={() => { this.props.navigation.navigate('paymentStack') }}>
+                        <Text style={{
+                          color: theme ? theme.primary : Color.primary,
+                          fontFamily: 'Poppins-SemiBold',
+                          textAlign: 'right'
+                        }}>{language.add}</Text>
+                      </TouchableOpacity>
+                    </View>
+                    {dataPayment.length > 0 && dataPayment.map((item, index) => {
                       return (
-                        <CustomizedHeader
-                          version={3}
+                        <PaymentMethodCard
                           data={item}
-                          redirect={() => {
-                            this.setState({details: true, items: item})
-                            this.retrieveLTransaction(false)
-                            this.retrieveAllSub(false)
-                          }}
                         />
                       )
                     })
                     }
                     {
-                      data.length === 0 && <EmptyMessage message={language.subscription.noSubscription}/>
+                      dataPayment.length === 0 && !isLoading && <EmptyMessage message={language.subscription.noPayment} />
+                    }
+                    {
+                      (isLoading && dataPayment.length === 0) && (
+                        <Skeleton size={1} template={'block'} height={100} />
+                      )
                     }
                   </View>
-                </View>
-                )
-              }
-              {
-                (subscription) && (
-                <View style={{
-                  marginBottom: 100, 
-                  paddingLeft: 15,
-                  paddingRight: 15}}>
-                  <Text
-                  style={{
-                    color: Color.primary,
-                    fontSize: 14,
-                    paddingTop: 20,
-                    fontWeight: 'bold'
-                  }}
-                  onPress={() => {this.setState({payment: true , subscription: false})}}>{language.subscription.viewSubscriptionList}</Text>
-                  <View style={{
-                    flexDirection: 'row',
-                    paddingTop: 15,
-                    paddingBottom: 15
-                  }}>
-                    <View style={{ width: '50%' }}>
-                      <Text style={{fontFamily: 'Poppins-SemiBold'}}>{language.subscription.paymentMethods}</Text>
-                    </View>
-                    <TouchableOpacity style={{ width: '50%' }}
-                    onPress={() => {this.props.navigation.navigate('paymentStack')}}>
-                      <Text style={{
-                        color: theme ? theme.primary : Color.primary,
-                        fontFamily: 'Poppins-SemiBold',
-                        textAlign: 'right'
-                      }}>{language.add}</Text>
-                    </TouchableOpacity>
-                  </View>
-                  {dataPayment.length > 0 && data.map((item, index) => {
-                    return (
-                      <PaymentMethodCard
-                        data={item}
-                      />
-                    )
-                  })
-                  }
-                  {
-                    dataPayment.length === 0 && <EmptyMessage message={language.subscription.noPayment}/>
-                  }
-                </View>
                 )
               }
             </ScrollView>
@@ -299,13 +316,13 @@ class Subscriptions extends Component {
                   }
                   redirect={() => {
                     dataLimit.length === 0 ?
-                    Alert.alert(language.subscription.message, language.subscription.noBillings, [
-                      {
-                        text: 'OK',
-                        onPress: () => console.log('Cancel Pressed'),
-                      },
-                    ]) :
-                    this.props.navigation.navigate('transactionsStack',{title: 'Subscription Billings', data: dataLimit})
+                      Alert.alert(language.subscription.message, language.subscription.noBillings, [
+                        {
+                          text: 'OK',
+                          onPress: () => console.log('Cancel Pressed'),
+                        },
+                      ]) :
+                      this.props.navigation.navigate('transactionsStack', { title: 'Subscription Billings', data: dataLimit })
                   }}
                 />
                 <View style={{
@@ -313,15 +330,14 @@ class Subscriptions extends Component {
                   paddingRight: 20,
                   minHeight: height + (height * 0.5)
                 }}>
-
                   {
-                    (isLoading) && (
-                      <Skeleton size={5} template={'block'} height={60}/>
-                    )
-                  }
-
-
-                  {!isLoading && dataLimit.length === 0 && <EmptyMessage message={language.subscription.noSubscription}/>}
+                      dataLimit.length === 0 && !isLoading && <EmptyMessage message={language.subscription.noSubscription} />
+                    }
+                    {
+                      (isLoading && dataLimit.length === 0) && (
+                        <Skeleton size={1} template={'block'} height={100} />
+                      )
+                    }
                   {
                     dataLimit.map((item, index) => {
                       return (

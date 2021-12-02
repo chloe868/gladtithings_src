@@ -14,21 +14,32 @@ class Churches extends Component {
       isLoading: false,
       data: [],
       limit: 5,
-      offset: 0
+      offset: 0,
+      searchLimit: 5,
+      searchOffset: 0
     }
   }
 
   componentDidMount() {
+    this.props.setSearchChurch(null)
     this.retrieve(false)
   }
 
   retrieve = (flag) => {
     const { user } = this.props.state;
     let parameter = {
+      condition: [
+        {
+          value: user.id,
+          column: 'account_id',
+          clause: '!='
+        }
+      ],
       sort: { created_at: 'asc' },
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
     }
+    console.log(parameter, Routes.merchantsRetrieve);
     this.setState({ isLoading: true })
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       this.setState({ isLoading: false })
@@ -43,11 +54,59 @@ class Churches extends Component {
           offset: flag == false ? 0 : this.state.offset
         })
       }
+    },  error => {
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
+  }
+
+  componentDidUpdate(){
+    const { searchChurch } = this.props.state;
+    if(searchChurch !== null && searchChurch !== '') {
+      this.search(false)
+    }
+  }
+
+  search = (flag) => {
+    const { searchChurch, user } = this.props.state;
+    const { searchLimit, searchOffset } = this.state;
+    let parameter = {
+      condition: [
+        {
+          value: '%' + searchChurch + '%',
+          column: 'name',
+          clause: 'like'
+        },
+        {
+          value: user.id,
+          column: 'account_id',
+          clause: '!='
+        }
+      ],
+      sort: { created_at: 'asc' },
+      limit: searchLimit,
+      offset: flag == true && searchOffset > 0 ? (searchOffset * searchLimit) : searchOffset
+    }
+    Api.request(Routes.merchantsRetrieve, parameter, response => {
+      if (response.data.length > 0) {
+        this.setState({
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          searchOffset: flag == false ? 1 : (searchOffset + 1)
+        })
+      } else {
+        this.setState({
+          data: flag == false ? [] : this.state.data,
+          searchOffset: flag == false ? 0 : searchOffset
+        })
+      }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false });
     });
   }
 
   render() {
-    const { theme, language } = this.props.state;
+    const { theme, language, searchChurch } = this.props.state;
     const { data, isLoading } = this.state;
     return (
       <View style={{
@@ -65,7 +124,11 @@ class Churches extends Component {
             }
             if (scrollingHeight >= (totalHeight)) {
               if (isLoading == false) {
-                this.retrieve(true)
+                if(searchChurch === null &&  searchChurch === '') {
+                  this.retrieve(true)
+                } else {
+                  this.search(true)
+                }
               }
             }
           }}
@@ -87,6 +150,14 @@ class Churches extends Component {
 }
 const mapStateToProps = state => ({ state: state });
 
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+    setSearchChurch: (searchChurch) => dispatch(actions.setSearchChurch(searchChurch))
+  };
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Churches);

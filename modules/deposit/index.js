@@ -92,41 +92,61 @@ class Deposit extends Component {
         });
       });
     }else{
-      Alert.alert('Payment Error', 'You are missing your amount', [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => console.log('Cancel Pressed'),
-        },
-      ]);
+      Alert.alert('Payment Error', 'You are missing your amount');
     }
   };
 
-  createLedger = (source, paymentIntent) => {
-    const {user} = this.props.state;
+  createLedger = (paymentIntent) => {
     const {params} = this.props.navigation.state;
     let tempDetails = null;
     let tempDesc = null;
     if(this.state.subscribeId !== null){
       tempDetails = 'subscription'  //this.state.subscribeId
       tempDesc = 'Subscription'
+      this.sendDirectTransfer(params.data, tempDetails, tempDesc, paymentIntent)
     }else{
       if(params?.page === 'withdrawStack'){
         tempDetails = 'withdraw'
         tempDesc = 'Withdraw'
+        this.sendTransfer(paymentIntent, tempDetails, tempDesc)
       }else if(params?.page === 'depositStack'){
         tempDetails = 'deposit'
         tempDesc = 'Deposit'
-      }
-      if(params?.type === 'Send Tithings'){
-        tempDetails = 'donation' //this should be the id of ther church
+        this.sendTransfer(paymentIntent, tempDetails, tempDesc)
+      }else if(params?.type === 'Send Tithings'){
+        tempDetails = 'church_donation'
         tempDesc = 'Church Donation'
+        this.sendDirectTransfer(params.data, tempDetails, tempDesc, paymentIntent)
+      } else if(params?.type === 'Send Event Tithings') {
+        tempDetails = 'event_donation'
+        tempDesc = 'Event Donation'
+        this.sendEvent(paymentIntent, tempDesc, params?.data)
       }
     }
+  };
+
+  sendEvent(paymentIntent, tempDesc, data){
+    const {user} = this.props.state;
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code,
+      amount: this.state.amount * -1,
+      currency: paymentIntent.currency,
+      details: data.id,
+      description: tempDesc,
+    };
+    Api.request(Routes.ledgerCreate, parameter, response => {
+      this.setState({isLoading: true})
+      if (response.data) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+      } else {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
+      }
+    });
+  }
+
+  sendTransfer(paymentIntent, tempDetails, tempDesc){
+    const {user} = this.props.state;
     let parameter = {
       account_id: user.id,
       account_code: user.code,
@@ -137,13 +157,44 @@ class Deposit extends Component {
     };
     Api.request(Routes.ledgerCreate, parameter, response => {
       this.setState({isLoading: true})
-      if (response.data != null) {
+      if (response.data) {
         this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
-      }
-      if (respose.error !== null) {
+      } else {
         this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
       }
     });
+  }
+
+  sendDirectTransfer = (data, tempDetails, tempDesc, paymentIntent) => {
+    const {user} = this.props.state;
+    console.log('OTP Create Request API Call', data)
+    let parameter = {
+      from: {
+        code: user.code,
+        id: user.id
+      },
+      to: {
+        id: data.account_id
+      },
+      amount: this.state.amount,
+      details: tempDetails,
+      currency: paymentIntent.currency,
+      description: tempDesc,
+    }
+    this.setState({ isLoading: true });
+    Api.request(Routes.sendDirectCreate, parameter, response => {
+      this.setState({ isLoading: false });
+      if (response.data) {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'success', title: 'Success'});
+      } else {
+        this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
+      }
+    },
+      (error) => {
+        console.log('API ERROR', error);
+        this.setState({ isLoading: false });
+      },
+    );
   };
 
   subscribe = (source, paymentIntent) => {
@@ -159,7 +210,7 @@ class Deposit extends Component {
       this.setState({isLoading: true})
       if (response.data != null) {
         this.setState({subscribeId: response.data})
-        this.createLedger('subscribe', paymentIntent)
+        this.createLedger(paymentIntent)
       }
       if (respose.error !== null) {
         this.props.navigation.navigate('pageMessageStack', {payload: 'error', title: 'Error'});
@@ -211,7 +262,7 @@ class Deposit extends Component {
     }
     if (paymentIntent) {
       if(this.props.navigation?.state?.params?.type !== 'Subscription Donation'){
-        await this.createLedger(source, paymentIntent);
+        await this.createLedger(paymentIntent);
       }else{
         await this.subscribe(source, paymentIntent);
       }
