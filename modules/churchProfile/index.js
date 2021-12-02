@@ -39,6 +39,23 @@ class ChurchProfile extends Component {
 
   componentDidMount(){
     this.retrieveEvents(false)
+    this.addToRecentlyVisitedChurches()
+  }
+
+  addToRecentlyVisitedChurches = () => {
+    const { data } = this.props.navigation.state.params
+    const { user } = this.props.state;
+    let parameter = {
+      account_id: user.id,
+      merchant_id: data.id
+    }
+    this.setState({isLoading: true});
+    Api.request(Routes.recentlyVisitedChurchesCreate, parameter, response => {
+      this.setState({isLoading: false});
+      console.log('added to recently visited churches');
+    }, error => {
+      console.log(error)
+    })
   }
 
   retrieveEvents = (flag) => {

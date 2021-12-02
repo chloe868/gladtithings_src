@@ -104,7 +104,7 @@ class CardsWithImages extends Component {
               width: '100%'
             }}>
               <Text style={Styles.address}>{item.name}</Text>
-              <Text style={Styles.address}>{item.date}</Text>
+              {item.date && <Text style={Styles.address}>{item.date}</Text>}
             </View>
             <View style={Styles.bottomView}>
               <FontAwesomeIcon
