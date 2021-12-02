@@ -8,7 +8,7 @@ import CustomizedHeader from 'src/modules/generic/CustomizedHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
-import { Spinner } from 'components';
+import Skeleton from 'components/Loading/Skeleton';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -28,8 +28,10 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    this.retrieveChurches()
-    this.retrieveEvents()
+    this.props.navigation.addListener('didFocus', () => {
+      this.retrieveChurches()
+      this.retrieveEvents()
+    })
   }
 
   retrieveEvents = () => {
@@ -41,18 +43,18 @@ class HomePage extends Component {
         column: 'start_date',
         clause: '>'
       }],
-      sort: {created_at: 'asc'},
+      sort: { created_at: 'asc' },
       limit: limit,
       offset: offset
     }
     Api.request(Routes.eventsRetrieve, parameter, response => {
-      if(response.data.length > 0) {
+      if (response.data.length > 0) {
         response.data.map((item, index) => {
           item['logo'] = item.image?.length > 0 ? item.image[0].category : null
           item['address'] = item.location
           item['date'] = item.start_date
         })
-        this.setState({events: response.data})
+        this.setState({ events: response.data })
       }
     }, error => {
       console.log(error)
@@ -112,7 +114,6 @@ class HomePage extends Component {
       <View style={{
         backgroundColor: Color.containerBackground
       }}>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
@@ -131,7 +132,7 @@ class HomePage extends Component {
                     },
                     amount: 0
                   }
-                : null
+                  : null
               }
               redirect={() => {
                 this.props.navigation.navigate('subscriptionStack')
@@ -167,6 +168,18 @@ class HomePage extends Component {
                   }}>{language.findChurch}</Text>
                 </TouchableOpacity>
               </View>
+              {isLoading &&
+                <View style={{
+                  flexDirection: 'row',
+                  width: width
+                }}>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                </View>}
               <CardsWithImages
                 version={1}
                 button={true}
@@ -197,6 +210,18 @@ class HomePage extends Component {
 
                 </TouchableOpacity>
               </View>}
+              {isLoading &&
+                <View style={{
+                  flexDirection: 'row',
+                  width: width
+                }}>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                </View>}
               <CardsWithImages
                 version={1}
                 data={churches}
@@ -226,6 +251,18 @@ class HomePage extends Component {
 
                 </TouchableOpacity>
               </View>
+              {isLoading &&
+                <View style={{
+                  flexDirection: 'row',
+                  width: width
+                }}>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                </View>}
               <CardsWithImages
                 button={true}
                 version={1}

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import CardsWithIcon from '../generic/CardsWithIcon';
 import Api from 'services/api/index.js';
 import { Routes } from 'common';
-import { Spinner } from 'components';
+import Skeleton from 'components/Loading/Skeleton';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -70,7 +70,6 @@ class Donations extends Component {
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}
           onScroll={(event) => {
             let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
@@ -87,6 +86,11 @@ class Donations extends Component {
             }
           }}
         >
+          {
+            (isLoading) && (
+              <Skeleton size={3} template={'block'} height={75} />
+            )
+          }
           <View style={{
             paddingLeft: 20,
             paddingRight: 20,
