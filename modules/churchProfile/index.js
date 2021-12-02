@@ -37,7 +37,7 @@ class ChurchProfile extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.retrieveEvents(false)
     this.addToRecentlyVisitedChurches()
   }
@@ -46,12 +46,25 @@ class ChurchProfile extends Component {
     const { data } = this.props.navigation.state.params
     const { user } = this.props.state;
     let parameter = {
-      account_id: user.id,
-      merchant_id: data.id
+      insert: {
+        account_id: user.id,
+        merchant_id: data.id
+      },
+      parameter: {
+        condition: [{
+          value: user.id,
+          column: 'account_id',
+          clause: '='
+        }, {
+          value: data.id,
+          column: 'merchant_id',
+          clause: '='
+        }]
+      }
     }
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     Api.request(Routes.recentlyVisitedChurchesCreate, parameter, response => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       console.log('added to recently visited churches');
     }, error => {
       console.log(error)
@@ -67,14 +80,14 @@ class ChurchProfile extends Component {
         column: 'account_id',
         clause: '='
       }],
-      sort: {created_at: 'asc'},
+      sort: { created_at: 'asc' },
       limit: limit,
       offset: flag == true && offset > 0 ? (offset * limit) : offset
     }
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     Api.request(Routes.eventsRetrieve, parameter, response => {
-      this.setState({isLoading: false});
-      if(response.data.length > 0) {
+      this.setState({ isLoading: false });
+      if (response.data.length > 0) {
         response.data.map((item, index) => {
           item['logo'] = item.image?.length > 0 ? item.image[0].category : null
           item['address'] = item.location
@@ -105,20 +118,20 @@ class ChurchProfile extends Component {
         backgroundColor: Color.containerBackground,
       }}>
         <ScrollView showsVerticalScrollIndicator={false}
-        onScroll={(event) => {
-          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
-          let totalHeight = event.nativeEvent.contentSize.height
-          if (event.nativeEvent.contentOffset.y <= 0) {
-            if (isLoading == false) {
-              // this.retrieve(false)
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if (event.nativeEvent.contentOffset.y <= 0) {
+              if (isLoading == false) {
+                // this.retrieve(false)
+              }
             }
-          }
-          if (scrollingHeight >= (totalHeight)) {
-            if (isLoading == false) {
-              this.retrieveEvents(true)
+            if (scrollingHeight >= (totalHeight)) {
+              if (isLoading == false) {
+                this.retrieveEvents(true)
+              }
             }
-          }
-        }}>
+          }}>
           <View style={{
             height: height * 1.5
           }}>
@@ -170,7 +183,7 @@ class ChurchProfile extends Component {
                 width: '40%'
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Send Tithings', data: data})
+                  this.props.navigation.navigate('depositStack', { type: 'Send Tithings', data: data })
                 }}
                 title={language.Donation}
               />

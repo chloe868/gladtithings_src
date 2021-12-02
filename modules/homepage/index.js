@@ -44,7 +44,8 @@ class HomePage extends Component {
         column: 'account_id',
         clause: '='
       }],
-      limit: 6
+      limit: 6,
+      sort: {created_at: 'desc'}
     }
     this.setState({isLoading: true});
     console.log(parameter, Routes.recentlyVisitedChurchesRetrieve)
@@ -99,7 +100,7 @@ class HomePage extends Component {
     const { days } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
-      limit: 2,
+      limit: 6,
       offset: 0
     }
     this.setState({ isLoading: true })
