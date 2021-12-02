@@ -170,17 +170,17 @@ export default {
   notificationsOptions: [
     {
       title: 'Email Login',
-      description: "Receives email address every time there’s a login of the account.",
+      description: "Receives email every time there’s a login of the account.",
       flag: false
     },
     {
       title: 'Email OTP',
-      description: "OTP will be send to you email address",
+      description: "OTP will be sent to your email address",
       flag: false
     },
     {
       title: 'SMS OTP',
-      description: "OTP will be send to you via SMS using your registered mobile number",
+      description: "OTP will be sent to you via SMS using your registered mobile number",
       flag: true
     },
     {
