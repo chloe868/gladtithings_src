@@ -27,7 +27,6 @@ class Transactions extends Component {
 
   componentDidMount() {
     let item = this.props.navigation.state?.params?.data;
-    console.log(item, '---hi----')
     if (item != null || item != undefined) {
       this.setState({ data: item })
     } else {
