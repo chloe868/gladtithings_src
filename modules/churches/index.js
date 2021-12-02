@@ -91,12 +91,12 @@ class Churches extends Component {
       if (response.data.length > 0) {
         this.setState({
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-          offset: flag == false ? 1 : (this.state.offset + 1)
+          searchOffset: flag == false ? 1 : (searchOffset + 1)
         })
       } else {
         this.setState({
           data: flag == false ? [] : this.state.data,
-          offset: flag == false ? 0 : this.state.offset
+          searchOffset: flag == false ? 0 : searchOffset
         })
       }
     }, error => {

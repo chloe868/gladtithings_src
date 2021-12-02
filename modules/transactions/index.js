@@ -27,9 +27,10 @@ class Transactions extends Component {
 
   componentDidMount() {
     let item = this.props.navigation.state?.params?.data;
-    if(item != null || item != undefined){
-      this.setState({data: item})
-    }else{
+    console.log(item, '---hi----')
+    if (item != null || item != undefined) {
+      this.setState({ data: item })
+    } else {
       this.retrieve(false);
     }
   }
@@ -46,7 +47,7 @@ class Transactions extends Component {
         value: user.id,
         clause: 'or'
       }],
-      sort: {created_at: 'desc'},
+      sort: { created_at: 'desc' },
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
     }
@@ -79,41 +80,39 @@ class Transactions extends Component {
         backgroundColor: Color.containerBackground
       }}>
         <ScrollView showsVerticalScrollIndicator={false}
-        onScroll={(event) => {
-          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
-          let totalHeight = event.nativeEvent.contentSize.height
-          if (event.nativeEvent.contentOffset.y <= 0) {
-            if (isLoading == false) {
-              // this.retrieve(false)
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if (event.nativeEvent.contentOffset.y <= 0) {
+              if (isLoading == false) {
+                // this.retrieve(false)
+              }
             }
-          }
-          if (scrollingHeight >= (totalHeight)) {
-            if (isLoading == false) {
-              this.retrieve(true)
+            if (scrollingHeight >= (totalHeight)) {
+              if (isLoading == false) {
+                this.retrieve(true)
+              }
             }
-          }
-        }}
+          }}
         >
+          {
+            (isLoading) && (
+              <Skeleton size={3} template={'block'} height={75} />
+            )
+          }
           <View style={{
             paddingLeft: 20,
             paddingRight: 20,
             minHeight: height + (height * 0.5)
           }}>
 
-            {
-              (isLoading) && (
-                <Skeleton size={5} template={'block'} height={60}/>
-              )
-            }
-
-
-            {!isLoading && data.length === 0 && <EmptyMessage message={language.emptyTithings}/>}
+            {!isLoading && data.length === 0 && <EmptyMessage message={language.emptyTithings} />}
             {
               data.map((item, index) => {
                 return (
                   <CardsWithIcon
                     redirect={() => {
-                      this.props.navigation.navigate('transactionDetailsStack', {data: item});
+                      this.props.navigation.navigate('transactionDetailsStack', { data: item });
                     }}
                     version={3}
                     description={item.description}

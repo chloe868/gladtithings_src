@@ -63,10 +63,14 @@ class Payments extends Component {
         status: 'authorize'
       };
       this.setState({isLoading: true})
+      console.log(Routes.createPaymentMethod, params)
       Api.request(Routes.createPaymentMethod, params, response => {
         this.setState({isLoading: false})
         this.props.navigation.navigate('subscriptionStack')
         console.log(response);
+      }, error => {
+        console.log(error)
+        this.setState({isLoading: false})
       });
     });
   };

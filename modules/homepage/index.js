@@ -28,8 +28,10 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    this.retrieveChurches()
-    this.retrieveEvents()
+    this.props.navigation.addListener( 'didFocus', () => {
+      this.retrieveChurches()
+      this.retrieveEvents()
+    })
   }
 
   retrieveEvents = () => {
