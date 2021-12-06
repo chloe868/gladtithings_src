@@ -23,7 +23,8 @@ class HomePage extends Component {
       isLoading: false,
       events: [],
       offset: 0,
-      limit: 5
+      limit: 5,
+      recentlyVisited: []
     }
   }
 
@@ -31,6 +32,40 @@ class HomePage extends Component {
     this.props.navigation.addListener('didFocus', () => {
       this.retrieveChurches()
       this.retrieveEvents()
+      this.retrieveRecentlyVisitedChurches()
+    })
+  }
+
+  retrieveRecentlyVisitedChurches = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '='
+      }],
+      limit: 6,
+      sort: {created_at: 'desc'}
+    }
+    this.setState({isLoading: true});
+    console.log(parameter, Routes.recentlyVisitedChurchesRetrieve)
+    Api.request(Routes.recentlyVisitedChurchesRetrieve, parameter, response => {
+      this.setState({isLoading: false});
+      let temp = []
+      if(response.data?.length > 0) {
+        response.data.map((item, index) => {
+         temp.push({
+          id: item.merchant.id,
+          address: item.merchant.address,
+          logo: item.merchant.logo,
+          name: item.merchant.name,
+          account_id: item.merchant.account_id
+         })
+        })
+      }
+      this.setState({ recentlyVisited: temp })
+    }, error => {
+      console.log(error)
     })
   }
 
@@ -65,7 +100,7 @@ class HomePage extends Component {
     const { days } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
-      limit: 2,
+      limit: 6,
       offset: 0
     }
     this.setState({ isLoading: true })
@@ -108,8 +143,7 @@ class HomePage extends Component {
 
   render() {
     const { theme, user, language } = this.props.state;
-    const { churches, isLoading, events } = this.state;
-    console.log('[CHURCHES]', churches)
+    const { churches, isLoading, events, recentlyVisited } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -183,7 +217,7 @@ class HomePage extends Component {
               <CardsWithImages
                 version={1}
                 button={true}
-                data={churches}
+                data={recentlyVisited}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.subscribe}
                 redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}

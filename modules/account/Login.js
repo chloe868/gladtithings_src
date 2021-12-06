@@ -252,7 +252,7 @@ class Login extends Component {
             height: height * 1.5
           }}>
             <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
-            <Header params={language.getStarted}></Header>
+            <Header params={language.signIn}></Header>
 
             {error > 0 ? <View style={Style.messageContainer}>
               {error == 1 ? (

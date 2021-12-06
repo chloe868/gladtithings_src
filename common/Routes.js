@@ -70,4 +70,6 @@ export default {
   ledgerRetrieve: apiUrl + 'ledger/retrieve',
   imageUploadArray: apiUrl + 'images/upload_image64_array',
   eventsRetrieve: apiUrl + 'events/retrieve',
+  recentlyVisitedChurchesRetrieve: apiUrl + 'recently_visited_churches/retrieve',
+  recentlyVisitedChurchesCreate: apiUrl + 'recently_visited_churches/create',
 };
