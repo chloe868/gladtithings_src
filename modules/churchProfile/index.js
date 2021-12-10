@@ -13,18 +13,6 @@ import { Spinner } from 'components';
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-const donations = [
-  {
-    title: 'July 23, 2021 5:00 PM',
-    description: "Change your theme colors here",
-    route: null
-  },
-  {
-    title: 'July 23, 2021 5:00 PM',
-    description: "Change your theme colors here",
-    route: null
-  }
-]
 class ChurchProfile extends Component {
   constructor(props) {
     super(props);
@@ -33,13 +21,38 @@ class ChurchProfile extends Component {
       data: [],
       isLoading: false,
       limit: 4,
-      offset: 0
+      offset: 0,
+      announcements: []
     }
   }
 
   componentDidMount() {
     this.retrieveEvents(false)
     this.addToRecentlyVisitedChurches()
+    this.retrieveAnnouncements()
+  }
+
+  retrieveAnnouncements = () => {
+    const { data } = this.props.navigation.state.params
+    let parameter = {
+      parameter: {
+        condition: [{
+          value: data.id,
+          column: 'merchant_id',
+          clause: '='
+        }]
+      }
+    }
+    this.setState({ isLoading: true });
+    Api.request(Routes.announcementsRetrieve, parameter, response => {
+      this.setState({ isLoading: false });
+      if(response.data.length > 0) {
+        this.setState({announcements: response.data})
+      }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading: false });
+    })
   }
 
   addToRecentlyVisitedChurches = () => {
@@ -105,14 +118,14 @@ class ChurchProfile extends Component {
       }
     }, error => {
       console.log(error)
-      console.log(Routes.eventsRetrieve, parameter, '---')
+      console.log(Routes.eventsRetrieve, parameter)
     })
   }
 
   render() {
     const { theme, user, language } = this.props.state;
     const { data } = this.props.navigation.state.params
-    const { isLoading } = this.state;
+    const { isLoading, announcements } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground,
@@ -193,11 +206,11 @@ class ChurchProfile extends Component {
               paddingLeft: 15,
               paddingRight: 15
             }}>
-              <Text style={{
+              {!isLoading && <Text style={{
                 fontFamily: 'Poppins-SemiBold'
-              }}>Announcements</Text>
+              }}>{language.churchProfile?.announcement}</Text>}
               {
-                donations.map((item, index) => {
+                announcements.map((item, index) => {
                   return (
                     <CardsWithIcon
                       redirect={() => {
@@ -210,13 +223,14 @@ class ChurchProfile extends Component {
                   )
                 })
               }
+              {announcements.length == 0 && !isLoading && <Text>{language.churchProfile?.noAnnouncement}</Text>}
             </View>
             <View>
               <Text style={{
                 paddingTop: 10,
                 paddingLeft: 20,
                 fontFamily: 'Poppins-SemiBold'
-              }}>Events</Text>
+              }}>{language.churchProfile?.events}</Text>
               <CardsWithImages
                 button={true}
                 version={1}

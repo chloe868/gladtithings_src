@@ -188,6 +188,7 @@ class AccountSettings extends Component {
               placeholder={user ? user.email : language.emailAddress}
               icon={faEnvelope}
               label={language.emailAddress}
+              disable={true}
               onTyping={(text) => {this.setState({email: text})}}
             />
 
