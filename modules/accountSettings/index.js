@@ -187,6 +187,7 @@ class AccountSettings extends Component {
             <InputFieldWithIcon
               placeholder={user ? user.email : language.emailAddress}
               icon={faEnvelope}
+              value={user.email}
               label={language.emailAddress}
               onTyping={(text) => {this.setState({email: text})}}
             />
