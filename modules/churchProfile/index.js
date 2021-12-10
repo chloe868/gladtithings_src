@@ -35,19 +35,17 @@ class ChurchProfile extends Component {
   retrieveAnnouncements = () => {
     const { data } = this.props.navigation.state.params
     let parameter = {
-      parameter: {
-        condition: [{
-          value: data.id,
-          column: 'merchant_id',
-          clause: '='
-        }]
-      }
+      condition: [{
+        value: data.id,
+        column: 'merchant_id',
+        clause: '='
+      }]
     }
     this.setState({ isLoading: true });
     Api.request(Routes.announcementsRetrieve, parameter, response => {
       this.setState({ isLoading: false });
-      if(response.data.length > 0) {
-        this.setState({announcements: response.data})
+      if (response.data.length > 0) {
+        this.setState({ announcements: response.data })
       }
     }, error => {
       console.log(error)

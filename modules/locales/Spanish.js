@@ -18,6 +18,7 @@ export default {
   findMass: 'Encontrar masa',
   subscribe: 'Suscribir',
   upcomingMasses: 'Próximas misas',
+  nearbyMass: 'Próximas misas cercanas',
   viewMore: 'Ver más',
   upcomingEvents: 'Próximos Eventos',
   donate: 'Donar',
