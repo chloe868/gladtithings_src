@@ -18,6 +18,7 @@ export default {
   findMass: 'Find Mass',
   subscribe: 'Subscribe',
   upcomingMasses: 'Upcoming Masses',
+  nearbyMass: 'Nearby Upcoming Masses',
   viewMore: 'View more',
   upcomingEvents: 'Upcoming Events',
   donate: 'Donate',
