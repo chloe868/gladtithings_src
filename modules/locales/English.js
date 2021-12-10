@@ -15,6 +15,7 @@ export default {
   welcome: 'Welcome',
   visitedChurches: 'Recently Visited Churches',
   findChurch: 'Find Church',
+  findMass: 'Find Mass',
   subscribe: 'Subscribe',
   upcomingMasses: 'Upcoming Masses',
   viewMore: 'View more',
@@ -260,5 +261,10 @@ export default {
   pageMembers: {
     placeholder: 'Username or Email Address',
     user: 'Invite Member',
+  },
+  churchProfile: {
+    events: 'Events',
+    announcement: 'Announcements',
+    noAnnouncement: 'This church has no announcement.'
   }
 }
