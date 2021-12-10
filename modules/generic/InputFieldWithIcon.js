@@ -14,6 +14,11 @@ class TextInputWithIcon extends Component{
       input: null
     }
   }
+  componentDidMount() {
+    if(this.props.value) {
+      this.setState({input: this.props.value})
+    }
+  }
 
   setInput(input){
     this.setState({
