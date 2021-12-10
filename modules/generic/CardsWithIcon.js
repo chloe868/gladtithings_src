@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Dimensions, Text } from 'react-native'
 import { BasicStyles, Color } from 'common';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faChevronRight, faChurch, faExclamationTriangle, faToggleOn, faToggleOff, faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faChevronRight, faChurch, faExclamationTriangle, faToggleOn, faToggleOff, faCreditCard, faChevronDown, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import Styles from './CardsWithIconStyle';
 
 const height = Math.round(Dimensions.get('window').height)
@@ -74,7 +74,7 @@ class CardsWithIcon extends Component {
   versionThree = () => {
     const { theme } = this.props.state;
     let amount = null
-    if(this.props.amount) {
+    if (this.props.amount) {
       amount = this.props.amount.split(' ')[1]
     }
     return (
@@ -85,7 +85,7 @@ class CardsWithIcon extends Component {
           ...this.props.style
         }}
         onPress={() => {
-          if(this.props.redirect) {
+          if (this.props.redirect) {
             this.props.redirect()
           }
         }}
@@ -95,25 +95,38 @@ class CardsWithIcon extends Component {
           justifyContent: 'center'
         }}>
           <FontAwesomeIcon
-            icon={this.props.description === 'Direct Transfer' ? faChurch : faCreditCard}
-            size={35}
-            style={{ color: Color.secondary }}
+            icon={this.props.description === 'Direct Transfer' ? (this.props.amount !== null ? faChurch : faMapMarkerAlt) : faCreditCard}
+            size={30}
+            style={{ color: this.props.amount !== null ? Color.secondary : Color.danger}}
           />
         </View>
         <View style={{ width: '60%', justifyContent: 'center' }}>
           <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{this.props.title}</Text>
           <Text style={{ fontSize: 13 }}>{this.props.date}</Text>
         </View>
-        <View style={{
-          width: '25%',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Text style={{
-            color: amount && amount > 0 ? (theme ? theme.primary : Color.primary) : Color.danger,
-            fontFamily: 'Poppins-SemiBold'
-          }}>{this.props.amount}</Text>
-        </View>
+        {this.props.amount !== null ?
+          <View style={{
+            width: '25%',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Text style={{
+              color: amount && amount > 0 ? (theme ? theme.primary : Color.primary) : Color.danger,
+              fontFamily: 'Poppins-SemiBold'
+            }}>{this.props.amount}</Text>
+          </View>
+          :
+          <View style={{
+           position: 'absolute',
+           right: 20,
+           top: 20
+          }}>
+            <FontAwesomeIcon
+              icon={faChevronDown}
+              size={15}
+              style={{ color: Color.gray }}
+            />
+          </View>}
       </TouchableOpacity>
     )
   }

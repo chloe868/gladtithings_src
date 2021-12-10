@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import CardsWithImages from 'src/modules/generic/CardsWithImages';
 import Api from 'services/api/index.js';
 import Skeleton from 'components/Loading/Skeleton';
+import CardsWithIcon from '../generic/CardsWithIcon';
+import EmptyMessage from 'modules/generic/Empty.js'
 import _ from 'lodash';
 
 const width = Math.round(Dimensions.get('window').width)
@@ -38,34 +40,38 @@ class Masses extends Component {
       console.log('[RESPONSE]', response)
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
-        let temp = [];
-        response.data.map((item, index) => {
-          let sched = [];
-          if (item.schedule) {
-            sched = JSON.parse(item.schedule)
-          }
-          sched.length > 0 && sched.map((items, inde) => {
-            let currentDay = new Date().getDay();
-            items.schedule.length > 0 && items.schedule.map((i, ind) => {
-              let a = i.startTime.split(':')
-              let b = i.endTime.split(':')
-              let aIsAm = parseInt(a[0]) <= 12 ? 'AM' : 'PM'
-              let bIsAm = parseInt(b[0]) <= 12 ? 'AM' : 'PM'
-              temp.push({
-                id: item.id,
-                address: item.address,
-                logo: item.logo,
-                name: i.name,
-                date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`,
-                account_id: item.account_id
-              })
-            })
-          })
-          this.setState({
-            churches: flag == false ? temp : _.uniqBy([...churches, ...temp], 'id'),
-            offset: flag == false ? 1 : (offset + 1)
-          })
+        this.setState({
+          churches: flag == false ? response.data : _.uniqBy([...churches, ...response.data], 'id'),
+          offset: flag == false ? 1 : (offset + 1)
         })
+        // let temp = [];
+        // response.data.map((item, index) => {
+        //   let sched = [];
+        //   if (item.schedule) {
+        //     sched = JSON.parse(item.schedule)
+        //   }
+        //   sched.length > 0 && sched.map((items, inde) => {
+        //     let currentDay = new Date().getDay();
+        //     items.schedule.length > 0 && items.schedule.map((i, ind) => {
+        //       let a = i.startTime.split(':')
+        //       let b = i.endTime.split(':')
+        //       let aIsAm = parseInt(a[0]) <= 12 ? 'AM' : 'PM'
+        //       let bIsAm = parseInt(b[0]) <= 12 ? 'AM' : 'PM'
+        //       temp.push({
+        //         id: item.id,
+        //         address: item.address,
+        //         logo: item.logo,
+        //         name: i.name, //i.name
+        //         date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`,
+        //         account_id: item.account_id
+        //       })
+        //     })
+        //   })
+        //   this.setState({
+        //     churches: flag == false ? temp : _.uniqBy([...churches, ...temp], 'id'),
+        //     offset: flag == false ? 1 : (offset + 1)
+        //   })
+        // })
       } else {
         this.setState({
           data: flag == false ? [] : churches,
@@ -102,10 +108,33 @@ class Masses extends Component {
             }
           }}
         >
-          <View style={{
-            marginBottom: height / 2
-          }}>
-            <View>
+          <View style={{marginBottom: height / 2}}>
+            {!isLoading && churches.length === 0 && <EmptyMessage message={language.emptyTithings} />}
+            <View style={{padding: 15}}>
+            {
+              churches.map((item, index) => {
+                console.log(item)
+                return (
+                  <CardsWithIcon
+                    redirect={() => {
+                     console.log('please collapse')
+                    }}
+                    version={3}
+                    description={'Direct Transfer'}
+                    title={item.name}
+                    date={item.address}
+                    amount={null}
+                  />
+                )
+              })
+            }
+            </View>
+            {
+              (isLoading) && (
+                <Skeleton size={3} template={'block'} height={75} />
+              )
+            }
+            {/* <View>
               <CardsWithImages
                 version={1}
                 data={churches}
@@ -126,7 +155,7 @@ class Masses extends Component {
                     <Skeleton size={1} template={'block'} height={150} />
                   </View>
                 </View>}
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </View>
