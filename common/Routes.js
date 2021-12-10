@@ -72,4 +72,5 @@ export default {
   eventsRetrieve: apiUrl + 'events/retrieve',
   recentlyVisitedChurchesRetrieve: apiUrl + 'recently_visited_churches/retrieve',
   recentlyVisitedChurchesCreate: apiUrl + 'recently_visited_churches/create',
+  announcementsRetrieve: apiUrl + 'announcements/retrieve'
 };

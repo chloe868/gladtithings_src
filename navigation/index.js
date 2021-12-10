@@ -33,6 +33,7 @@ import PageAboutStack from 'src/modules/community/about/Drawer'
 import PageRolesStack from 'src/modules/community/roles/Drawer'
 import PageMembersStack from 'src/modules/community/members/Drawer'
 import TransactionDetailsStack from 'src/modules/transactions/details/Drawer';
+import MassesStack from 'src/modules/masses/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -115,7 +116,8 @@ const PrimaryNav = createStackNavigator(
     pageAboutStack: { screen: PageAboutStack },
     pageRolesStack: { screen: PageRolesStack },
     pageMembersStack: { screen: PageMembersStack },
-    transactionDetailsStack: { screen: TransactionDetailsStack }
+    transactionDetailsStack: { screen: TransactionDetailsStack },
+    massesStack: { screen: MassesStack}
   },
   {
     // Default config for all screens

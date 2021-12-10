@@ -233,14 +233,14 @@ class HomePage extends Component {
                 >{language.upcomingMasses}</Text>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('churchesStack')
+                    this.props.navigation.navigate('massesStack')
                   }}
                   style={Style.right}
                 >
                   <Text style={{
                     fontFamily: 'Poppins-SemiBold',
                     color: theme ? theme.primary : Color.primary
-                  }}>{language.viewMore + '>>>'}</Text>
+                  }}>{language.findMass + '>>>'}</Text>
 
                 </TouchableOpacity>
               </View>}
