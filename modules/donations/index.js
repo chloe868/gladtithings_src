@@ -108,7 +108,7 @@ class Donations extends Component {
                     description={item.description}
                     title={item.receiver ? item.receiver.email : item.description}
                     date={item.created_at_human}
-                    amount={item.currency + ' ' + item.amount?.toLocaleString()}
+                    amount={item.currency?.toUpperCase() + ' ' + item.amount?.toLocaleString()}
                   />
                 )
               })

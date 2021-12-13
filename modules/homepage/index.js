@@ -230,7 +230,7 @@ class HomePage extends Component {
                     fontFamily: 'Poppins-SemiBold',
                     width: '50%'
                   }}
-                >{language.upcomingMasses}</Text>
+                >{language.nearbyMass}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('massesStack')

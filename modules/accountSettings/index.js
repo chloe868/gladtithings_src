@@ -40,7 +40,7 @@ class AccountSettings extends Component {
       condition: [{
         value: user.id,
         clause: '=',
-        column: 'account_id'
+        column: 'id'
       }]
     }
     this.setState({ isLoading: true })
@@ -64,8 +64,8 @@ class AccountSettings extends Component {
     if (user === null) {
       return
     }
-    console.log(user.email, this.state.email);
-    if(user.email === this.state.email) {
+    if(this.state.email == '' || user.email === this.state.email && (this.state.password === '' || this.state.password === null) && (this.state.confirmPassword === null || this.state.confirmPassword === '')) {
+      Alert.alert('Opps', 'You did not change anything.')
       return
     }
     this.updateAccount();
@@ -96,7 +96,7 @@ class AccountSettings extends Component {
 
   updateAccount = () => {
     const { user } = this.props.state;
-    if(this.state.email !== user.email && (this.state.password === '' || this.state.password === null)) {
+    if(this.state.email != '' && this.state.email !== user.email && (this.state.password === '' || this.state.password === null)) {
       Alert.alert(
         "Opps",
         "Email not updated. Password needs to be changed too if you change your email.",
@@ -187,8 +187,8 @@ class AccountSettings extends Component {
             <InputFieldWithIcon
               placeholder={user ? user.email : language.emailAddress}
               icon={faEnvelope}
+              value={user.email}
               label={language.emailAddress}
-              disable={true}
               onTyping={(text) => {this.setState({email: text})}}
             />
 

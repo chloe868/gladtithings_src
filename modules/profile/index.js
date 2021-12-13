@@ -366,6 +366,7 @@ class Profile extends Component {
                 label={language.firstName}
                 onTyping={text => { this.firstNameHandler(text) }}
                 profile={true}
+                value={this.state.firstName}
                 placeholderTextColor={this.state.firstName ? '#000' : '#999'}
               />
               <InputFieldWithIcon
@@ -373,6 +374,7 @@ class Profile extends Component {
                 icon={faUser}
                 label={language.lastName}
                 profile={true}
+                value={this.state.lastName}
                 onTyping={text => { this.lastNameHandler(text) }}
               />
               <InputFieldWithIcon
@@ -380,6 +382,7 @@ class Profile extends Component {
                 icon={faUser}
                 label={language.noGender}
                 profile={true}
+                value={this.state.gender}
                 onTyping={text => { this.genderHandler(text) }}
               />
               <InputFieldWithIcon
@@ -387,6 +390,7 @@ class Profile extends Component {
                 icon={faUser}
                 label={language.phoneNumber}
                 profile={true}
+                value={this.state.cellularNumber}
                 onTyping={text => { this.cellularNumberHandler(text) }}
               />
               <InputFieldWithIcon
@@ -394,6 +398,7 @@ class Profile extends Component {
                 icon={faMapMarkerAlt}
                 label={language.address}
                 profile={true}
+                value={this.state.address}
                 onTyping={text => { this.addressHandler(text) }}
               />
             </View> :
