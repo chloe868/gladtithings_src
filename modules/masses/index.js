@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions } from 'react-native';
-import { Color, Routes } from 'common';
+import { View, Text, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { Color, Routes, BasicStyles } from 'common';
 import { connect } from 'react-redux';
-import CardsWithImages from 'src/modules/generic/CardsWithImages';
 import Api from 'services/api/index.js';
 import Skeleton from 'components/Loading/Skeleton';
 import CardsWithIcon from '../generic/CardsWithIcon';
 import EmptyMessage from 'modules/generic/Empty.js'
 import _ from 'lodash';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
+import StreetView from 'react-native-streetview';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -21,11 +24,48 @@ class Masses extends Component {
       isLoading: false,
       offset: 0,
       limit: 5,
+      isMapReady: false,
+      region: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 10.7254,
+        longitudeDelta: 10.7254,
+        formatted_address: null,
+      },
+      mapType: 'standard',
+      streetView: false
     }
   }
 
+  onRegionChange = (region) => {
+    console.log(region)
+    this.setState({
+      region: region
+    })
+  };
+
+  onMapLayout = () => {
+    this.setState({ isMapReady: true });
+  };
+
   componentDidMount() {
     this.retrieveChurches(false)
+    const config = {
+      enableHighAccuracy: false
+    };
+    Geolocation.getCurrentPosition(
+      info =>
+        this.setState({
+          region: {
+            ...this.state.region,
+            latitude: info.coords.latitude,
+            longitude: info.coords.longitude
+          }
+        }),
+      error => console.log("ERROR", error),
+      config,
+    );
+    console.log('--s-')
   }
 
   retrieveChurches = (flag) => {
@@ -37,41 +77,12 @@ class Masses extends Component {
     }
     this.setState({ isLoading: true })
     Api.request(Routes.merchantsRetrieve, parameter, response => {
-      console.log('[RESPONSE]', response)
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.setState({
           churches: flag == false ? response.data : _.uniqBy([...churches, ...response.data], 'id'),
           offset: flag == false ? 1 : (offset + 1)
         })
-        // let temp = [];
-        // response.data.map((item, index) => {
-        //   let sched = [];
-        //   if (item.schedule) {
-        //     sched = JSON.parse(item.schedule)
-        //   }
-        //   sched.length > 0 && sched.map((items, inde) => {
-        //     let currentDay = new Date().getDay();
-        //     items.schedule.length > 0 && items.schedule.map((i, ind) => {
-        //       let a = i.startTime.split(':')
-        //       let b = i.endTime.split(':')
-        //       let aIsAm = parseInt(a[0]) <= 12 ? 'AM' : 'PM'
-        //       let bIsAm = parseInt(b[0]) <= 12 ? 'AM' : 'PM'
-        //       temp.push({
-        //         id: item.id,
-        //         address: item.address,
-        //         logo: item.logo,
-        //         name: i.name, //i.name
-        //         date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`,
-        //         account_id: item.account_id
-        //       })
-        //     })
-        //   })
-        //   this.setState({
-        //     churches: flag == false ? temp : _.uniqBy([...churches, ...temp], 'id'),
-        //     offset: flag == false ? 1 : (offset + 1)
-        //   })
-        // })
       } else {
         this.setState({
           data: flag == false ? [] : churches,
@@ -84,9 +95,50 @@ class Masses extends Component {
     });
   }
 
+  renderMap = () => {
+    const { region, mapType, streetView } = this.state;
+    const { theme } = this.props.state;
+    return (
+      <View>
+        <MapView
+          style={{
+            minWidth: width - 50,
+            minHeight: height - 300,
+            flex: 1,
+            borderRadius: BasicStyles.standardBorderRadius
+          }}
+          mapType={mapType}
+          ref={(ref) => (this.mapView = ref)}
+          onMapReady={this.onMapLayout}
+          provider={PROVIDER_GOOGLE}
+          region={region}
+          onRegionChangeComplete={(e) => this.onRegionChange(e)}
+        >
+          {
+            this.state.isMapReady && (
+              <Marker
+                key={0}
+                coordinate={region}
+                title={'Title route'}
+              >
+                <Image
+                  source={require('src/assets/userPosition.png')}
+                  style={{
+                    width: 60,
+                    height: 60
+                  }}
+                />
+              </Marker>
+            )
+          }
+        </MapView>
+      </View>
+    );
+  };
+
   render() {
-    const { theme, user, language } = this.props.state;
-    const { churches, isLoading, events, recentlyVisited } = this.state;
+    const { language, theme } = this.props.state;
+    const { churches, isLoading, region, streetView, mapType } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -96,11 +148,6 @@ class Masses extends Component {
           onScroll={(event) => {
             let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
             let totalHeight = event.nativeEvent.contentSize.height
-            if (event.nativeEvent.contentOffset.y <= 0) {
-              if (isLoading == false) {
-                // this.retrieve(false)
-              }
-            }
             if (scrollingHeight >= (totalHeight)) {
               if (isLoading == false) {
                 this.retrieveChurches(true)
@@ -108,54 +155,82 @@ class Masses extends Component {
             }
           }}
         >
-          <View style={{marginBottom: height / 2}}>
+          <View style={{ marginBottom: height / 2 }}>
+            <View>
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  bottom: 60,
+                  right: 10,
+                  zIndex: 100,
+                  padding: 10,
+                  borderRadius: 20,
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }}
+                onPress={() => {
+                  this.setState({ mapType: mapType === 'standard' ? 'satellite' : 'standard' })
+                }}
+              >
+                <Text style={{ color: 'white' }}>{mapType === 'standard' ? 'Satellite View' : 'Standard View'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  bottom: 10,
+                  right: 10,
+                  zIndex: 100,
+                  padding: 10,
+                  borderRadius: 20,
+                  backgroundColor: !streetView ? (theme ? theme.primary : Color.primary) : Color.danger
+                }}
+                onPress={() => {
+                  this.setState({ streetView: !streetView })
+                }}
+              >
+                <Text style={{ color: 'white' }}>{!streetView ? 'Enable Street View' : 'Disable Street View'}</Text>
+              </TouchableOpacity>
+              {streetView && <StreetView
+                style={{
+                  minWidth: width - 50,
+                  minHeight: height - 300,
+                }}
+                allGesturesEnabled={true}
+                coordinate={region}
+                pov={{
+                  tilt: parseFloat(0),
+                  bearing: parseFloat(0),
+                  zoom: parseInt(1)
+                }}
+                onSuccess={() => console.log('map loaded')}
+                onError={(event) => console.log('failed to load map', event.nativeEvent)}
+              />}
+              {!streetView && this.renderMap()}
+            </View>
             {!isLoading && churches.length === 0 && <EmptyMessage message={language.emptyTithings} />}
-            <View style={{padding: 15}}>
-            {
-              churches.map((item, index) => {
-                console.log(item)
-                return (
-                  <CardsWithIcon
-                    redirect={() => {
-                     console.log('please collapse')
-                    }}
-                    version={3}
-                    description={'Direct Transfer'}
-                    title={item.name}
-                    date={item.address}
-                    amount={null}
-                  />
-                )
-              })
-            }
+            <View style={{ padding: 15 }}>
+              {
+                churches.map((item, index) => {
+                  return (
+                    <CardsWithIcon
+                      key={index}
+                      redirect={() => {
+                        console.log('please collapse')
+                      }}
+                      version={3}
+                      description={'Direct Transfer'}
+                      title={item.name}
+                      date={item.address}
+                      amount={null}
+                    />
+                  )
+                })
+              }
             </View>
             {
               (isLoading) && (
                 <Skeleton size={3} template={'block'} height={75} />
               )
             }
-            {/* <View>
-              <CardsWithImages
-                version={1}
-                data={churches}
-                buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={language.subscribe}
-                redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
-                buttonClick={(item) => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation', data: item }) }}
-              />
-              {isLoading &&
-                <View style={{
-                  flexDirection: 'row',
-                  width: width
-                }}>
-                  <View style={{ width: '50%' }}>
-                    <Skeleton size={1} template={'block'} height={150} />
-                  </View>
-                  <View style={{ width: '50%' }}>
-                    <Skeleton size={1} template={'block'} height={150} />
-                  </View>
-                </View>}
-            </View> */}
           </View>
         </ScrollView>
       </View>
