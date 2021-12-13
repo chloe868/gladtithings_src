@@ -26,7 +26,8 @@ class Subscriptions extends Component {
       dataNoLimit: [],
       data: [],
       dataPayment: [],
-      items: null
+      items: null,
+      limit: 4,
     }
   }
 
@@ -34,6 +35,7 @@ class Subscriptions extends Component {
     this.props.navigation.addListener( 'didFocus', () => {
       this.retrieveAllPayment()
     })
+    this.retrieveAllSub()
     this.retrieveAllSubscriptions()
   }
 
@@ -88,8 +90,8 @@ class Subscriptions extends Component {
         clause: '='
       }],
       sort: { created_at: 'desc' },
-      limit: 5,
-      offset: 0
+      limit: this.state.limit,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
     }
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerRetrieve, parameter, response => {
@@ -128,6 +130,8 @@ class Subscriptions extends Component {
           dataNoLimit: response.data,
         })
       }
+    }, error => {
+      console.log('[error]', error)
     });
   }
 

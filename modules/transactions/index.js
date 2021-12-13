@@ -116,7 +116,7 @@ class Transactions extends Component {
                     version={3}
                     description={item.description}
                     title={item.receiver ? item.receiver.email : item.description}
-                    date={item.created_at_human}
+                    date={item.created_at_human ? item.created_at_human : item.created_at}
                     amount={item.currency?.toUpperCase() + ' ' + item.amount?.toLocaleString()}
                   />
                 )
