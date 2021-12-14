@@ -26,8 +26,8 @@ class Masses extends Component {
       limit: 5,
       isMapReady: false,
       region: {
-        latitude: 0,
-        longitude: 0,
+        latitude: 10.3241644,
+        longitude: 123.9100133,
         latitudeDelta: 10.7254,
         longitudeDelta: 10.7254,
         formatted_address: null,
@@ -139,6 +139,7 @@ class Masses extends Component {
   render() {
     const { language, theme } = this.props.state;
     const { churches, isLoading, region, streetView, mapType } = this.state;
+    console.log(region, '---region---')
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -189,10 +190,15 @@ class Masses extends Component {
               >
                 <Text style={{ color: 'white' }}>{!streetView ? 'Enable Street View' : 'Disable Street View'}</Text>
               </TouchableOpacity>
-              {streetView && <StreetView
+              {streetView && 
+              <View style={{
+                flex: 1
+              }}>
+                <StreetView
                 style={{
                   minWidth: width - 50,
                   minHeight: height - 300,
+                  margin: 0
                 }}
                 allGesturesEnabled={true}
                 coordinate={region}
@@ -203,7 +209,8 @@ class Masses extends Component {
                 }}
                 onSuccess={() => console.log('map loaded')}
                 onError={(event) => console.log('failed to load map', event.nativeEvent)}
-              />}
+              />
+              </View>}
               {!streetView && this.renderMap()}
             </View>
             {!isLoading && churches.length === 0 && <EmptyMessage message={language.emptyTithings} />}
