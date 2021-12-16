@@ -1,9 +1,13 @@
 import VersionCheck from 'react-native-version-check';
-
-import DeviceInfo from 'react-native-device-info';
-import { Helper } from 'common';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 import { Platform, Linking , Alert} from 'react-native';
 export default {
+  async askPermission(){
+    const trackingStatus = await requestTrackingPermission();
+    if (trackingStatus === 'authorized' || trackingStatus === 'unavailable') {
+      // enable tracking features
+    }
+  },
   checkVersion(callback){
     if(Platform.OS === 'android'){
       VersionCheck.needUpdate()

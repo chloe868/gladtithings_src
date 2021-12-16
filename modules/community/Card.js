@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, Image, Dimensions, Text, TextInput, Alert } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBan, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faBell, faUsers, faImage } from '@fortawesome/free-solid-svg-icons';
 import { BasicStyles, Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import Config from 'src/config.js';
@@ -26,21 +26,23 @@ class Card extends Component {
       }}>
         <View style={{
           paddingLeft: 5,
-          justifyContent: 'space-between',
           flexDirection: 'row',
           width: '90%',
           alignItems: 'center'
         }}>
-          <View>
-
-            
+          <FontAwesomeIcon icon={faImage} />
+          <View style={{
+            paddingLeft: 10
+          }}>
             <Text style={{
               fontSize: BasicStyles.standardTitleFontSize,
               fontFamily: 'Poppins-SemiBold',
+              fontWeight: 'bold'
             }}> {data.title}</Text>
             <Text style={{
               fontSize: BasicStyles.standardFontSize
-            }}> {data.created_at}
+            }}>
+              Non Profit - 20k Followers - 10k Joined
             </Text>
           </View>
          
@@ -50,12 +52,44 @@ class Card extends Component {
   }
 
   
-  renderBody = (data) => {
+  renderSuggestions = (data) => {
     return (
       <View style={{
         ...BasicStyles.standardWidth,
-        paddingTop: 20,
-        paddingBottom: 25,
+        paddingTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+      }}>
+        <FontAwesomeIcon icon={faUsers} />
+        <Text style={{
+          fontSize: BasicStyles.standardFontSize,
+          paddingLeft: 10
+        }}>Follow & Join</Text>
+      </View>
+    )
+  }
+
+  renderJoined = (data) => {
+    return (
+      <View style={{
+        ...BasicStyles.standardWidth,
+        paddingTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+      }}>
+        <FontAwesomeIcon icon={faBan} />
+        <Text style={{
+          fontSize: BasicStyles.standardFontSize,
+          paddingLeft: 10
+        }}>Unfollow</Text>
+      </View>
+    )
+  }
+  renderManaged = (data) => {
+    return (
+      <View style={{
+        ...BasicStyles.standardWidth,
+        paddingTop: 10,
         flexDirection: 'row',
         justifyContent: 'flex-start',
       }}>
@@ -66,9 +100,11 @@ class Card extends Component {
             marginLeft: 5
           }}
         />}
+        <FontAwesomeIcon icon={faUsers} />
         <Text style={{
-          fontSize: BasicStyles.standardFontSize
-        }}>{data.title}</Text>
+          fontSize: BasicStyles.standardFontSize,
+          paddingLeft: 10
+        }}>Notifications</Text>
       </View>
     )
   }
@@ -83,6 +119,8 @@ class Card extends Component {
         borderWidth: .3,
         marginBottom: 10,
         marginTop: 10,
+        paddingBottom: 10,
+        paddingTop: 10,
         backgroundColor: 'white'
       }}
       onPress={() => {
@@ -95,7 +133,15 @@ class Card extends Component {
       }}
       >
         {this.renderHeader(data)}
-        {this.renderBody(data)}
+        {
+          this.props.from == 'suggestions' && this.renderSuggestions(data)
+        }
+        {
+          (this.props.from == 'joined') && this.renderJoined(data)
+        }
+        {
+          (this.props.from == 'managed') && this.renderManaged(data)
+        }
       </TouchableOpacity>
     )
   }

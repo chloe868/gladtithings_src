@@ -42,7 +42,12 @@ class HeaderRightOptions extends Component {
     const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', paddingRight: 20, zIndex: 999}}>
-        <TouchableOpacity onPress={this.back.bind(this)}>
+        <TouchableOpacity
+          onPress={() => {
+            this.props.navigationProps.navigate('pageSettingScreen', {
+              data: this.props.navigationProps.state.params.data
+            })
+          }}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
             icon={faCog}
@@ -68,11 +73,11 @@ let HeaderRightOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(He
 const Stack = createStackNavigator({
   pageScreen: {
     screen: Screen,
-    headerMode: Platform.OS === 'ios'?'float': 'screen',
+    headerMode: Platform.OS === 'ios'? 'float' : 'screen',
     navigationOptions: ({navigation}) => ({
       // title: navigation.state.params && navigation.state.params.data ? navigation.state.params.data.title : 'Page',
-      // headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      // headerRight: <HeaderRightOptionsConnect navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
+      headerRight: <HeaderRightOptionsConnect navigationProps={navigation} />,
       headerTransparent: true
     }),
   },

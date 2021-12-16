@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Platform } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
 import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
@@ -62,7 +62,7 @@ class Page extends Component {
         flexDirection: 'row',
         width: '100%',
         position: 'absolute',
-        top: 0,
+        top: Platform.OS == 'ios' ? 40 : 0,
         left: 0,
         zIndex: 999,
         justifyContent: 'space-between',
@@ -187,9 +187,9 @@ class Page extends Component {
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        {
+        {/*
           this.header()
-        }
+        */}
         <BottomSheetOptions
           data={menuData}
           ref={this.myRef}

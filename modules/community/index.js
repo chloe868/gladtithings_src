@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
-import Footer from 'modules/generic/Footer';
+import Loading from 'components/Loading/Skeleton'
 import { connect } from 'react-redux';
 import IncrementButton from 'components/Form/Button';
 import Format from './TabContainer'
@@ -10,6 +10,7 @@ import Api from 'services/api';
 import _ from 'lodash';
 import Comments from 'src/components/Comments/index';
 import { Spinner } from 'components';
+import Skeleton from '../../components/Loading/Skeleton';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -51,7 +52,10 @@ class Community extends Component {
       community: [],
       data: [],
       offset: 0,
-      limit: 5
+      limit: 5,
+      isSuggestionLoading: false,
+      isJoinedLoading: false,
+      isManagedLoading: false
     }
   }
 
@@ -64,7 +68,7 @@ class Community extends Component {
     })
   }
 
-  retrieveCommunities = () => {
+  retrieveCommunitiesSuggestions = () => {
     const { user } = this.props.state;
     if (user == null) {
       return null
@@ -74,9 +78,10 @@ class Community extends Component {
     console.log({
       parameter
     })
-    this.setState({ isLoading: true })
+    this.setState({ isSuggestionLoading: true })
     Api.request(Routes.pageRetrieve, parameter, response => {
-      this.setState({ isLoading: false })
+      this.retrieveCommunitiesJoined()
+      this.setState({ isSuggestionLoading: false })
       console.log({
         response
       })
@@ -90,7 +95,70 @@ class Community extends Component {
         })
       }
     }, error => {
-      this.setState({ isLoading: false })
+      this.retrieveCommunitiesJoined()
+      this.setState({ isSuggestionLoading: false })
+    });
+  }
+
+  retrieveCommunitiesJoined = () => {
+    const { user } = this.props.state;
+    if (user == null) {
+      return null
+    }
+    let parameter = {
+    }
+    console.log({
+      parameter
+    })
+    this.setState({ isJoinedLoading: true })
+    Api.request(Routes.pageRetrieve, parameter, response => {
+      this.setState({ isJoinedLoading: false })
+      this.retrieveCommunitiesManaged()
+      console.log({
+        response
+      })
+      if (response.data && response.data.length > 0) {
+        this.setState({
+          community: response.data
+        })
+      } else {
+        this.setState({
+          community: []
+        })
+      }
+    }, error => {
+      this.retrieveCommunitiesManaged()
+      this.setState({ isJoinedLoading: false })
+    });
+  }
+
+  retrieveCommunitiesManaged = () => {
+    const { user } = this.props.state;
+    if (user == null) {
+      return null
+    }
+    let parameter = {
+    }
+    console.log({
+      parameter
+    })
+    this.setState({ isManagedLoading: true })
+    Api.request(Routes.pageRetrieve, parameter, response => {
+      this.setState({ isManagedLoading: false })
+      console.log({
+        response
+      })
+      if (response.data && response.data.length > 0) {
+        this.setState({
+          community: response.data
+        })
+      } else {
+        this.setState({
+          community: []
+        })
+      }
+    }, error => {
+      this.setState({ isManagedLoading: false })
     });
   }
 
@@ -108,7 +176,7 @@ class Community extends Component {
       message: false,
       community: true
     })
-    this.retrieveCommunities()
+    this.retrieveCommunitiesSuggestions()
   }
 
   popetwitter = () => {
@@ -133,7 +201,7 @@ class Community extends Component {
   }
 
   communities = () => {
-    const { community } = this.state;
+    const { community, isSuggestionLoading, isJoinedLoading, isManagedLoading } = this.state;
     return (
       <View style={{
         marginBottom: 100
@@ -145,12 +213,17 @@ class Community extends Component {
             style={{
               ...BasicStyles.standardWidth,
               fontFamily: 'Poppins-SemiBold',
+              fontWeight: 'bold'
             }}
           >Communities You Might Interested In</Text>
         </View>
+        {isSuggestionLoading && (
+          <Loading template={'block'} size={1}/>
+        )}
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
+            from={'suggestions'}
             navigation={this.props.navigation}
           />
         ))}
@@ -161,12 +234,17 @@ class Community extends Component {
             style={{
               ...BasicStyles.standardWidth,
               fontFamily: 'Poppins-SemiBold',
+              fontWeight: 'bold'
             }}
           >Communities You Manage</Text>
         </View>
+        {isJoinedLoading && (
+          <Loading template={'block'} size={1}/>
+        )}
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
+            from={'managed'}
             navigation={this.props.navigation}
           />
         ))}
@@ -178,6 +256,7 @@ class Community extends Component {
             style={{
               ...BasicStyles.standardWidth,
               fontFamily: 'Poppins-SemiBold',
+              fontWeight: 'bold'
             }}
           >Communities You Followed & Joined</Text>
           <Text
@@ -187,10 +266,15 @@ class Community extends Component {
             }}
           >View Recommendation</Text>
         </View>
+
+        {isManagedLoading && (
+          <Loading template={'block'} size={1}/>
+        )}
         {community.length > 0 && community.map((item, index) => (
           <Card
             data={item}
             navigation={this.props.navigation}
+            from={'joined'}
           />
         ))}
       </View>
@@ -277,10 +361,14 @@ class Community extends Component {
               <Comments withImages={true} shouldRetrieve={shouldRetrieve} />
             </View>
           }
+          {
+            (this.state.default && this.isLoading) && (
+              <Skeleton template={'request'}/>
+            )
+          }
           {this.state.message && this.popetwitter()}
           {this.state.community && this.communities()}
         </ScrollView>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         {/* <Footer layer={0} {...this.props} /> */}
         {/* <BottomSheetOptions
           ref={this.myRef}
