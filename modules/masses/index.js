@@ -26,10 +26,10 @@ class Masses extends Component {
       limit: 5,
       isMapReady: false,
       region: {
-        latitude: 10.3241644,
-        longitude: 123.9100133,
-        latitudeDelta: 10.7254,
-        longitudeDelta: 10.7254,
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0,
+        longitudeDelta: 0,
         formatted_address: null,
       },
       mapType: 'standard',
@@ -115,21 +115,20 @@ class Masses extends Component {
           onRegionChangeComplete={(e) => this.onRegionChange(e)}
         >
           {
-            this.state.isMapReady && (
-              <Marker
-                key={0}
-                coordinate={region}
-                title={'Title route'}
-              >
-                <Image
-                  source={require('src/assets/userPosition.png')}
-                  style={{
-                    width: 60,
-                    height: 60
-                  }}
-                />
-              </Marker>
-            )
+            this.state.isMapReady &&
+            <Marker
+              key={0}
+              coordinate={region}
+              title={'Title route'}
+            >
+              <Image
+                source={require('src/assets/userPosition.png')}
+                style={{
+                  width: 60,
+                  height: 60
+                }}
+              />
+            </Marker>
           }
         </MapView>
       </View>
@@ -190,27 +189,27 @@ class Masses extends Component {
               >
                 <Text style={{ color: 'white' }}>{!streetView ? 'Enable Street View' : 'Disable Street View'}</Text>
               </TouchableOpacity>
-              {streetView && 
-              <View style={{
-                flex: 1
-              }}>
-                <StreetView
-                style={{
-                  minWidth: width - 50,
-                  minHeight: height - 300,
-                  margin: 0
-                }}
-                allGesturesEnabled={true}
-                coordinate={region}
-                pov={{
-                  tilt: parseFloat(0),
-                  bearing: parseFloat(0),
-                  zoom: parseInt(1)
-                }}
-                onSuccess={() => console.log('map loaded')}
-                onError={(event) => console.log('failed to load map', event.nativeEvent)}
-              />
-              </View>}
+              {streetView &&
+                <View style={{
+                  flex: 1
+                }}>
+                  <StreetView
+                    style={{
+                      minWidth: width - 50,
+                      minHeight: height - 300,
+                      margin: 0
+                    }}
+                    allGesturesEnabled={true}
+                    coordinate={region}
+                    pov={{
+                      tilt: parseFloat(0),
+                      bearing: parseFloat(0),
+                      zoom: parseInt(1)
+                    }}
+                    onSuccess={() => console.log('map loaded')}
+                    onError={(event) => console.log('failed to load map', event.nativeEvent)}
+                  />
+                </View>}
               {!streetView && this.renderMap()}
             </View>
             {!isLoading && churches.length === 0 && <EmptyMessage message={language.emptyTithings} />}
