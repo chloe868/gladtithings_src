@@ -111,8 +111,8 @@ class Masses extends Component {
           ref={(ref) => (this.mapView = ref)}
           onMapReady={this.onMapLayout}
           provider={PROVIDER_GOOGLE}
-          region={region}
-          onRegionChangeComplete={(e) => this.onRegionChange(e)}
+          region={region} // without this the map won't move. but layo kaayo ang map
+          onRegionChangeComplete={(e) => this.onRegionChange(e)} // without this dili momove ang map but dili machange ang current loc as you move the map
         >
           {
             this.state.isMapReady &&
