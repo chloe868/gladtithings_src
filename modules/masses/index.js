@@ -32,6 +32,12 @@ class Masses extends Component {
         longitudeDelta: 0,
         formatted_address: null,
       },
+      moreMarkers: [{
+        latitude: 10.323971563875467,
+        latitudeDelta: 0.00968137024035265,
+        longitude: 123.9079531095922,
+        longitudeDelta: 0.0075058266520358075
+      }],
       mapType: 'standard',
       streetView: false
     }
@@ -129,6 +135,25 @@ class Masses extends Component {
                 }}
               />
             </Marker>
+          }
+          {
+            this.state.isMapReady && this.state.moreMarkers.length > 0 && this.state.moreMarkers.map((item, index) => {
+              return (
+                <Marker
+                  key={index}
+                  coordinate={item}
+                  title={'Title route'}
+                >
+                  <Image
+                    source={require('src/assets/userPosition.png')}
+                    style={{
+                      width: 60,
+                      height: 60
+                    }}
+                  />
+                </Marker>
+              )
+            })
           }
         </MapView>
       </View>
