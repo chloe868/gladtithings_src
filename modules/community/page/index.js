@@ -182,6 +182,7 @@ class Page extends Component {
   render() {
     const { theme } = this.props.state;
     const { isLoading, menuData } = this.state;
+    const { params } = this.props.navigation.state;
     return (
       <View style={{
         height: height,
@@ -204,7 +205,10 @@ class Page extends Component {
               this.pageImage()
             }
 
-            <Comments withImages={true}/>
+            <Comments withImages={true} payload={{
+              payload: 'page',
+              payload_value: params?.data?.id
+            }}/>
           </View>
         </ScrollView>
       </View>
