@@ -118,7 +118,7 @@ class Masses extends Component {
           onMapReady={this.onMapLayout}
           provider={PROVIDER_GOOGLE}
           region={region} // without this the map won't move. but layo kaayo ang map
-          onRegionChangeComplete={(e) => this.onRegionChange(e)} // without this dili momove ang map but dili machange ang current loc as you move the map
+          // onRegionChangeComplete={(e) => this.onRegionChange(e)} // without this dili momove ang map but dili machange ang current loc as you move the map
         >
           {
             this.state.isMapReady &&
@@ -244,10 +244,9 @@ class Masses extends Component {
                   return (
                     <CardsWithIcon
                       key={index}
-                      redirect={() => {
-                        console.log('please collapse')
-                      }}
-                      version={3}
+                      schedule={item.schedule}
+                      item={item}
+                      version={6}
                       description={'Direct Transfer'}
                       title={item.name}
                       date={item.address}
