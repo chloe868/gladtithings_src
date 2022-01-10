@@ -244,7 +244,6 @@ class Masses extends Component {
                   return (
                     <CardsWithIcon
                       key={index}
-                      schedule={item.schedule}
                       item={item}
                       version={6}
                       description={'Direct Transfer'}
