@@ -56,7 +56,7 @@ class HomePage extends Component {
         response.data.map((item, index) => {
          temp.push({
           id: item.merchant.id,
-          address: item.merchant.address,
+          address: JSON.parse(item.merchant.address)?.name,
           logo: item.merchant.logo,
           name: item.merchant.name,
           account_id: item.merchant.account_id
@@ -124,7 +124,7 @@ class HomePage extends Component {
                 let bIsAm = parseInt(b[0]) <= 12 ? 'AM' : 'PM'
                 temp.push({
                   id: item.id,
-                  address: item.address,
+                  address: JSON.parse(item.address)?.name,
                   logo: item.logo,
                   name: i.name,
                   date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`,

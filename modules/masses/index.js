@@ -28,8 +28,8 @@ class Masses extends Component {
       region: {
         latitude: 0,
         longitude: 0,
-        latitudeDelta: 0,
-        longitudeDelta: 0,
+        latitudeDelta: 0.12,
+        longitudeDelta: 0.12,
         formatted_address: null,
       },
       moreMarkers: [{
@@ -89,6 +89,7 @@ class Masses extends Component {
           churches: flag == false ? response.data : _.uniqBy([...churches, ...response.data], 'id'),
           offset: flag == false ? 1 : (offset + 1)
         })
+        console.log(response.data[0])
       } else {
         this.setState({
           data: flag == false ? [] : churches,
@@ -130,25 +131,25 @@ class Masses extends Component {
               <Image
                 source={require('src/assets/userPosition.png')}
                 style={{
-                  width: 60,
-                  height: 60
+                  width: 50,
+                  height: 50
                 }}
               />
             </Marker>
           }
           {
-            this.state.isMapReady && this.state.moreMarkers.length > 0 && this.state.moreMarkers.map((item, index) => {
+            this.state.isMapReady && this.state.churches.length > 0 && this.state.churches.map((item, index) => {
               return (
                 <Marker
                   key={index}
-                  coordinate={item}
-                  title={'Title route'}
+                  coordinate={JSON.parse(item.address)}
+                  title={JSON.parse(item.address).name}
                 >
                   <Image
                     source={require('src/assets/userPosition.png')}
                     style={{
-                      width: 60,
-                      height: 60
+                      width: 50,
+                      height: 50
                     }}
                   />
                 </Marker>
@@ -248,7 +249,7 @@ class Masses extends Component {
                       version={6}
                       description={'Direct Transfer'}
                       title={item.name}
-                      date={item.address}
+                      date={JSON.parse(item.address)?.name}
                       amount={null}
                     />
                   )
