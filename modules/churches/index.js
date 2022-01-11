@@ -44,6 +44,9 @@ class Churches extends Component {
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
+        response.data.map(item => {
+          item.address = JSON.parse(item.address)?.name
+        })
         this.setState({
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
           offset: flag == false ? 1 : (this.state.offset + 1)
