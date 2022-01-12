@@ -349,6 +349,7 @@ class OTP extends Component {
     let parameters = {
       account_id: user.id,
     };
+    console.log(Routes.notificationSettingOtp, parameters);
     this.setState({ isLoading: true });
     Api.request(
       Routes.notificationSettingOtp,

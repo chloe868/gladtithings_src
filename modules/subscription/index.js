@@ -32,7 +32,7 @@ class Subscriptions extends Component {
   }
 
   componentDidMount = () => {
-    this.props.navigation.addListener( 'didFocus', () => {
+    this.props.navigation.addListener('didFocus', () => {
       this.retrieveAllPayment()
     })
     this.retrieveAllSub()
@@ -48,6 +48,9 @@ class Subscriptions extends Component {
     Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
+        response.data.map(item => {
+          item.merchant_details.address = JSON.parse(item.merchant_details?.address)?.name
+        })
         this.setState({ data: response.data })
       } else {
         this.setState({ data: [] })
@@ -330,18 +333,26 @@ class Subscriptions extends Component {
                   }}
                 />
                 <View style={{
-                  paddingLeft: 20,
-                  paddingRight: 20,
+                  paddingLeft: 10,
+                  paddingRight: 10,
                   minHeight: height + (height * 0.5)
                 }}>
-                  {
+                  <View style={{
+                    width: width - 40
+                  }}>
+                    {
                       dataLimit.length === 0 && !isLoading && <EmptyMessage message={language.subscription.noSubscription} />
                     }
+                  </View>
+                  <View style={{
+                    width: width - 40
+                  }}>
                     {
                       (isLoading && dataLimit.length === 0) && (
                         <Skeleton size={1} template={'block'} height={100} />
                       )
                     }
+                  </View>
                   {
                     dataLimit.map((item, index) => {
                       return (
