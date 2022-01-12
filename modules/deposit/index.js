@@ -88,6 +88,7 @@ class Deposit extends Component {
         };
         this.setState({isLoading: true})
         Api.request(Routes.createPaymentIntent, params, response => {
+          this.setState({isLoading: true})
           this.handlePayment(response.data, res.token);
         });
       });

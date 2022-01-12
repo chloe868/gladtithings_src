@@ -56,7 +56,7 @@ class HomePage extends Component {
         response.data.map((item, index) => {
          temp.push({
           id: item.merchant.id,
-          address: JSON.parse(item.merchant.address)?.name,
+          address: JSON.parse(item.merchant?.address)?.name,
           logo: item.merchant.logo,
           name: item.merchant.name,
           account_id: item.merchant.account_id

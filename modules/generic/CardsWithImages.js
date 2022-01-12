@@ -157,10 +157,15 @@ class CardsWithImages extends Component {
       }}>
         {this.props.data?.length > 0 && this.props.data.map((item, index) => {
           return (
-            <View style={{
+            <TouchableOpacity style={{
               width: width,
               flexDirection: 'row',
               height: 220
+            }}
+            onPress={() => {
+              if(this.props.redirect) {
+                this.props.redirect(item)
+              }
             }}>
               <View style={{
                 height: 220,
@@ -289,7 +294,7 @@ class CardsWithImages extends Component {
                   }}
                 />
               </View>
-            </View>
+            </TouchableOpacity>
           )
         })}
       </View>
