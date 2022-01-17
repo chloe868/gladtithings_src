@@ -32,19 +32,12 @@ class Masses extends Component {
         longitudeDelta: 0.12,
         formatted_address: null,
       },
-      moreMarkers: [{
-        latitude: 10.323971563875467,
-        latitudeDelta: 0.00968137024035265,
-        longitude: 123.9079531095922,
-        longitudeDelta: 0.0075058266520358075
-      }],
       mapType: 'standard',
       streetView: false
     }
   }
 
   onRegionChange = (region) => {
-    console.log(region)
     this.setState({
       region: region
     })
@@ -110,7 +103,7 @@ class Masses extends Component {
         <MapView
           style={{
             minWidth: width - 50,
-            minHeight: height - 300,
+            minHeight: height - (height/2.5),
             flex: 1,
             borderRadius: BasicStyles.standardBorderRadius
           }}
@@ -127,6 +120,7 @@ class Masses extends Component {
               key={0}
               coordinate={region}
               title={'Title route'}
+              tracksViewChanges={false}
             >
               <Image
                 source={require('src/assets/userPosition.png')}
@@ -144,6 +138,7 @@ class Masses extends Component {
                   key={index}
                   coordinate={JSON.parse(item.address)}
                   title={JSON.parse(item.address).name}
+                  tracksViewChanges={false}
                 >
                   <Image
                     source={require('src/assets/userPosition.png')}
@@ -164,7 +159,6 @@ class Masses extends Component {
   render() {
     const { language, theme } = this.props.state;
     const { churches, isLoading, region, streetView, mapType } = this.state;
-    console.log(region, '---region---')
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -222,7 +216,7 @@ class Masses extends Component {
                   <StreetView
                     style={{
                       minWidth: width - 50,
-                      minHeight: height - 300,
+                      minHeight: height - (height/2.5),
                       margin: 0
                     }}
                     allGesturesEnabled={true}
@@ -250,6 +244,16 @@ class Masses extends Component {
                       description={'Direct Transfer'}
                       title={item.name}
                       date={JSON.parse(item.address)?.name}
+                      redirect={() => {
+                        
+                        this.setState({
+                          region: {
+                            ...this.state.region,
+                            latitude: JSON.parse(item.address)?.latitude,
+                            longitude: JSON.parse(item.address)?.longitude
+                          }
+                        })
+                      }}
                       amount={null}
                     />
                   )

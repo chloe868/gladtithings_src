@@ -224,6 +224,9 @@ class CardsWithIcon extends Component {
               icon={faMapMarkerAlt}
               size={30}
               style={{ color: Color.danger }}
+              onPress={() => {
+                this.props.redirect()
+              }}
             />
           </View>
           <View style={{ width: '60%', justifyContent: 'center' }}>
