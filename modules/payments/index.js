@@ -1,21 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, ScrollView, Dimensions, Alert} from 'react-native';
+import {View, ScrollView, Dimensions} from 'react-native';
 import {Color, Routes} from 'common';
-import Footer from 'modules/generic/Footer';
 import {connect} from 'react-redux';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faChurch} from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
-import CustomizedHeader from '../generic/CustomizedHeader';
 import StripeCard from 'components/Payments/Stripe/Stripe.js';
-import Stripe from 'components/Payments/Stripe/index.js';
-import {TextInput} from 'react-native-gesture-handler';
 import {WebView} from 'react-native-webview';
 import { Spinner } from 'components';
 import Api from 'services/api/index.js';
 import Config from 'src/config.js';
 import {
-  confirmPayment,
   createToken,
   initStripe 
 } from '@stripe/stripe-react-native';
