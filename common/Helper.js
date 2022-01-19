@@ -18,7 +18,6 @@ export default {
     messageGroup: 'App\\Events\\MessageGroup',
     rider: 'App\\Events\\Rider',
   },
-  wallet: 'drawer',
   DrawerMenu: [
     {
       title: 'Homepage',
