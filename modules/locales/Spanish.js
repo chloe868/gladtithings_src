@@ -130,6 +130,11 @@ export default {
       route: 'displayStack'
     },
     {
+      title: 'Lista de Métodos de Pago',
+      description: "Ver la lista de todos sus métodos de pago",
+      route: 'methodsStack'
+    },
+    {
       title: 'Configuración de idioma',
       description: "Administre los idiomas que desea usar aquí",
       route: 'languageSettingsStack'

@@ -32,9 +32,6 @@ class Subscriptions extends Component {
   }
 
   componentDidMount = () => {
-    this.props.navigation.addListener('didFocus', () => {
-      this.retrieveAllPayment()
-    })
     this.retrieveAllSub()
     this.retrieveAllSubscriptions()
   }
@@ -59,25 +56,6 @@ class Subscriptions extends Component {
       console.log(error);
       this.setState({ isLoading: false })
     });
-  }
-
-  retrieveAllPayment = () => {
-    const { user } = this.props.state;
-    let parameter = {
-      account_id: user.id,
-    }
-    this.setState({ isLoading: true })
-    Api.request(Routes.paymentRetrieveMethods, parameter, response => {
-      this.setState({ isLoading: false })
-      if (response.data.length > 0) {
-        this.setState({ dataPayment: response.data })
-      } else {
-        this.setState({ dataPayment: [] })
-      }
-    }, error => {
-      console.log(error);
-      this.setState({ isLoading: false })
-    })
   }
 
   retrieveLTransaction = (flag) => {
@@ -190,17 +168,6 @@ class Subscriptions extends Component {
               {
                 (payment) && (
                   <View style={{ marginBottom: 100 }}>
-                    <Text
-                      style={{
-                        color: Color.primary,
-                        fontSize: 14,
-                        padding: 9,
-                        paddingLeft: 10,
-                        paddingTop: 20,
-                        textAlign: 'left',
-                        fontWeight: 'bold'
-                      }}
-                      onPress={() => { this.setState({ subscription: true, payment: false }) }}>{language.subscription.viewPaymentMethods}</Text>
                     <View style={{
                       paddingTop: 10,
                       paddingRight: 10,
@@ -265,22 +232,6 @@ class Subscriptions extends Component {
                         }}>{language.add}</Text>
                       </TouchableOpacity>
                     </View>
-                    {dataPayment.length > 0 && dataPayment.map((item, index) => {
-                      return (
-                        <PaymentMethodCard
-                          data={item}
-                        />
-                      )
-                    })
-                    }
-                    {
-                      dataPayment.length === 0 && !isLoading && <EmptyMessage message={language.subscription.noPayment} />
-                    }
-                    {
-                      (isLoading && dataPayment.length === 0) && (
-                        <Skeleton size={1} template={'block'} height={100} />
-                      )
-                    }
                   </View>
                 )
               }
