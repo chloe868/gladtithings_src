@@ -38,6 +38,7 @@ import DirectCashInStack from 'src/modules/cashIn/direct/Drawer'
 import PayPalStack from 'components/Payments/PayPal/Drawer'
 import MethodsStack from 'src/modules/paymentMethods/Drawer';
 import LedgerStack from 'modules/ledger/Drawer.js';
+import CurrencyStack from 'modules/currency/CurrencyDrawer.js';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -126,6 +127,7 @@ const PrimaryNav = createStackNavigator(
     paypalStack: { screen: PayPalStack},
     methodsStack: { screen: MethodsStack},
     ledgerStack: { screen: LedgerStack},
+    currencyStack: { screen: CurrencyStack },
   },
   {
     // Default config for all screens
