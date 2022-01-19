@@ -34,6 +34,8 @@ import PageRolesStack from 'src/modules/community/roles/Drawer'
 import PageMembersStack from 'src/modules/community/members/Drawer'
 import TransactionDetailsStack from 'src/modules/transactions/details/Drawer';
 import MassesStack from 'src/modules/masses/Drawer';
+import DirectCashInStack from 'src/modules/cashIn/direct/Drawer'
+import PayPalStack from 'components/Payments/PayPal/Drawer'
 
 const WelcomeStack = createStackNavigator(
   {
@@ -99,7 +101,7 @@ const PrimaryNav = createStackNavigator(
     accountSettingsStack: { screen: AccountSettingStack},
     transactionsStack: {screen: TransactionsStack},
     pageMessageStack: { screen: PageMessageStack},
-    depositStack: { screen: DepositStack},
+    // depositStack: { screen: DepositStack},
     withdrawStack: { screen: DepositStack},
     notificationSettingsStack: { screen: NotificationSettingsStack},
     otpStack: { screen: OtpStack },
@@ -117,7 +119,9 @@ const PrimaryNav = createStackNavigator(
     pageRolesStack: { screen: PageRolesStack },
     pageMembersStack: { screen: PageMembersStack },
     transactionDetailsStack: { screen: TransactionDetailsStack },
-    massesStack: { screen: MassesStack}
+    massesStack: { screen: MassesStack},
+    depositStack: { screen: DirectCashInStack},
+    paypalStack: { screen: PayPalStack},
   },
   {
     // Default config for all screens

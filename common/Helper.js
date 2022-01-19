@@ -1,5 +1,6 @@
 import { faHome, faShieldAlt, faCopy, faCog, faUsers, faWallet, faHistory, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import {English, Spanish} from 'src/modules/locales';
+import Color from 'common/Color'
 export default {
   company: 'Increment Technologies',
   APP_NAME: '@GLADTITHINGS_',
@@ -103,5 +104,72 @@ export default {
       return true;
     }
   },
-  defaultLanguage: English
+  defaultLanguage: English,
+  cashInMethods: [{
+    title: 'PayPal',
+    description: 'PayPal Authorized',
+    fees: 'Fees Apply',
+    logo: require('assets/paypal.png'),
+    color: Color.gray,
+    code: 'PAYPAL',
+    country: 'International',
+    feeConfiguration: {
+      type: 'fixed',
+      amount: 10,
+      currency: 'PHP'
+    }
+  }, {
+    title: 'Stripe CC / DC',
+    description: '0000-0000-0000-0000',
+    fees: 'Fees Apply',
+    logo: require('assets/stripe.png'),
+    color: Color.primary,
+    code: 'STRIPE',
+    country: 'International',
+    feeConfiguration: {
+      type: 'fixed',
+      amount: 10,
+      currency: 'PHP'
+    }
+  }],
+  checkStatus(user){
+    if(user == null){
+      return false
+    }
+    switch(user.status.toLowerCase()){
+      case 'invalid_email': return -1; break;
+      case 'not_verified': return 0;break
+      case 'email_verified': return 1;break
+      case 'account_verified': return 2; break;
+      case 'basic_verified': return 3; break;
+      case 'standard_verified': return 4; break;
+      case 'business_verified': return 5; break;
+      case 'enterprise_verified': return 6; break;
+      default: return 7;break
+    }
+  },
+  accountStatus(user){
+    if(user == null){
+      return false
+    }
+    switch(user.status.toLowerCase()){
+      case 'not_verified': return 'Not Verified';break
+      case 'verified': return 'Email Verified';break
+      case 'email_verified': return 'Email Verified';break
+      case 'account_verified': return 'Account Verified'; break;
+      case 'basic_verified': return 'Basic Verified'; break;
+      case 'standard_verified': return 'Standard Verified'; break;
+      case 'business_verified': return 'Business Verified'; break;
+      case 'enterprise_verified': return 'Enterprise Verified'; break;
+      default: return 'Granted';break
+    }
+  },
+  convertMaximum(maximum, currency){
+    switch(currency.toLowerCase()){
+      case 'php': return maximum;
+      case 'usd': return maximum / 50;
+      case 'euro': return parseInt(maximum / 60);
+      case 'thb': return parseInt(maximum / 1.50);
+    }
+  },
 };
