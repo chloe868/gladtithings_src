@@ -34,6 +34,7 @@ import PageRolesStack from 'src/modules/community/roles/Drawer'
 import PageMembersStack from 'src/modules/community/members/Drawer'
 import TransactionDetailsStack from 'src/modules/transactions/details/Drawer';
 import MassesStack from 'src/modules/masses/Drawer';
+import MethodsStack from 'src/modules/paymentMethods/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -117,7 +118,8 @@ const PrimaryNav = createStackNavigator(
     pageRolesStack: { screen: PageRolesStack },
     pageMembersStack: { screen: PageMembersStack },
     transactionDetailsStack: { screen: TransactionDetailsStack },
-    massesStack: { screen: MassesStack}
+    massesStack: { screen: MassesStack},
+    methodsStack: { screen: MethodsStack}
   },
   {
     // Default config for all screens
