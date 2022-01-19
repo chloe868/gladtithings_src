@@ -33,6 +33,7 @@ class Stack extends Component {
   }
 
   componentDidMount = () => {
+    this.setState({currency: this.props.state.ledger?.currency || 'PHP'})
   }
 
   openBottomSheet = () => {
