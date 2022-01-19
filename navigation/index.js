@@ -36,6 +36,7 @@ import TransactionDetailsStack from 'src/modules/transactions/details/Drawer';
 import MassesStack from 'src/modules/masses/Drawer';
 import DirectCashInStack from 'src/modules/cashIn/direct/Drawer'
 import PayPalStack from 'components/Payments/PayPal/Drawer'
+import MethodsStack from 'src/modules/paymentMethods/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -122,6 +123,7 @@ const PrimaryNav = createStackNavigator(
     massesStack: { screen: MassesStack},
     depositStack: { screen: DirectCashInStack},
     paypalStack: { screen: PayPalStack},
+    methodsStack: { screen: MethodsStack}
   },
   {
     // Default config for all screens
