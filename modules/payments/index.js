@@ -3,7 +3,7 @@ import {View, ScrollView, Dimensions} from 'react-native';
 import {Color, Routes} from 'common';
 import {connect} from 'react-redux';
 import IncrementButton from 'components/Form/Button';
-import StripeCard from 'components/Payments/Stripe/Stripe.js';
+import StripeCard from 'modules/Stripe/Stripe.js';
 import {WebView} from 'react-native-webview';
 import { Spinner } from 'components';
 import Api from 'services/api/index.js';

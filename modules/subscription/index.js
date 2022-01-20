@@ -243,7 +243,7 @@ class Subscriptions extends Component {
                 data={this.state.items}
                 buttonText={language.edit}
                 redirect={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Edit Subscription Donation', data: this.state.items })
+                  this.props.navigation.navigate('otherTransactionStack', { type: 'Edit Subscription Donation', data: this.state.items })
                 }}
               />
               <View style={{

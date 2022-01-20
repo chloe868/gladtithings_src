@@ -184,7 +184,7 @@ class ChurchProfile extends Component {
                 marginRight: 20
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Subscription Donation', data: data })
+                  this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: data })
                 }}
                 title={language.Follow}
               />
@@ -194,7 +194,7 @@ class ChurchProfile extends Component {
                 width: '40%'
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('depositStack', { type: 'Send Tithings', data: data })
+                  this.props.navigation.navigate('otherTransactionStack', { type: 'Send Tithings', data: data })
                 }}
                 title={language.Donation}
               />
@@ -236,7 +236,7 @@ class ChurchProfile extends Component {
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
                 redirect={() => { return }}
-                buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings' }) }}
+                buttonClick={() => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings' }) }}
               />
             </View>
           </View>
