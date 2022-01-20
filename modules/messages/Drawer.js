@@ -18,14 +18,14 @@ class HeaderOptions extends Component {
     const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={this.back.bind(this)}>
+        {/* <TouchableOpacity onPress={this.back.bind(this)}> */}
           {/*Donute Button Image */}
-          <FontAwesomeIcon
+          {/* <FontAwesomeIcon
             icon={faChevronLeft}
             size={BasicStyles.headerBackIconSize}
             style={{color: theme ? theme.primary : Color.primary }}
-          />
-        </TouchableOpacity>
+          /> */}
+        {/* </TouchableOpacity> */}
       </View>
     );
   }
