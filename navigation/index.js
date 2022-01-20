@@ -37,8 +37,10 @@ import MassesStack from 'src/modules/masses/Drawer';
 import DirectCashInStack from 'src/modules/cashIn/direct/Drawer'
 import PayPalStack from 'components/Payments/PayPal/Drawer'
 import MethodsStack from 'src/modules/paymentMethods/Drawer';
-import LedgerStack from 'modules/ledger/Drawer.js';
-import CurrencyStack from 'modules/currency/CurrencyDrawer.js';
+import LedgerStack from 'src/modules/ledger/Drawer.js';
+import CurrencyStack from 'src/modules/currency/CurrencyDrawer.js';
+import StripeStack from 'components/Payments/Stripe/Drawer';
+import OtherTransactionStack from 'src/modules/deposit/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -128,6 +130,8 @@ const PrimaryNav = createStackNavigator(
     methodsStack: { screen: MethodsStack},
     ledgerStack: { screen: LedgerStack},
     currencyStack: { screen: CurrencyStack },
+    stripeStack: { screen: StripeStack },
+    otherTransactionStack: { screen : OtherTransactionStack }
   },
   {
     // Default config for all screens

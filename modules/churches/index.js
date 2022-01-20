@@ -144,7 +144,7 @@ class Churches extends Component {
             buttonColor={theme ? theme.primary : Color.primary}
             buttonTitle={language.subscribe}
             redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
-            buttonClick={(item) => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation', data: item }) }}
+            buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
           />
         </ScrollView>
       </View>

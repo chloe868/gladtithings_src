@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import CardsWithImages from '../generic/CardsWithImages';
 import CustomizedHeader from '../generic/CustomizedHeader';
 import IncrementButton from 'components/Form/Button';
-import StripeCard from 'components/Payments/Stripe/Stripe.js';
+import StripeCard from 'modules/Stripe/Stripe.js';
 import { WebView } from 'react-native-webview';
 import Api from 'services/api/index.js';
 import Config from 'src/config.js';
@@ -215,7 +215,7 @@ class Events extends Component {
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
                 redirect={() => { return }}
-                buttonClick={() => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings' }) }}
+                buttonClick={() => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings' }) }}
               />
               {!isLoading && events.length == 0 &&
                 <View style={{

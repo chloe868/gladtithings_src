@@ -221,7 +221,7 @@ class HomePage extends Component {
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.subscribe}
                 redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
-                buttonClick={(item) => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation', data: item }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
               />
               {churches?.length > 0 && <View style={Style.title}>
                 <Text
@@ -262,7 +262,7 @@ class HomePage extends Component {
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.subscribe}
                 redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
-                buttonClick={(item) => { this.props.navigation.navigate('depositStack', { type: 'Subscription Donation', data: item }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
               />
               <View style={Style.title}>
                 <Text
@@ -304,7 +304,7 @@ class HomePage extends Component {
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
                 redirect={() => { return }}
-                buttonClick={(item) => { this.props.navigation.navigate('depositStack', { type: 'Send Event Tithings', data: item }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
             </View>
           </View>
