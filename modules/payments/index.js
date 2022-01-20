@@ -54,7 +54,7 @@ class Payments extends Component {
       this.setState({ isLoading: true })
       Api.request(Routes.createPaymentMethod, params, response => {
         this.setState({ isLoading: false })
-        this.props.navigation.navigate('withdrawStack')
+        this.props.navigation.navigate('methodsStack')
       }, error => {
         console.log(error)
         this.setState({ isLoading: false })
