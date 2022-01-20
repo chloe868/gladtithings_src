@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
 import IncrementButton from 'components/Form/Button';
 import CustomizedHeader from '../generic/CustomizedHeader';
-import { TextInput } from 'react-native-gesture-handler';
-import { WebView } from 'react-native-webview';
 import { Spinner } from 'components';
 import Api from 'services/api/index.js';
 import AmountInput from 'modules/generic/AmountInput'
