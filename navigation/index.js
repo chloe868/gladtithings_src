@@ -41,6 +41,7 @@ import LedgerStack from 'src/modules/ledger/Drawer.js';
 import CurrencyStack from 'src/modules/currency/CurrencyDrawer.js';
 import StripeStack from 'components/Payments/Stripe/Drawer';
 import OtherTransactionStack from 'src/modules/deposit/Drawer';
+import DashboardStack from 'src/modules/dashboard/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -131,7 +132,8 @@ const PrimaryNav = createStackNavigator(
     ledgerStack: { screen: LedgerStack},
     currencyStack: { screen: CurrencyStack },
     stripeStack: { screen: StripeStack },
-    otherTransactionStack: { screen : OtherTransactionStack }
+    otherTransactionStack: { screen : OtherTransactionStack },
+    dashboardStack : { screen : DashboardStack }
   },
   {
     // Default config for all screens
