@@ -223,7 +223,14 @@ class HomePage extends Component {
                 redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
               />
-              {churches?.length > 0 && <View style={Style.title}>
+              {!isLoading && recentlyVisited.length === 0 && <Text style={{
+                padding: 20,
+                margin: 0,
+                marginTop: -25,
+                marginBottom: -20,
+                fontSize: 11
+              }}>No recently visited churches.</Text>}
+              <View style={Style.title}>
                 <Text
                   numberOfLines={1}
                   style={{
@@ -243,7 +250,7 @@ class HomePage extends Component {
                   }}>{language.findMass + '>>>'}</Text>
 
                 </TouchableOpacity>
-              </View>}
+              </View>
               {isLoading &&
                 <View style={{
                   flexDirection: 'row',
@@ -264,6 +271,13 @@ class HomePage extends Component {
                 redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
               />
+              {!isLoading && churches.length === 0 && <Text style={{
+                padding: 20,
+                margin: 0,
+                marginTop: -25,
+                marginBottom: -20,
+                fontSize: 11
+              }}>No nearby upcoming masses.</Text>}
               <View style={Style.title}>
                 <Text
                   numberOfLines={1}
@@ -306,6 +320,13 @@ class HomePage extends Component {
                 redirect={() => { return }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
+              {!isLoading && events.length === 0 && <Text style={{
+                padding: 20,
+                margin: 0,
+                marginTop: -25,
+                marginBottom: -20,
+                fontSize: 11
+              }}>No nearby upcoming events.</Text>}
             </View>
           </View>
         </ScrollView>
