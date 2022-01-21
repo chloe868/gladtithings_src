@@ -94,6 +94,9 @@ class Churches extends Component {
     }
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       if (response.data.length > 0) {
+        response.data.map(item => {
+          item.address = JSON.parse(item.address)?.name
+        })
         this.setState({
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
           searchOffset: flag == false ? 1 : (searchOffset + 1)
@@ -114,7 +117,7 @@ class Churches extends Component {
     const { theme, language, searchChurch } = this.props.state;
     const { data, isLoading, originalData } = this.state;
     let d = []
-    d = searchChurch == null ? originalData : data;
+    d = searchChurch == null || searchChurch == '' ? originalData : data;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
