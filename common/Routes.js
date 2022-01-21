@@ -74,4 +74,6 @@ export default {
   recentlyVisitedChurchesCreate: apiUrl + 'recently_visited_churches/create',
   announcementsRetrieve: apiUrl + 'announcements/retrieve',
   paypalAuthorized: apiUrl + 'paypal/auth',
+  reactionCreate: apiUrl + 'reactions/create',
+  reactionDelete: apiUrl + 'reactions/remove_reaction'
 };

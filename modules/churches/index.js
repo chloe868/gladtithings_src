@@ -13,6 +13,7 @@ class Churches extends Component {
       input: null,
       isLoading: false,
       data: [],
+      originalData: [],
       limit: 5,
       offset: 0,
       searchLimit: 5,
@@ -49,7 +50,8 @@ class Churches extends Component {
         })
         this.setState({
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-          offset: flag == false ? 1 : (this.state.offset + 1)
+          offset: flag == false ? 1 : (this.state.offset + 1),
+          originalData: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id')
         })
       } else {
         this.setState({
@@ -110,7 +112,9 @@ class Churches extends Component {
 
   render() {
     const { theme, language, searchChurch } = this.props.state;
-    const { data, isLoading } = this.state;
+    const { data, isLoading, originalData } = this.state;
+    let d = []
+    d = searchChurch == null ? originalData : data;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -140,7 +144,7 @@ class Churches extends Component {
           <CardsWithImages
             photos={true}
             version={3}
-            data={data}
+            data={d}
             buttonColor={theme ? theme.primary : Color.primary}
             buttonTitle={language.subscribe}
             redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
