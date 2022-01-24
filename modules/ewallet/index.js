@@ -175,7 +175,7 @@ class Ewallet extends Component {
                 marginTop: 10,
                 fontFamily: 'Poppins-SemiBold'
               }}>
-                {data?.first_name} {data?.middle_name} {data?.last_name}
+                {data?.first_name ? data?.first_name + ' ' + data?.middle_name + ' ' + data?.last_name : this.props.navigation.state.params?.data?.username}
               </Text>
               <Text style={{
                 textAlign: 'center',
