@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, Dimensions } from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import Screen from './index';
 import {connect} from 'react-redux';
-import { BasicStyles, Color } from 'common';
-
+import { Color } from 'common';
+const width = Math.round(Dimensions.get('window').width)
 class HeaderOptions extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +47,26 @@ const Stack = createStackNavigator({
       title: navigation.state.params.title ? navigation.state.params.title : 'Page',
       drawerLabel: navigation.state.params.title ? navigation.state.params.title : 'Page',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      ...BasicStyles.headerDrawerStyle
+      ...{
+        headerStyle: {
+          elevation: 0,
+          backgroundColor: Color.containerBackground,
+          height: 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: 18,
+          width: width
+        },
+        headerTitleContainerStyle: {
+          backgroundColor: Color.containerBackground,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '69%'
+        },
+        headerTitleStyle: {
+          fontFamily: 'Poppins-SemiBold',
+        },
+      },
     }),
   },
 });
