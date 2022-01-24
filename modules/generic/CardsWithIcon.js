@@ -14,7 +14,7 @@ class CardsWithIcon extends Component {
     super(props)
     this.state = {
       collapse: false,
-      days: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     }
   }
 
@@ -260,10 +260,13 @@ class CardsWithIcon extends Component {
                       fontFamily: 'Poppins-SemiBold',
                       color: this.state.days[new Date().getDay()] == item.title ? Color.danger : null
                     }}>{item.title}</Text>
-                    {item.schedule.map(i => (<View>
-                      <Text>Language: {i.language}</Text>
+                    {item.schedule.map((i, ind) => (<View style={{
+                      borderBottomWidth: ind != item.schedule.length - 1 ? 1 : 0,
+                      borderBottomColor: Color.lightGray
+                    }}>
                       <Text>Time: {i.startTime} - {i.endTime}</Text>
-                      <Text>Name: {i.name}</Text>
+                      <Text>Presider: {i.name}</Text>
+                      <Text>Language: {i.language}</Text>
                     </View>))}
                   </View>
                 )
