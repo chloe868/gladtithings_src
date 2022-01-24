@@ -90,13 +90,21 @@ class CardsWithImages extends Component {
                 item.logo ? <Image
                   source={{ uri: Config.BACKEND_URL + item.logo }}
                   style={Styles.image} /> :
-                <View style={{
-                  height: '100%',
-                  width: '100%',
-                  backgroundColor: Color.white,
-                  borderRadius: 5
-                }}>
-                </View>
+                  <View style={{
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: Color.white,
+                    borderRadius: 5,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <FontAwesomeIcon
+                      icon={faImage}
+                      size={55}
+                      style={{
+                        color: Color.gray
+                      }} />
+                  </View>
               }
             </View>
             <View style={{
@@ -162,11 +170,11 @@ class CardsWithImages extends Component {
               flexDirection: 'row',
               height: 220
             }}
-            onPress={() => {
-              if(this.props.redirect) {
-                this.props.redirect(item)
-              }
-            }}>
+              onPress={() => {
+                if (this.props.redirect) {
+                  this.props.redirect(item)
+                }
+              }}>
               <View style={{
                 height: 220,
                 width: '50%',
@@ -202,7 +210,7 @@ class CardsWithImages extends Component {
                         <Image
                           source={{ uri: Config.BACKEND_URL + image.url }}
                           style={{
-                            height:'100%',
+                            height: '100%',
                             width: '100%',
                             borderRadius: 5
                           }}
