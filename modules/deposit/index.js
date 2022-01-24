@@ -252,9 +252,17 @@ class Deposit extends Component {
             {this.props.navigation?.state?.params?.type ===
               'Send Event Tithings' && (
                 <CustomizedHeader
+                  data={{
+                    merchant_details: {
+                      name: data.name,
+                      address: data.address,
+                      logo: data.logo
+                    },
+                    amount: parseFloat(0)
+                  }}
                   version={2}
                   redirect={() => {
-                    console.log('ji');
+                    this.props.navigation.navigate('subscriptionStack')
                   }}
                 />
               )}

@@ -8,7 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
 import CardsWithIcon from '../generic/CardsWithIcon';
 import Api from 'services/api/index.js';
-import { Spinner } from 'components';
+import _ from 'lodash';
+import Skeleton from 'components/Loading/Skeleton';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -126,7 +127,7 @@ class ChurchProfile extends Component {
     const { isLoading, announcements } = this.state;
     return (
       <View style={{
-        backgroundColor: Color.containerBackground,
+        backgroundColor: Color.containerBackground
       }}>
         <ScrollView showsVerticalScrollIndicator={false}
           onScroll={(event) => {
@@ -144,7 +145,7 @@ class ChurchProfile extends Component {
             }
           }}>
           <View style={{
-            height: height * 1.5
+            marginBottom: height / 2
           }}>
             <View style={{
               height: height / 3,
@@ -239,9 +240,20 @@ class ChurchProfile extends Component {
                 buttonClick={() => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings' }) }}
               />
             </View>
+            {isLoading &&
+              <View style={{
+                flexDirection: 'row',
+                width: width
+              }}>
+                <View style={{ width: '50%' }}>
+                  <Skeleton size={1} template={'block'} height={150} />
+                </View>
+                <View style={{ width: '50%' }}>
+                  <Skeleton size={1} template={'block'} height={150} />
+                </View>
+              </View>}
           </View>
         </ScrollView>
-        {isLoading ? <Spinner mode="overlay" /> : null}
       </View>
     );
   }

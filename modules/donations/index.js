@@ -6,6 +6,7 @@ import CardsWithIcon from '../generic/CardsWithIcon';
 import Api from 'services/api/index.js';
 import { Routes } from 'common';
 import Skeleton from 'components/Loading/Skeleton';
+import _ from 'lodash';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
