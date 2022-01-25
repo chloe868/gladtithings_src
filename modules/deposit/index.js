@@ -21,12 +21,13 @@ class Deposit extends Component {
       card: null,
       isLoading: false,
       subscribeId: null,
-      currency: 'PHP'
+      currency: 'PHP',
+      ledger: null
     };
   }
 
   componentDidMount() {
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' });
   }
 
   unsubscribe = () => {
@@ -59,13 +60,47 @@ class Deposit extends Component {
     });
   }
 
-  createPayment = () => {
-    if (this.state.amount !== null && this.state.amount > 0) {
-      if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
-        this.createLedger();
-      } else {
-        this.subscribe();
+  retrieveLedger = (currency) => {
+    const { user } = this.props.state;
+    const { amount } = this.state;
+    let parameter = {
+      condition: [
+        {
+          clause: '=',
+          column: 'account_id',
+          value: user.id
+        }
+      ],
+      account_code: user.code,
+      account_id: user.id
+    }
+    console.log(Routes.ledgerSummary, parameter);
+    this.setState({ isLoading: true })
+    Api.request(Routes.ledgerSummary, parameter, response => {
+      this.setState({ isLoading: false })
+      if(response.data.length > 0) {
+        let ledger = currency === 'PHP' ? response.data[0] : response.data[1];
+        this.setState({ledger: ledger})
+        if(parseFloat(ledger.available_balance) >= parseFloat(amount)) {
+          if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
+            this.createLedger();
+          } else {
+            this.subscribe();
+          }
+        } else {
+          Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
+        }
       }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false })
+    });
+  }
+
+  createPayment = () => {
+    let cur = this.props.state.ledger?.currency || this.state.currency;
+    if (this.state.amount !== null && this.state.amount > 0) {
+      this.retrieveLedger(cur)
     } else {
       Alert.alert('Payment Error', 'You are missing your amount');
     }
