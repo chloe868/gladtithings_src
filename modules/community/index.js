@@ -68,6 +68,11 @@ class Community extends Component {
     })
   }
 
+  componentDidUpdate() {
+    const { searchPost } = this.props.state;
+    console.log(searchPost, '--')
+  }
+
   retrieveCommunitiesSuggestions = () => {
     const { user } = this.props.state;
     if (user == null) {

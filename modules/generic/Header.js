@@ -141,10 +141,10 @@ class Header extends Component {
             <TextInput
               style={{
                 height: 35,
-                width: '100%'
+                width: '100%',
+                marginTop: 4
               }}
-              onChangeText={(text) => this.setState({ input: text })}
-              value={input}
+              onChangeText={(text) => this.props.setSearchPost(text)}
               placeholder={language.search}
             />
           </View>
@@ -204,9 +204,8 @@ const mapDispatchToProps = (dispatch) => {
   const { actions } = require('@redux');
   return {
     logout: () => dispatch(actions.logout()),
-    setStatusSearch: (statusSearch) => dispatch(actions.setStatusSearch(statusSearch)),
-    setCreateStatus: (createStatus) => dispatch(actions.setCreateStatus(createStatus)),
-    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal({ isVisible: isVisible }))
+    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal({ isVisible: isVisible })),
+    setSearchPost: (searchPost) => dispatch(actions.setSearchPost(searchPost))
   };
 };
 
