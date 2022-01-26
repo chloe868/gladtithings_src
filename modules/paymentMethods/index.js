@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { View, ScrollView, Dimensions, TouchableOpacity, Text, Alert } from 'react-native';
 import { Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import PaymentMethodCard from 'modules/generic/Cards';
@@ -21,6 +21,44 @@ class PaymentMethods extends Component {
       limit: 4,
       offset: 0
     }
+  }
+
+  remove = (id) => {
+    Alert.alert('Confirmation', 'Are you sure you want to delete this payment method?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          let parameter = {
+            id: id
+          }
+          this.setState({ isLoading: true })
+          console.log(Routes.paymentMethodsDelete, parameter);
+          Api.request(Routes.paymentMethodsDelete, parameter, response => {
+            this.setState({ isLoading: false })
+            console.log(response);
+            if (response.data > 0) {
+              let data = this.state.data
+              data.length > 0 && data.map((item, index) => {
+                console.log(item.id == id, item.id, id);
+                if (item.id == id) {
+                  data.splice(index, 1);
+                }
+              })
+              console.log(data)
+              this.setState({ data: data });
+            }
+          }, error => {
+            console.log(error)
+            this.setState({ isLoading: false })
+          });
+        },
+      },
+    ]);
   }
 
   componentDidMount = () => {
@@ -94,6 +132,7 @@ class PaymentMethods extends Component {
             return (
               <PaymentMethodCard
                 data={item}
+                remove={(id) => { this.remove(id) }}
               />
             )
           })}
@@ -101,7 +140,7 @@ class PaymentMethods extends Component {
             data.length === 0 && !isLoading && <EmptyMessage message={language.subscription.noPayment} />
           }
           {
-            (isLoading && data.length === 0) && (
+            (isLoading) && (
               <Skeleton size={1} template={'block'} height={100} />
             )
           }
