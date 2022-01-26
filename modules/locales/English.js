@@ -135,7 +135,7 @@ export default {
       route: 'methodsStack'
     },
     {
-      title: 'Laguage Settings',
+      title: 'Language Settings',
       description: "Manage languages you want to use here",
       route: 'languageSettingsStack'
     }
