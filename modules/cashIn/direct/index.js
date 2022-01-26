@@ -8,12 +8,9 @@ import {
   Alert,
   SafeAreaView
 } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUserShield, faUser, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { BasicStyles, Color, Helper } from 'common';
+import { Color, Helper } from 'common';
 import { connect } from 'react-redux';
 import { Spinner } from 'components';
-import Api from 'services/api/index.js';
 import SelectWithArrow from 'components/InputField/SelectWithArrow'
 const height = Math.round(Dimensions.get('window').height);
 import AmountInput from 'modules/generic/AmountInput'
