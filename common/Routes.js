@@ -34,6 +34,7 @@ export default {
   commentsRetrieve: apiUrl + 'comments/retrieve_comments',
   commentsCreate: apiUrl + 'comments/create',
   commentsDelete: apiUrl + 'comments/delete',
+  commentsUpdate: apiUrl + 'comments/update',
   commentMembersCreate: apiUrl + 'comment_members/create',
   commentRepliesCreate: apiUrl + 'comment_replies/create',
   merchantsRetrieve: apiUrl + 'account_merchants/retrieve_with_featured_photos',
@@ -75,5 +76,6 @@ export default {
   announcementsRetrieve: apiUrl + 'announcements/retrieve',
   paypalAuthorized: apiUrl + 'paypal/auth',
   reactionCreate: apiUrl + 'reactions/create',
-  reactionDelete: apiUrl + 'reactions/remove_reaction'
+  reactionDelete: apiUrl + 'reactions/remove_reaction',
+  reportCreate: apiUrl + 'reports/create'
 };
