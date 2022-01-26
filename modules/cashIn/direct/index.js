@@ -17,9 +17,8 @@ import Api from 'services/api/index.js';
 import SelectWithArrow from 'components/InputField/SelectWithArrow'
 const height = Math.round(Dimensions.get('window').height);
 import AmountInput from 'modules/generic/AmountInput'
-import PaymentCard from 'components/Payments/Cards'
+// import PaymentCard from 'components/Payments/Cards'
 import Button from 'components/Form/Button';
-import RBSheet from 'react-native-raw-bottom-sheet';
 
 class Stack extends Component {
   constructor(props) {
@@ -28,7 +27,9 @@ class Stack extends Component {
       isLoading: false,
       amount: null,
       currency: 'PHP',
-      selected: []
+      selected: [],
+      charge: null,
+      total: null
     };
   }
 
@@ -36,20 +37,60 @@ class Stack extends Component {
     this.setState({currency: this.props.state.ledger?.currency || 'PHP'})
   }
 
-  openBottomSheet = () => {
-    this.RBSheet.open()
+  managePayment = (item) => {
+    let temp = [];
+    temp.push(item);
+    this.setState({selected: temp})
   }
 
-  manageRedirect(){
-    const { selected } = this.state;
+  manageCharges(item){
+    let fee = item.feeConfiguration
+    const { amount } = this.state;
+    let charge = 0
+    let total = 0
+    if(fee.type == 'percentage'){
+      charge = (amount * (fee.amount / 100)).toFixed(2)
+      total = (amount - charge).toFixed(2)
+      this.setState({
+        charge,
+        total
+      })
+    }else{
+      charge = (amount - fee.amount).toFixed(2)
+      total = (amount - charge).toFixed(2)
+      this.setState({
+        charge,
+        total
+      })
+    }
+  }
 
+  navigate(route, data){
+    this.props.navigation.navigate(route, {
+      data: {
+        data
+      }
+    })
+  }
+
+
+  manageRedirect(){
+    const { selected, currency, amount } = this.state;
+    let cur = this.props.state.ledger?.currency || currency
+    if(amount > 0) {
+    } else {
+      Alert.alert('Cannot proceed', 'Input your desired amount to contiue.')
+      return
+    }
     if(selected.length > 0){
       switch(selected[0].code){
         case 'PAYPAL': 
           this.props.navigation.navigate('paypalStack', {
             data: {
               amount: this.state.amount,
-              currency: this.state.currency
+              currency: cur,
+              charge: this.state.charge,
+              total: this.state.total
             }
           })
           break
@@ -57,7 +98,9 @@ class Stack extends Component {
           this.props.navigation.navigate('visaStack', {
             data: {
               amount: this.state.amount,
-              currency: this.state.currency
+              currency: cur,
+              charge: this.state.charge,
+              total: this.state.total
             }
           })
           break
@@ -65,7 +108,9 @@ class Stack extends Component {
           this.props.navigation.navigate('unioBankStack', {
             data: {
               amount: this.state.amount,
-              currency: this.state.currency
+              currency: cur,
+              charge: this.state.charge,
+              total: this.state.total
             }
           })
           break
@@ -73,14 +118,18 @@ class Stack extends Component {
           this.props.navigation.navigate('payMayaStack', {
             data: {
               amount: this.state.amount,
-              currency: this.state.currency
+              currency: cur,
+              charge: this.state.charge,
+              total: this.state.total
             }
           })
         case 'STRIPE':
             this.props.navigation.navigate('stripeStack', {
               data: {
                 amount: this.state.amount,
-                currency: this.state.currency
+                currency: cur,
+                charge: this.state.charge,
+                total: this.state.total
               }
             })
       }
@@ -88,6 +137,7 @@ class Stack extends Component {
   }
 
   renderFees = (fee) => {
+    const { amount, currency, charge, total } = this.state;
     return (
       <View style={{
         width: '100%'
@@ -99,7 +149,7 @@ class Stack extends Component {
           <Text>Proessing Fee</Text>
           <Text style={{
             fontWeight: 'bold'
-          }}>{fee.currency + ' ' + fee.amount}</Text>
+          }}>{currency + ' ' + charge}</Text>
         </View>
 
         <View style={{
@@ -109,19 +159,24 @@ class Stack extends Component {
         }}>
           <Text style={{
             fontWeight: 'bold'
-          }}>Total</Text>
+          }}>You will receive</Text>
           <Text style={{
             fontWeight: 'bold'
-          }}>{fee.currency + ' ' + fee.amount}</Text>
+          }}>{currency + ' ' + total}</Text>
         </View>
       </View>
     );
   }
 
   render() {
-    const { isLoading, selected } = this.state
+    const { isLoading, selected, currency } = this.state
     const { theme } = this.props.state;
     const { ledger, user } = this.props.state;
+    let cur = ledger ? ledger?.currency : currency;
+    let cards = Helper.cashInMethods;
+    cards = cards.filter((item) => {
+      return item.currency == cur
+    })
     return (
       <SafeAreaView style={{
         flex: 1
@@ -149,15 +204,53 @@ class Stack extends Component {
               disableRedirect={false}
               navigation={this.props.navigation}
             />
-          
+            {selected.length > 0 && (
+              <View style={{
+                padding: 20,
+                backgroundColor: '#00B89F',
+                height: 160,
+                borderRadius: 10,
+                marginBottom: 20
+              }}>
+                <Text style={{
+                  color: Color.white,
+                  fontWeight: 'bold'
+                }}>
+                  {selected[0].title}
+                </Text>
+                <Text style={{
+                  color: Color.white,
+                  fontWeight: 'bold'
+                }}>
+                  ************
+                </Text>
+                <Text style={{
+                  fontWeight: 'bold',
+                  position: 'absolute',
+                  bottom: 20,
+                  left: 20
+                }}>
+                  {selected[0].fees}
+                </Text>
+                <Image style={{
+                  position: 'absolute',
+                  bottom: 20,
+                  right: 20,
+                  height: 50,
+                  width: '50%',
+                  resizeMode: 'contain'
+                }}
+                source={selected[0].logo}/>
+              </View>
+            )}
             <SelectWithArrow
               value={selected.length > 0 ? selected[0].title: 'Select available method'}
               onPress={() => {
-                this.openBottomSheet()
+                this.props.navigation.navigate('paymentCardsStack', {data: cards, setPaymentMethod: this.managePayment})
               }}
               />
 
-              <PaymentCard data={selected} press={false}/>
+              {/* <PaymentCard data={selected} press={false}/> */}
             
             {
               (selected.length > 0) && this.renderFees(selected[0].feeConfiguration)
@@ -188,7 +281,7 @@ class Stack extends Component {
         }
         
 
-        <RBSheet
+        {/*<RBSheet
           ref={ref => {
             this.RBSheet = ref;
           }}
@@ -202,16 +295,8 @@ class Stack extends Component {
             }
           }}
         >
-          <View style={{
-          }}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}>
-              <View style={{
-                minHeight: height * 0.75,
-                padding: 20
-              }}>
                 <PaymentCard
-                  data={Helper.cashInMethods}
+                  data={cards}
                   onSelect={(item) => {
                     let newSelected = []
                     newSelected.push(item)
@@ -219,14 +304,11 @@ class Stack extends Component {
                       selected: newSelected
                     })
                     this.RBSheet.close()
+                    this.manageCharges(item)
                   }}
                   press={true}
                 />
-              </View>
-              
-            </ScrollView>
-          </View>
-        </RBSheet>
+        </RBSheet>*/}
       </SafeAreaView>
     );
   }
@@ -244,4 +326,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Stack);
-
