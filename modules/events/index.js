@@ -163,7 +163,7 @@ class Events extends Component {
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
                 redirect={() => { return }}
-                buttonClick={() => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings' }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item}) }}
               />
               {!isLoading && events.length == 0 &&
                 <View style={{
