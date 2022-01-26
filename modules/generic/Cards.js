@@ -70,7 +70,7 @@ class Cards extends Component {
                 </View>
               }
               redirect={() => {
-                console.log('hi')
+                this.props.remove(this.props.data.id)
               }}
             />
           </TouchableOpacity>
