@@ -127,7 +127,7 @@ const PrimaryNav = createStackNavigator(
     pageMembersStack: { screen: PageMembersStack },
     transactionDetailsStack: { screen: TransactionDetailsStack },
     massesStack: { screen: MassesStack},
-    depositStack: { screen: DirectCashInStack},
+    directCashInStack: { screen: DirectCashInStack},
     paypalStack: { screen: PayPalStack},
     methodsStack: { screen: MethodsStack},
     ledgerStack: { screen: LedgerStack},
