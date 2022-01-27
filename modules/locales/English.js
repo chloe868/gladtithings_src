@@ -71,7 +71,7 @@ export default {
     },
     {
       title: 'Deposit',
-      route: 'depositStack',
+      route: 'directCashInStack',
       icon: faWallet,
       borderBottom: false,
       payload: 'drawerStack',

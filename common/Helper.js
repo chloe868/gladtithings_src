@@ -60,7 +60,7 @@ export default {
     },
     {
       title: 'Deposit',
-      route: 'depositStack',
+      route: 'directCashInStack',
       icon: faWallet,
       borderBottom: false,
       payload: 'drawerStack',
@@ -68,7 +68,7 @@ export default {
     },
     {
       title: 'Withdraw',
-      route: 'depositStack',
+      route: 'directCashInStack',
       icon: faCreditCard,
       borderBottom: false,
       payload: 'drawerStack',

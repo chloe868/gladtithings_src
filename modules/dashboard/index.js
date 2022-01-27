@@ -140,7 +140,7 @@ class Dashboard extends Component {
                 width: '40%'
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('depositStack', { page: 'Deposit' })
+                  this.props.navigation.navigate('directCashInStack', { page: 'Deposit' })
                 }}
                 title={language.deposit}
               />
@@ -150,7 +150,7 @@ class Dashboard extends Component {
                 width: '40%'
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('depositStack', { page: 'Withdraw' })
+                  this.props.navigation.navigate('directCashInStack', { page: 'Withdraw' })
                 }}
                 title={language.withdraw}
               />
