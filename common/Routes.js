@@ -78,5 +78,6 @@ export default {
   paypalAuthorized: apiUrl + 'paypal/auth',
   reactionCreate: apiUrl + 'reactions/create',
   reactionDelete: apiUrl + 'reactions/remove_reaction',
-  reportCreate: apiUrl + 'reports/create'
+  reportCreate: apiUrl + 'reports/create',
+  eventAttendeesCreate: apiUrl + 'event_attendees/create'
 };

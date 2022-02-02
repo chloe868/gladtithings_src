@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { Color, Routes } from 'common';
 import Style from './Style.js';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
 import Skeleton from 'components/Loading/Skeleton';
+import {Spinner} from 'components';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -24,7 +25,8 @@ class HomePage extends Component {
       events: [],
       offset: 0,
       limit: 5,
-      recentlyVisited: []
+      recentlyVisited: [],
+      loadingEvent: false
     }
   }
 
@@ -33,6 +35,58 @@ class HomePage extends Component {
       this.retrieveChurches()
       this.retrieveEvents()
       this.retrieveRecentlyVisitedChurches()
+    })
+  }
+
+  attendEvent = (item) => {
+    let parameter = {
+      condition: [{
+        value: item.id,
+        column: 'id',
+        clause: '='
+      }]
+    }
+    this.setState({loadingEvent: true})
+    Api.request(Routes.eventsRetrieve, parameter, response => {
+      this.setState({loadingEvent: false})
+      if (response.data.length > 0) {
+        Alert.alert('Attend Event?', `Event Name: ${response.data[0].name?.toUpperCase()}\n\nLimit: ${response.data[0].limit}`, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Attend',
+            onPress: () => this.addToEventAttendees(item),
+          },
+        ]);
+      }
+    }, error => {
+      this.setState({loadingEvent: false})
+      console.log(error)
+    })
+  }
+
+  addToEventAttendees = (event) => {
+    this.setState({loadingEvent: true})
+    console.log(Routes.eventAttendeesCreate, {
+      event_id: event.id,
+      account_id: this.props.state.user.id
+    });
+    Api.request(Routes.eventAttendeesCreate, {
+      event_id: event.id,
+      account_id: this.props.state.user.id
+    }, response => {
+      this.setState({loadingEvent: false})
+      if (response.data > 0) {
+        Alert.alert('Success', `You successfully attended to "${event.name}" event.`);
+      } else {
+        Alert.alert('Error', response.error);
+      }
+    }, error => {
+      this.setState({loadingEvent: false})
+      console.log(error)
     })
   }
 
@@ -143,11 +197,12 @@ class HomePage extends Component {
 
   render() {
     const { theme, user, language } = this.props.state;
-    const { churches, isLoading, events, recentlyVisited } = this.state;
+    const { churches, isLoading, events, recentlyVisited, loadingEvent } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
       }}>
+        {loadingEvent && <Spinner mode="overlay" />}
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
@@ -317,7 +372,7 @@ class HomePage extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
-                redirect={() => { return }}
+                redirect={(item) => { this.attendEvent(item) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
               {!isLoading && events.length === 0 && <Text style={{
