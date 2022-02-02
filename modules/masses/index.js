@@ -48,46 +48,44 @@ class Masses extends Component {
   };
 
   componentDidMount() {
-    this.retrieveChurches(false)
     const config = {
       enableHighAccuracy: false
     };
     Geolocation.getCurrentPosition(
-      info =>
+      info => {
         this.setState({
           region: {
             ...this.state.region,
             latitude: info.coords.latitude,
             longitude: info.coords.longitude
           }
-        }),
+        })
+        this.retrieveChurches()
+      },
       error => console.log("ERROR", error),
       config,
     );
     console.log('--s-')
   }
 
-  retrieveChurches = (flag) => {
-    const { days, offset, limit, churches } = this.state;
+  retrieveChurches = () => {
+    const { region, offset, limit, churches } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
-      limit: limit,
-      offset: flag == true && offset > 0 ? (offset * limit) : offset
+      masses: {
+        latitude: region.latitude,
+        longitude: region.longitude
+      }
     }
     this.setState({ isLoading: true })
+    console.log(Routes.merchantsRetrieve, parameter);
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.setState({
-          churches: flag == false ? response.data : _.uniqBy([...churches, ...response.data], 'id'),
-          offset: flag == false ? 1 : (offset + 1)
+          churches: response.data
         })
         console.log(response.data[0])
-      } else {
-        this.setState({
-          data: flag == false ? [] : churches,
-          offset: flag == false ? 0 : offset
-        })
       }
     }, error => {
       console.log(error)
@@ -119,7 +117,7 @@ class Masses extends Component {
             <Marker
               key={0}
               coordinate={region}
-              title={'Title route'}
+              title={'My Current Location'}
               tracksViewChanges={false}
             >
               <Image
@@ -165,15 +163,6 @@ class Masses extends Component {
       }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          onScroll={(event) => {
-            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
-            let totalHeight = event.nativeEvent.contentSize.height
-            if (scrollingHeight >= (totalHeight)) {
-              if (isLoading == false) {
-                this.retrieveChurches(true)
-              }
-            }
-          }}
         >
           <View style={{ marginBottom: height / 2 }}>
             <View>
@@ -232,8 +221,8 @@ class Masses extends Component {
                 </View>}
               {!streetView && this.renderMap()}
             </View>
-            {!isLoading && churches.length === 0 && <EmptyMessage message={language.emptyTithings} />}
             <View style={{ padding: 15 }}>
+            {!isLoading && churches.length === 0 && <EmptyMessage message={language.massesNearby.emptyMasses} />}
               {
                 churches.map((item, index) => {
                   return (

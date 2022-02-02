@@ -272,5 +272,8 @@ export default {
     events: 'Eventos',
     announcement: 'Anuncios',
     noAnnouncement: 'Esta iglesia no tiene anuncio.'
+  },
+  massesNearby: {
+    emptyMasses: 'No hay masas cercanas.'
   }
 }

@@ -26,7 +26,7 @@ export default {
   add: 'Add',
   month: 'Month',
   nextDonation: 'Next donation on',
-  Donation: 'Donation',
+  Donation: 'Donate',
   Follow: 'Follow',
   cancelConfirmation: 'Are you sure you want to cancel ?',
   DrawerMenu: [
@@ -272,5 +272,8 @@ export default {
     events: 'Events',
     announcement: 'Announcements',
     noAnnouncement: 'This church has no announcement.'
+  },
+  massesNearby: {
+    emptyMasses: 'No nearby masses.'
   }
 }
