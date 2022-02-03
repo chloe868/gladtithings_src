@@ -81,15 +81,19 @@ class Deposit extends Component {
       if(response.data.length > 0) {
         let ledger = response.data.filter(item => item.currency == currency);
         console.log(ledger, currency)
-        this.setState({ledger: ledger[0]})
-        if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
-          if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
-            this.createLedger();
+        if(ledger.length > 0) {
+          this.setState({ledger: ledger[0]})
+          if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
+            if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
+              this.createLedger();
+            } else {
+              this.subscribe();
+            }
           } else {
-            this.subscribe();
+            Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
           }
         } else {
-          Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
+          Alert.alert('Payment Error', 'You have no balance for this currency.');
         }
       }
     }, error => {
