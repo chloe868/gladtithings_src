@@ -21,13 +21,13 @@ class Deposit extends Component {
       card: null,
       isLoading: false,
       subscribeId: null,
-      currency: 'PHP',
+      currency: 'USD',
       ledger: null
     };
   }
 
   componentDidMount() {
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' });
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' });
   }
 
   unsubscribe = () => {
@@ -79,9 +79,10 @@ class Deposit extends Component {
     Api.request(Routes.ledgerSummary, parameter, response => {
       this.setState({ isLoading: false })
       if(response.data.length > 0) {
-        let ledger = currency === 'PHP' ? response.data[0] : response.data[1];
-        this.setState({ledger: ledger})
-        if(parseFloat(ledger.available_balance) >= parseFloat(amount)) {
+        let ledger = response.data.filter(item => item.currency == currency);
+        console.log(ledger, currency)
+        this.setState({ledger: ledger[0]})
+        if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
           if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
             this.createLedger();
           } else {
@@ -326,8 +327,7 @@ class Deposit extends Component {
                       }}>Current Amount: {data?.amount}</Text>
                       <AmountInput
                         onChange={(amount, currency) => this.setState({
-                          amount: amount,
-                          currency: currency
+                          amount: amount
                         })
                         }
                         maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
@@ -340,8 +340,7 @@ class Deposit extends Component {
                     </View> :
                     <AmountInput
                       onChange={(amount, currency) => this.setState({
-                        amount: amount,
-                        currency: currency
+                        amount: amount
                       })
                       }
                       maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
