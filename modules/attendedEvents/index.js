@@ -14,7 +14,7 @@ import AmountInput from 'modules/generic/AmountInput'
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-class Events extends Component {
+class AttendedEvents extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,8 +25,7 @@ class Events extends Component {
       events: [],
       limit: 8,
       offset: 0,
-      currency: 'PHP',
-      loadingEvent: false
+      currency: 'PHP'
     }
   }
 
@@ -35,79 +34,28 @@ class Events extends Component {
     this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
   }
 
-  attendEvent = (item) => {
-    let parameter = {
-      condition: [{
-        value: item.id,
-        column: 'id',
-        clause: '='
-      }]
-    }
-    this.setState({loadingEvent: true})
-    Api.request(Routes.eventsRetrieve, parameter, response => {
-      this.setState({loadingEvent: false})
-      if (response.data.length > 0) {
-        Alert.alert('Attend Event?', `Event Name: ${response.data[0].name?.toUpperCase()}\n\nLimit: ${response.data[0].limit}`, [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'Attend',
-            onPress: () => this.addToEventAttendees(item),
-          },
-        ]);
-      }
-    }, error => {
-      this.setState({loadingEvent: false})
-      console.log(error)
-    })
-  }
-
-  addToEventAttendees = (event) => {
-    this.setState({loadingEvent: true})
-    console.log(Routes.eventAttendeesCreate, {
-      event_id: event.id,
-      account_id: this.props.state.user.id
-    });
-    Api.request(Routes.eventAttendeesCreate, {
-      event_id: event.id,
-      account_id: this.props.state.user.id
-    }, response => {
-      this.setState({loadingEvent: false})
-      if (response.data > 0) {
-        Alert.alert('Success', `You successfully attended to "${event.name}" event.`);
-      } else {
-        Alert.alert('Error', response.error);
-      }
-    }, error => {
-      this.setState({loadingEvent: false})
-      console.log(error)
-    })
-  }
-
   retrieveEvents = (flag) => {
     const { user } = this.props.state;
     const { limit, offset, events } = this.state;
     let parameter = {
       condition: [{
-        value: new Date(),
-        column: 'start_date',
-        clause: '>'
+        value: user.id,
+        column: 'account_id',
+        clause: '='
       }],
       sort: { created_at: 'asc' },
       limit: limit,
       offset: flag == true && offset > 0 ? (offset * this.state.limit) : offset
     }
     this.setState({ isLoading: true })
-    Api.request(Routes.eventsRetrieve, parameter, response => {
+    console.log(Routes.eventAttendeesRetrieve, parameter);
+    Api.request(Routes.eventAttendeesRetrieve, parameter, response => {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         response.data.map((item, index) => {
-          item['logo'] = item.image?.length > 0 ? item.image[0].category : null
-          item['address'] = item.location
-          item['date'] = item.start_date
+          item['logo'] = item.event.image?.length > 0 ? item.event.image[0].category : null
+          item['address'] = item.event.location
+          item['date'] = item.event.start_date
         })
         this.setState({
           events: flag == false ? response.data : _.uniqBy([...events, ...response.data], 'id'),
@@ -180,42 +128,14 @@ class Events extends Component {
             backgroundColor: Color.containerBackground
           }}>
           <View style={{ marginBottom: height /2, }}>
-            <CustomizedHeader
-              version={2}
-              donate={true}
-              redirect={() => {
-                this.setState({ donate: true })
-              }}
-              data={
-                events.length > 0 ?
-                  {
-                    merchant_details: {
-                      name: events[0].name,
-                      logo: events[0].logo,
-                      address: events[0].address
-                    },
-                    amount: 0
-                  }
-                  : null
-              }
-              showButton={donate}
-            />
-            {!donate ? <View style={{ marginTop: 20 }}>
-              <View style={{
-                paddingLeft: 20,
-                paddingRight: 20
-              }}>
-                <Text style={{
-                  fontFamily: 'Poppins-SemiBold'
-                }}>Upcoming Events.</Text>
-              </View>
+            <View style={{ marginTop: 20 }}>
               <CardsWithImages
                 button={true}
                 version={1}
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
-                redirect={(item) => { this.attendEvent(item) }}
+                redirect={(item) => { return }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item}) }}
               />
               {!isLoading && events.length == 0 &&
@@ -238,61 +158,9 @@ class Events extends Component {
                     <Skeleton size={1} template={'block'} height={150} />
                   </View>
                 </View>}
-            </View> :
-              <View style={{
-                padding: 20,
-              }}>
-                <View style={{
-                  padding: 20,
-                }}>
-                  <View style={{
-                    borderWidth: 1,
-                    borderColor: Color.lightGray,
-                    padding: 15,
-                    borderRadius: 10
-                  }}>
-                    <AmountInput
-                      onChange={(amount, currency) => this.setState({
-                        amount: amount,
-                        currency: currency
-                      })
-                      }
-                      maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
-                      type={{
-                        type: 'Cash In'
-                      }}
-                      disableRedirect={false}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                </View>
-              </View>
-            }
+            </View>
           </View>
         </ScrollView>
-        {loadingEvent ? <Spinner mode="overlay" /> : null}
-        {donate && <View style={{
-          position: 'absolute',
-          bottom: 10,
-          left: 0,
-          paddingLeft: 20,
-          paddingRight: 20,
-          width: '100%'
-        }}>
-          <IncrementButton
-            style={{
-              backgroundColor: Color.secondary,
-              width: '100%'
-            }}
-            textStyle={{
-              fontFamily: 'Poppins-SemiBold'
-            }}
-            onClick={() => {
-              this.createPayment()
-            }}
-            title={'Continue'}
-          />
-        </View>}
       </View>
     );
   }
@@ -306,5 +174,5 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Events);
+export default connect(mapStateToProps, mapDispatchToProps)(AttendedEvents);
 

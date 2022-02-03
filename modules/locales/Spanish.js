@@ -120,6 +120,11 @@ export default {
       route: 'notificationSettingsStack'
     },
     {
+      title: 'Eventos a los que asistí',
+      description: "Ver todos los eventos a los que asistí.",
+      route: 'eventSettingsStack'
+    },
+    {
       title: 'sobre la aplicación',
       description: "Abrir sitio web ",
       route: 'website'
