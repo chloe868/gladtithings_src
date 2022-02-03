@@ -113,7 +113,8 @@ class HomePage extends Component {
           address: JSON.parse(item.merchant?.address)?.name,
           logo: item.merchant.logo,
           name: item.merchant.name,
-          account_id: item.merchant.account_id
+          account_id: item.merchant.account_id,
+          addition_informations: item.merchant.addition_informations
          })
         })
       }
@@ -182,7 +183,8 @@ class HomePage extends Component {
                   logo: item.logo,
                   name: i.name,
                   date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`,
-                  account_id: item.account_id
+                  account_id: item.account_id,
+                  addition_informations: item.addition_informations
                 })
               })
             }

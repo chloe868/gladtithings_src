@@ -120,6 +120,11 @@ export default {
       route: 'notificationSettingsStack'
     },
     {
+      title: 'Events I Attended',
+      description: "View all events I attended.",
+      route: 'eventSettingsStack'
+    },
+    {
       title: 'About Glad Tithings',
       description: "Open website ",
       route: 'website'

@@ -42,7 +42,8 @@ import CurrencyStack from 'src/modules/currency/CurrencyDrawer.js';
 import StripeStack from 'components/Payments/Stripe/Drawer';
 import OtherTransactionStack from 'src/modules/deposit/Drawer';
 import DashboardStack from 'src/modules/dashboard/Drawer';
-import PaymentCardsStack from 'components/Payments/Cards/Drawer'
+import PaymentCardsStack from 'components/Payments/Cards/Drawer';
+import AttendedEvents from 'src/modules/attendedEvents/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -135,7 +136,8 @@ const PrimaryNav = createStackNavigator(
     stripeStack: { screen: StripeStack },
     otherTransactionStack: { screen : OtherTransactionStack },
     dashboardStack : { screen : DashboardStack },
-    paymentCardsStack: { screen: PaymentCardsStack}
+    paymentCardsStack: { screen: PaymentCardsStack},
+    eventSettingsStack: { screen: AttendedEvents}
   },
   {
     // Default config for all screens

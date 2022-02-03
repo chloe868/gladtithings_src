@@ -185,6 +185,11 @@ class Deposit extends Component {
     const { user } = this.props.state;
     const { currency } = this.state;
     const { params } = this.props.navigation.state;
+    if(params.data.addition_informations != 'subscription-enabled') {
+      Alert.alert('Cannot subscribe', 'The merchant disabled its subscription.');
+      console.log(params);
+      return
+    }
     let parameter = {
       account_id: user.id,
       merchant: params.data.id,
