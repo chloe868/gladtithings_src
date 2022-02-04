@@ -80,5 +80,6 @@ export default {
   reactionDelete: apiUrl + 'reactions/remove_reaction',
   reportCreate: apiUrl + 'reports/create',
   eventAttendeesCreate: apiUrl + 'event_attendees/create',
-  eventAttendeesRetrieve: apiUrl + 'event_attendees/retrieve_events_attended'
+  eventAttendeesRetrieve: apiUrl + 'event_attendees/retrieve_events_attended',
+  sharePostCreate: apiUrl + 'share_posts/create'
 };
