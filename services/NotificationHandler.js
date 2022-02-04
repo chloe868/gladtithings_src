@@ -127,6 +127,11 @@ class NotificationHandler extends Component {
         setComments(comments);
       }
         break
+      case 'subscription': {
+        console.log(data, '================from subscription------------------')
+        this.playSound()
+      }
+      break
     }
   }
 

@@ -200,7 +200,7 @@ class Deposit extends Component {
       merchant: params.data.id,
       amount: this.state.amount,
       currency: currency,
-      to: params.date.account_id
+      to: params.data.account_id
     };
     console.log(parameter, Routes.SubscriptionCreate);
     Api.request(Routes.SubscriptionCreate, parameter, response => {
