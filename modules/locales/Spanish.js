@@ -280,5 +280,8 @@ export default {
   },
   massesNearby: {
     emptyMasses: 'No hay masas cercanas.'
+  },
+  homepage: {
+    noSubscription: 'No tienes ninguna suscripción a la iglesia. Haga clic en "Buscar iglesia" a continuación para buscar iglesias que le interesen.'
   }
 }

@@ -26,7 +26,8 @@ class HomePage extends Component {
       offset: 0,
       limit: 5,
       recentlyVisited: [],
-      loadingEvent: false
+      loadingEvent: false,
+      currentSubscription: null
     }
   }
 
@@ -35,7 +36,35 @@ class HomePage extends Component {
       this.retrieveChurches()
       this.retrieveEvents()
       this.retrieveRecentlyVisitedChurches()
+      this.retrieveAllSubscriptions()
     })
+  }
+
+  
+  retrieveAllSubscriptions = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      account_id: user.id
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        response.data.map(item => {
+          item.merchant_details.address = JSON.parse(item.merchant_details?.address)?.name
+        })
+        this.setState({ currentSubscription: {
+          ...response.data[0],
+          address: response.data[0].merchant_details.address,
+          amount: 20,
+          date: response.data[0].next_month,
+          logo: response.data[0].merchant_details.logo
+        }})
+      }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false })
+    });
   }
 
   attendEvent = (item) => {
@@ -199,7 +228,7 @@ class HomePage extends Component {
 
   render() {
     const { theme, user, language } = this.props.state;
-    const { churches, isLoading, events, recentlyVisited, loadingEvent } = this.state;
+    const { churches, isLoading, events, recentlyVisited, loadingEvent, currentSubscription } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -211,24 +240,29 @@ class HomePage extends Component {
           <View style={{
             marginBottom: height / 2
           }}>
-            <CustomizedHeader
+            {currentSubscription ? <CustomizedHeader
               version={2}
-              data={
-                events.length > 0 ?
-                  {
-                    merchant_details: {
-                      name: events[0].name,
-                      logo: events[0].logo,
-                      address: events[0].address
-                    },
-                    amount: 0
-                  }
-                  : null
-              }
+              data={{
+                merchant_details: {
+                  name: currentSubscription.name,
+                  logo: currentSubscription.logo,
+                  address: currentSubscription.address,
+                },
+                amount: currentSubscription.amount,
+                next_month: currentSubscription.next_month
+              }}
+              redirect={() => {
+                this.props.navigation.navigate('subscriptionStack')
+              }}
+            /> : 
+            <CustomizedHeader
+              version={4}
+              text={language.homepage.noSubscription}
               redirect={() => {
                 this.props.navigation.navigate('subscriptionStack')
               }}
             />
+            }
             <View>
               <View style={Style.title}>
                 <Text
