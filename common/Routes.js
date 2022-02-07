@@ -82,5 +82,6 @@ export default {
   eventAttendeesCreate: apiUrl + 'event_attendees/create',
   eventAttendeesRetrieve: apiUrl + 'event_attendees/retrieve_events_attended',
   eventAttendeesDelete: apiUrl + 'event_attendees/delete',
-  sharePostCreate: apiUrl + 'share_posts/create'
+  sharePostCreate: apiUrl + 'share_posts/create',
+  confirmPaymentIntent: apiUrl + 'stripe_webhooks/confirm_payment',
 };
