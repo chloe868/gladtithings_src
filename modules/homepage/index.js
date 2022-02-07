@@ -10,6 +10,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
 import Skeleton from 'components/Loading/Skeleton';
 import {Spinner} from 'components';
+import Geolocation from '@react-native-community/geolocation';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -27,13 +28,36 @@ class HomePage extends Component {
       limit: 5,
       recentlyVisited: [],
       loadingEvent: false,
-      currentSubscription: null
+      currentSubscription: null,
+      region: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.12,
+        longitudeDelta: 0.12,
+        formatted_address: null,
+      },
     }
   }
 
   componentDidMount() {
     this.props.navigation.addListener('didFocus', () => {
-      this.retrieveChurches()
+      const config = {
+        enableHighAccuracy: false
+      };
+      Geolocation.getCurrentPosition(
+        info => {
+          this.setState({
+            region: {
+              ...this.state.region,
+              latitude: info.coords.latitude,
+              longitude: info.coords.longitude
+            }
+          })
+          this.retrieveChurches()
+        },
+        error => console.log("ERROR", error),
+        config,
+      );
       this.retrieveEvents()
       this.retrieveRecentlyVisitedChurches()
       this.retrieveAllSubscriptions()
@@ -181,11 +205,15 @@ class HomePage extends Component {
   }
 
   retrieveChurches = () => {
-    const { days } = this.state;
+    const { days, region } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
       limit: 6,
-      offset: 0
+      offset: 0,
+      masses: {
+        latitude: region.latitude,
+        longitude: region.longitude
+      }
     }
     this.setState({ isLoading: true })
     Api.request(Routes.merchantsRetrieve, parameter, response => {
