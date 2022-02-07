@@ -73,36 +73,33 @@ class AttendedEvents extends Component {
     })
   }
 
-  createPayment = async () => {
-    if (this.state.amount !== null && this.state.amount > 0) {
-      this.createLedger();
-    } else {
-      Alert.alert('Donation Error', 'You are missing your amount.');
-    }
-  };
-
-  createLedger = () => {
-    const { user } = this.props.state;
-    const { events } = this.state;
-    let params = {
-      account_id: user.id,
-      account_code: user.code,
-      amount: -(this.state.amount),
-      currency: this.state.currency,
-      details: events[0]?.id,
-      description: 'Event Donation',
-    };
-    Api.request(Routes.ledgerCreate, params, response => {
-      console.log('[CHARGE RESPONSE]', response);
-      this.setState({ isLoading: true })
-      if (response.data != null) {
-        this.props.navigation.navigate('pageMessageStack', { payload: 'success', title: 'Success' });
-      }
-      if (respose.error !== null) {
-        this.props.navigation.navigate('pageMessageStack', { payload: 'error', title: 'Error' });
-      }
-    });
-  };
+  removeEvents = (item) => {
+    console.log(item);
+    Alert.alert('Unattend?', 'Are you sure you want to delete this event from the events you attended?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          this.setState({ isLoading: true })
+          Api.request(Routes.eventAttendeesDelete, {
+            id: item.id
+          }, response => {
+            this.setState({ isLoading: false })
+            if (response.data) {
+              this.retrieveEvents(false);
+            }
+          }, error => {
+            this.setState({ isLoading: false })
+            console.log(error)
+          })
+        }
+      },
+    ]);
+  }
 
   render() {
     const { theme, user, paypalUrl } = this.props.state;
@@ -127,7 +124,7 @@ class AttendedEvents extends Component {
           style={{
             backgroundColor: Color.containerBackground
           }}>
-          <View style={{ marginBottom: height /2, }}>
+          <View style={{ marginBottom: height / 2, }}>
             <View style={{ marginTop: 20 }}>
               <CardsWithImages
                 button={true}
@@ -135,8 +132,8 @@ class AttendedEvents extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
-                redirect={(item) => { return }}
-                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item}) }}
+                redirect={(item) => { this.removeEvents(item) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
               {!isLoading && events.length == 0 &&
                 <View style={{
