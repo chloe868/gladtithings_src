@@ -11,7 +11,8 @@ import IncrementButton from 'components/Form/Button';
 import Api from 'services/api/index.js';
 import CardsWithImages from '../generic/CardsWithImages';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ImagePicker from 'react-native-image-picker';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -29,6 +30,33 @@ class CreateCommunity extends Component {
     }
   }
 
+  upload = () => {
+    const { user } = this.props.state
+    const options = {
+      noData: true
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+        this.setState({ photo: null })
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.setState({ photo: null })
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        this.setState({ photo: null })
+      } else {
+        ImageResizer.createResizedImage(response.uri, response.width * 0.5, response.height * 0.5, 'JPEG', 72, 0)
+          .then(res => {
+
+          })
+          .catch(err => {
+            // Oops, something went wrong. Check that the filename is correct and
+            // inspect err to get more details.
+            console.log('[ERROR]', err)
+          });
+      }
+    })}
 
   submit = () => {
     const { user } = this.props.state;
@@ -120,7 +148,7 @@ class CreateCommunity extends Component {
               }}
             />
             
-            <Text
+            {/*<Text
               style={{marginTop: 22}}
             >{language.community.logo}</Text>
 
@@ -128,36 +156,58 @@ class CreateCommunity extends Component {
               marginTop: 5,
               fontSize: BasicStyles.standardFontSize - 2
             }}>512px x 512px</Text>
-            <FontAwesomeIcon
-              icon={faImage}
-              size={150}
-              paddingHorizontal={200}
+            <TouchableOpacity
               style={{
-                width: '100%',
-                borderWidth: 0.1,
+                borderWidth: 0.5,
+                borderColor: Color.gray,
                 marginTop: 20,
                 backgroundColor: Color.white,
                 borderRadius: 5,
-                
+                width: '100%',
+                display: 'flex',
+                alignContent: 'center',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
-            />
+              onPress={() => {
+                this.upload()
+              }}
+              >
+              <FontAwesomeIcon
+                icon={faImage}
+                size={150}
+                color={Color.gray}
+              />
+            </TouchableOpacity>
 
             <Text
               style={{marginTop: 22}}
             >{language.community.banner}</Text>
-            <FontAwesomeIcon
-              icon={faImage}
-              size={150}
-              paddingHorizontal={200}
+
+            <TouchableOpacity
               style={{
-                width: '100%',
-                borderWidth: 0.1,
+                borderWidth: 0.5,
+                borderColor: Color.gray,
                 marginTop: 20,
                 backgroundColor: Color.white,
                 borderRadius: 5,
-                
+                width: '100%',
+                display: 'flex',
+                alignContent: 'center',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
-            />
+              onPress={() => {
+                this.upload()
+              }}
+              >
+              <FontAwesomeIcon
+                icon={faImage}
+                size={150}
+                color={Color.gray}
+              />
+            </TouchableOpacity>*/}
+            
 
             <View style={{
               marginTop: 20,
