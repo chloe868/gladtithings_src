@@ -13,6 +13,8 @@ import _ from 'lodash';
 import { Spinner } from 'components';
 import Comments from 'src/components/Comments/index';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import ImagePicker from 'react-native-image-picker';
+
 const photoMenu = [{
   title: 'View Photo',
   route: 'view_photo',
@@ -36,10 +38,51 @@ class Page extends Component {
     this.myRef = React.createRef()
     this.state = {
       isLoading: false,
-      data: []
+      data: [],
+      image: null
     }
   }
 
+  upload = () => {
+    const { user } = this.props.state
+    const options = {
+      noData: true
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+        this.setState({ photo: null })
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.setState({ photo: null })
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        this.setState({ photo: null })
+      } else {
+        ImageResizer.createResizedImage(response.uri, response.width * 0.5, response.height * 0.5, 'JPEG', 72, 0)
+          .then(res => {
+
+          })
+          .catch(err => {
+            // Oops, something went wrong. Check that the filename is correct and
+            // inspect err to get more details.
+            console.log('[ERROR]', err)
+          });
+      }
+    })}
+
+
+  imageOption(item){
+    switch(item.title.toLowerCase()){
+      case 'change photo': {
+        this.upload()
+        break
+      }
+      case 'view photo': {
+        break
+      }
+    }
+  }
   header() {
     const { theme } = this.props.state;
     return (
@@ -95,6 +138,9 @@ class Page extends Component {
           width: '100%'
         }}
         onPress={() => {
+          this.setState({
+            image: 'cover'
+          })
           this.RBSheet.open()
         }}
         >
@@ -120,9 +166,14 @@ class Page extends Component {
           justifyContent: 'space-between',
           alignItems: 'center',
           backgroundColor: theme ? theme.primary : Color.primary
-        }}>
+        }}
+        
+        >
           <TouchableOpacity
             onPress={() => {
+              this.setState({
+                image: 'profile'
+              })
               this.RBSheet.open()
             }}>
             <Image
@@ -191,7 +242,11 @@ class Page extends Component {
                   paddingLeft: 20,
                   borderBottomColor: Color.gray,
                   borderBottomWidth: 0.5
-                }}>
+                }}
+                onPress={() => {
+                  this.imageOption(item)
+                }}
+                >
                   <View>
                     <Text>{item.title}</Text>
                   </View>
