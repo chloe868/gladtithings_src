@@ -76,8 +76,8 @@ const Stack = createStackNavigator({
     headerMode: Platform.OS === 'ios'? 'float' : 'screen',
     navigationOptions: ({navigation}) => ({
       // title: navigation.state.params && navigation.state.params.data ? navigation.state.params.data.title : 'Page',
-      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      headerRight: <HeaderRightOptionsConnect navigationProps={navigation} />,
+      // headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
+      // headerRight: <HeaderRightOptionsConnect navigationProps={navigation} />,
       headerTransparent: true
     }),
   },

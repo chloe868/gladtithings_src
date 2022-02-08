@@ -49,7 +49,7 @@ class Page extends Component {
         position: 'absolute',
         top: Platform.OS == 'ios' ? 40 : 0,
         left: 0,
-        zIndex: 999,
+        zIndex: 9999,
         justifyContent: 'space-between',
         paddingLeft: 10,
         paddingRight: 10,
@@ -167,9 +167,9 @@ class Page extends Component {
         height: height,
         backgroundColor: Color.containerBackground
       }}>
-        {/*
+        {
           this.header()
-        */}
+        }
         <RBSheet
           ref={ref => {
             this.RBSheet = ref;
