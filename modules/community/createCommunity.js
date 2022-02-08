@@ -101,7 +101,8 @@ class CreateCommunity extends Component {
           <View style={{
             paddingLeft: 20,
             paddingRight: 20,
-            minHeight: height * 1.5
+            minHeight: height * 1.5,
+            width: '100%'
           }}>
             <InputFieldWithIcon
               placeholder={language.community.name_placeholder}
