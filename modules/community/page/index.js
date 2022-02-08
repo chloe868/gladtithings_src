@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Platform } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
-import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
-import IncrementButton from 'components/Form/Button';
-import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import Card from 'modules/community/Card'
-import Api from 'services/api';
 import _ from 'lodash';
-import { Spinner } from 'components';
 import Comments from 'src/components/Comments/index';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ImagePicker from 'react-native-image-picker';
+import ImageModal from 'components/Modal/ImageModalV2'
 
 const photoMenu = [{
   title: 'View Photo',
@@ -39,7 +34,8 @@ class Page extends Component {
     this.state = {
       isLoading: false,
       data: [],
-      image: null
+      image: null,
+      viewImage: []
     }
   }
 
@@ -79,6 +75,11 @@ class Page extends Component {
         break
       }
       case 'view photo': {
+        let images = this.state.viewImage
+        images.push('/storage/image/3_2021-10-07_03_14_26_BTS_logo_(2017).png')
+        this.setState({
+          viewImage: images
+        })
         break
       }
     }
@@ -210,8 +211,7 @@ class Page extends Component {
 
 
   render() {
-    const { theme } = this.props.state;
-    const { isLoading } = this.state;
+    const { viewImage } = this.state;
     const { params } = this.props.navigation.state;
     return (
       <View style={{
@@ -251,6 +251,14 @@ class Page extends Component {
               ))
             }
         </RBSheet>
+        {
+          viewImage && viewImage.length > 0 && (
+            <ImageModal
+              images={viewImage}
+            />
+          )
+        }
+        
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             minHeight: height * 1.5,
