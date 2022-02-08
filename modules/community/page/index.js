@@ -12,9 +12,8 @@ import Api from 'services/api';
 import _ from 'lodash';
 import { Spinner } from 'components';
 import Comments from 'src/components/Comments/index';
-import BottomSheetOptions  from 'src/components/BottomSheet/index';
-
-const coverPhotoMenu = [{
+import RBSheet from 'react-native-raw-bottom-sheet';
+const photoMenu = [{
   title: 'View Photo',
   route: 'view_photo',
   type: 'callback',
@@ -25,19 +24,6 @@ const coverPhotoMenu = [{
   type: 'callback',
   icon: faCog
 }];
-
-const profilePhotoMenu = [{
-  title: 'View Photo',
-  route: 'view_photo',
-  type: 'callback',
-  icon: faCog
-}, {
-  title: 'Change Photo',
-  route: 'change_photo',
-  type: 'callback',
-  icon: faCog
-}];
-
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -50,8 +36,7 @@ class Page extends Component {
     this.myRef = React.createRef()
     this.state = {
       isLoading: false,
-      data: [],
-      menuData: null
+      data: []
     }
   }
 
@@ -110,10 +95,7 @@ class Page extends Component {
           width: '100%'
         }}
         onPress={() => {
-          this.setState({
-            menuData: coverPhotoMenu
-          })
-          this.myRef.current.openBottomSheet()
+          this.RBSheet.open()
         }}
         >
           <Image
@@ -141,10 +123,7 @@ class Page extends Component {
         }}>
           <TouchableOpacity
             onPress={() => {
-              this.setState({
-                menuData: profilePhotoMenu
-              })
-              this.myRef.current.openBottomSheet()
+              this.RBSheet.open()
             }}>
             <Image
               style={{
@@ -181,7 +160,7 @@ class Page extends Component {
 
   render() {
     const { theme } = this.props.state;
-    const { isLoading, menuData } = this.state;
+    const { isLoading } = this.state;
     const { params } = this.props.navigation.state;
     return (
       <View style={{
@@ -191,10 +170,35 @@ class Page extends Component {
         {/*
           this.header()
         */}
-        <BottomSheetOptions
-          data={menuData}
-          ref={this.myRef}
-        ></BottomSheetOptions>
+        <RBSheet
+          ref={ref => {
+            this.RBSheet = ref;
+          }}
+          closeOnDragDown={true}
+          dragFromTopOnly={true}
+          closeOnPressMask={false}
+          height={height / 2}
+          onClose={() => {
+            this.RBSheet.close()
+          }}>
+            {
+              photoMenu && photoMenu.map(item => (
+                <TouchableOpacity style={{
+                  width: '100%',
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                  paddingRight: 20,
+                  paddingLeft: 20,
+                  borderBottomColor: Color.gray,
+                  borderBottomWidth: 0.5
+                }}>
+                  <View>
+                    <Text>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))
+            }
+        </RBSheet>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             minHeight: height * 1.5,
