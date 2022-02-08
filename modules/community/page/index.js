@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Platform } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
 import { connect } from 'react-redux';
-import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faImage, faCog, faSitemap, faPlus} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import _ from 'lodash';
 import Comments from 'src/components/Comments/index';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ImagePicker from 'react-native-image-picker';
 import ImageModal from 'components/Modal/ImageModalV2'
+import Config from 'src/config.js';
 
 const photoMenu = [{
   title: 'View Photo',
@@ -31,6 +32,7 @@ class Page extends Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef()
+    this.imageRef = React.createRef()
     this.state = {
       isLoading: false,
       data: [],
@@ -67,6 +69,37 @@ class Page extends Component {
       }
     })}
 
+  checkImage(params, payload){
+    if(params == null) return false
+    if(params && params.additional_informations == null) return false
+    if(params && params.additional_informations){
+      let details = JSON.parse(params.additional_informations)
+      console.log({
+        details
+      })
+      if(details && details.profile && payload == 'profile'){
+        return true
+      }else if(details && details.cover && payload == 'cover'){
+        return true
+      }
+    }
+    return false
+  }
+
+  getImage(params, payload){
+    if(params == null) return null
+    if(params && params.additional_informations == null) return null
+    if(params && params.additional_informations){
+      let details = JSON.parse(params.additional_informations)
+      if(details && details.profile && payload == 'profile'){
+        return Config.BACKEND_URL + details.profile
+      }else if(details && details.cover && payload == 'cover'){
+        return Config.BACKEND_URL + details.cover
+      }
+    }
+    return null
+  }
+
 
   imageOption(item){
     switch(item.title.toLowerCase()){
@@ -75,11 +108,20 @@ class Page extends Component {
         break
       }
       case 'view photo': {
-        let images = this.state.viewImage
-        images.push('/storage/image/3_2021-10-07_03_14_26_BTS_logo_(2017).png')
+        this.RBSheet.close()
+        let images = []
+        const { params } = this.props.navigation.state;
+        if(params && params.data){
+          let data = params.data
+          if(data && data.additional_informations){
+            let details = JSON.parse(data.additional_informations)
+            images.push(details[this.state.image])
+          }
+        }
         this.setState({
           viewImage: images
         })
+        this.imageRef.current.openBottomSheet()
         break
       }
     }
@@ -136,7 +178,11 @@ class Page extends Component {
         marginBottom: 25
       }}>
         <TouchableOpacity style={{
-          width: '100%'
+          width: '100%',
+          display: 'flex',
+          alignContent: 'center',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
         onPress={() => {
           this.setState({
@@ -145,14 +191,19 @@ class Page extends Component {
           this.RBSheet.open()
         }}
         >
-          <Image
-            style={{
-              width: width,
-              height: height / 3
-            }}
-
-            source={require('assets/logo.png')}
-            />
+            {
+              params && this.checkImage(params.data, 'cover') ? (
+                <Image
+                  style={{
+                    width: width,
+                    height: height / 3
+                  }}
+                  source={{uri: this.getImage(params.data, 'cover')}}
+                />
+              ) : (
+                <FontAwesomeIcon icon={faPlus} size={height / 3} color={Color.gray}/>
+              )
+              }
         </TouchableOpacity>
 
         <View style={{
@@ -176,17 +227,38 @@ class Page extends Component {
                 image: 'profile'
               })
               this.RBSheet.open()
-            }}>
-            <Image
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                borderWidth: 0.5,
-                borderColor: Color.secondary
-              }}
-              source={require('assets/iconlogo.png')}
-            />
+            }}
+            style={{
+              alignContent: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 30,
+              height: 60,
+              width: 60,
+              color: Color.gray,
+              backgroundColor: Color.white,
+              borderColor: Color.secondary,
+              borderWidth: 2
+            }}
+            >
+              {
+               
+                params && this.checkImage(params.data, 'profile') ? (
+                  <Image
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 25,
+                      borderWidth: 0.5,
+                      borderColor: Color.secondary
+                    }}
+                    source={{uri: this.getImage(params.data, 'profile')}}
+                  />
+                ) : (
+                  <FontAwesomeIcon icon={faSitemap} size={30} color={Color.gray}/>
+                )
+              }
+            
           </TouchableOpacity>
           {
             params.data && (
@@ -251,13 +323,12 @@ class Page extends Component {
               ))
             }
         </RBSheet>
-        {
-          viewImage && viewImage.length > 0 && (
-            <ImageModal
-              images={viewImage}
-            />
-          )
-        }
+        
+        
+        <ImageModal
+          images={viewImage}
+          ref={this.imageRef}
+        />
         
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
