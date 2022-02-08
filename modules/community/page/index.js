@@ -228,10 +228,7 @@ class Page extends Component {
           closeOnDragDown={true}
           dragFromTopOnly={true}
           closeOnPressMask={false}
-          height={height / 2}
-          onClose={() => {
-            this.RBSheet.close()
-          }}>
+          height={height / 2}>
             {
               photoMenu && photoMenu.map(item => (
                 <TouchableOpacity style={{
