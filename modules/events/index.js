@@ -25,13 +25,66 @@ class Events extends Component {
       events: [],
       limit: 8,
       offset: 0,
-      currency: 'PHP'
+      currency: 'PHP',
+      loadingEvent: false
     }
   }
 
   componentDidMount() {
     this.retrieveEvents(false)
     this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+  }
+
+  attendEvent = (item) => {
+    let parameter = {
+      condition: [{
+        value: item.id,
+        column: 'id',
+        clause: '='
+      }]
+    }
+    this.setState({loadingEvent: true})
+    Api.request(Routes.eventsRetrieve, parameter, response => {
+      this.setState({loadingEvent: false})
+      if (response.data.length > 0) {
+        Alert.alert('Attend Event?', `Event Name: ${response.data[0].name?.toUpperCase()}\n\nLimit: ${response.data[0].limit}`, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Attend',
+            onPress: () => this.addToEventAttendees(item),
+          },
+        ]);
+      }
+    }, error => {
+      this.setState({loadingEvent: false})
+      console.log(error)
+    })
+  }
+
+  addToEventAttendees = (event) => {
+    this.setState({loadingEvent: true})
+    console.log(Routes.eventAttendeesCreate, {
+      event_id: event.id,
+      account_id: this.props.state.user.id
+    });
+    Api.request(Routes.eventAttendeesCreate, {
+      event_id: event.id,
+      account_id: this.props.state.user.id
+    }, response => {
+      this.setState({loadingEvent: false})
+      if (response.data > 0) {
+        Alert.alert('Success', `You successfully attended to "${event.name}" event.`);
+      } else {
+        Alert.alert('Error', response.error);
+      }
+    }, error => {
+      this.setState({loadingEvent: false})
+      console.log(error)
+    })
   }
 
   retrieveEvents = (flag) => {
@@ -105,7 +158,7 @@ class Events extends Component {
 
   render() {
     const { theme, user, paypalUrl } = this.props.state;
-    const { donate, amount, events, isLoading } = this.state;
+    const { donate, amount, events, isLoading, loadingEvent } = this.state;
     return (
       <View style={{ backgroundColor: Color.containerBackground }}>
         <ScrollView showsVerticalScrollIndicator={false}
@@ -126,7 +179,7 @@ class Events extends Component {
           style={{
             backgroundColor: Color.containerBackground
           }}>
-          <View style={{ height: height * 1.5, }}>
+          <View style={{ marginBottom: height /2, }}>
             <CustomizedHeader
               version={2}
               donate={true}
@@ -162,7 +215,7 @@ class Events extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
-                redirect={() => { return }}
+                redirect={(item) => { this.attendEvent(item) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item}) }}
               />
               {!isLoading && events.length == 0 &&
@@ -217,7 +270,7 @@ class Events extends Component {
             }
           </View>
         </ScrollView>
-        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+        {loadingEvent ? <Spinner mode="overlay" /> : null}
         {donate && <View style={{
           position: 'absolute',
           bottom: 10,

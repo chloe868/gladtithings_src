@@ -120,6 +120,11 @@ export default {
       route: 'notificationSettingsStack'
     },
     {
+      title: 'Eventos a los que asistí',
+      description: "Ver todos los eventos a los que asistí.",
+      route: 'eventSettingsStack'
+    },
+    {
       title: 'sobre la aplicación',
       description: "Abrir sitio web ",
       route: 'website'
@@ -272,5 +277,11 @@ export default {
     events: 'Eventos',
     announcement: 'Anuncios',
     noAnnouncement: 'Esta iglesia no tiene anuncio.'
+  },
+  massesNearby: {
+    emptyMasses: 'No hay masas cercanas.'
+  },
+  homepage: {
+    noSubscription: 'No tienes ninguna suscripción a la iglesia. Haga clic en "Buscar iglesia" a continuación para buscar iglesias que le interesen.'
   }
 }

@@ -76,7 +76,7 @@ class CustomizedHeader extends Component {
           borderRadius: 10
         }}>
           <Image
-            source={{uri: Config.BACKEND_URL  + data?.merchant_details?.logo}}
+            source={{ uri: Config.BACKEND_URL + data?.merchant_details?.logo }}
             style={{
               height: '100%',
               width: '100%',
@@ -187,7 +187,7 @@ class CustomizedHeader extends Component {
           height: (height / 4) - 40
         }}>
           <Image
-            source={{uri: Config.BACKEND_URL  + data.merchant_details.logo}}
+            source={{ uri: Config.BACKEND_URL + data.merchant_details.logo }}
             style={{
               height: '100%',
               width: '100%',
@@ -271,11 +271,60 @@ class CustomizedHeader extends Component {
                 }}>{language.goToSubscription}</Text>
               </View>
             }
-            redirect={() =>
-              {this.props.redirect()}
+            redirect={() => { this.props.redirect() }
             }
           />}
         </View>
+      </View>
+    )
+  }
+
+  versionFour = () => {
+    const { theme, language, user } = this.props.state;
+    const { text } = this.props;
+    return (
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+      }}>
+        <FontAwesomeIcon
+          icon={faChurch}
+          size={50}
+          style={{ marginRight: 5, color: Color.white }}
+        />
+        <Text style={{
+          textAlign: 'center',
+          padding: 10,
+          fontSize: 13,
+          color: Color.white
+        }}>
+          {text}
+        </Text>
+        <Button
+          style={{
+            width: '40%',
+            height: 35,
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            marginTop: 10
+          }}
+          content={
+            <View style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}>
+              <Text style={{
+                color: 'white',
+                fontSize: 12,
+                fontFamily: 'Poppins-SemiBold'
+              }}>{language.goToSubscription}</Text>
+            </View>
+          }
+          redirect={() => {
+            this.props.redirect()
+          }}
+        />
       </View>
     )
   }
@@ -298,6 +347,7 @@ class CustomizedHeader extends Component {
         {this.props.version === 1 && this.versionOne()}
         {this.props.version === 2 && this.versionTwo()}
         {this.props.version === 3 && this.versionThree()}
+        {this.props.version === 4 && this.versionFour()}
       </View>
     )
   }

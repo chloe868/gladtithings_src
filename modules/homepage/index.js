@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { Color, Routes } from 'common';
 import Style from './Style.js';
 import { connect } from 'react-redux';
@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
 import Skeleton from 'components/Loading/Skeleton';
+import {Spinner} from 'components';
+import Geolocation from '@react-native-community/geolocation';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -24,15 +26,120 @@ class HomePage extends Component {
       events: [],
       offset: 0,
       limit: 5,
-      recentlyVisited: []
+      recentlyVisited: [],
+      loadingEvent: false,
+      currentSubscription: null,
+      region: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.12,
+        longitudeDelta: 0.12,
+        formatted_address: null,
+      },
     }
   }
 
   componentDidMount() {
     this.props.navigation.addListener('didFocus', () => {
-      this.retrieveChurches()
+      const config = {
+        enableHighAccuracy: false
+      };
+      Geolocation.getCurrentPosition(
+        info => {
+          this.setState({
+            region: {
+              ...this.state.region,
+              latitude: info.coords.latitude,
+              longitude: info.coords.longitude
+            }
+          })
+          this.retrieveChurches()
+        },
+        error => console.log("ERROR", error),
+        config,
+      );
       this.retrieveEvents()
       this.retrieveRecentlyVisitedChurches()
+      this.retrieveAllSubscriptions()
+    })
+  }
+
+  
+  retrieveAllSubscriptions = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      account_id: user.id
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.SubscriptionRetrieveByParams, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        response.data.map(item => {
+          item.merchant_details.address = JSON.parse(item.merchant_details?.address)?.name
+        })
+        this.setState({ currentSubscription: {
+          ...response.data[0],
+          address: response.data[0].merchant_details.address,
+          amount: 20,
+          date: response.data[0].next_month,
+          logo: response.data[0].merchant_details.logo
+        }})
+      }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false })
+    });
+  }
+
+  attendEvent = (item) => {
+    let parameter = {
+      condition: [{
+        value: item.id,
+        column: 'id',
+        clause: '='
+      }]
+    }
+    this.setState({loadingEvent: true})
+    Api.request(Routes.eventsRetrieve, parameter, response => {
+      this.setState({loadingEvent: false})
+      if (response.data.length > 0) {
+        Alert.alert('Attend Event?', `Event Name: ${response.data[0].name?.toUpperCase()}\n\nLimit: ${response.data[0].limit}`, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Attend',
+            onPress: () => this.addToEventAttendees(item),
+          },
+        ]);
+      }
+    }, error => {
+      this.setState({loadingEvent: false})
+      console.log(error)
+    })
+  }
+
+  addToEventAttendees = (event) => {
+    this.setState({loadingEvent: true})
+    console.log(Routes.eventAttendeesCreate, {
+      event_id: event.id,
+      account_id: this.props.state.user.id
+    });
+    Api.request(Routes.eventAttendeesCreate, {
+      event_id: event.id,
+      account_id: this.props.state.user.id
+    }, response => {
+      this.setState({loadingEvent: false})
+      if (response.data > 0) {
+        Alert.alert('Success', `You successfully attended to "${event.name}" event.`);
+      } else {
+        Alert.alert('Error', response.error);
+      }
+    }, error => {
+      this.setState({loadingEvent: false})
+      console.log(error)
     })
   }
 
@@ -59,7 +166,8 @@ class HomePage extends Component {
           address: JSON.parse(item.merchant?.address)?.name,
           logo: item.merchant.logo,
           name: item.merchant.name,
-          account_id: item.merchant.account_id
+          account_id: item.merchant.account_id,
+          addition_informations: item.merchant.addition_informations
          })
         })
       }
@@ -97,11 +205,15 @@ class HomePage extends Component {
   }
 
   retrieveChurches = () => {
-    const { days } = this.state;
+    const { days, region } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
       limit: 6,
-      offset: 0
+      offset: 0,
+      masses: {
+        latitude: region.latitude,
+        longitude: region.longitude
+      }
     }
     this.setState({ isLoading: true })
     Api.request(Routes.merchantsRetrieve, parameter, response => {
@@ -128,7 +240,8 @@ class HomePage extends Component {
                   logo: item.logo,
                   name: i.name,
                   date: `${days[currentDay]} ${i.startTime} ${aIsAm} - ${i.endTime} ${bIsAm}`,
-                  account_id: item.account_id
+                  account_id: item.account_id,
+                  addition_informations: item.addition_informations
                 })
               })
             }
@@ -143,35 +256,41 @@ class HomePage extends Component {
 
   render() {
     const { theme, user, language } = this.props.state;
-    const { churches, isLoading, events, recentlyVisited } = this.state;
+    const { churches, isLoading, events, recentlyVisited, loadingEvent, currentSubscription } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
       }}>
+        {loadingEvent && <Spinner mode="overlay" />}
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
           <View style={{
             marginBottom: height / 2
           }}>
-            <CustomizedHeader
+            {currentSubscription ? <CustomizedHeader
               version={2}
-              data={
-                events.length > 0 ?
-                  {
-                    merchant_details: {
-                      name: events[0].name,
-                      logo: events[0].logo,
-                      address: events[0].address
-                    },
-                    amount: 0
-                  }
-                  : null
-              }
+              data={{
+                merchant_details: {
+                  name: currentSubscription.name,
+                  logo: currentSubscription.logo,
+                  address: currentSubscription.address,
+                },
+                amount: currentSubscription.amount,
+                next_month: currentSubscription.next_month
+              }}
+              redirect={() => {
+                this.props.navigation.navigate('subscriptionStack')
+              }}
+            /> : 
+            <CustomizedHeader
+              version={4}
+              text={language.homepage.noSubscription}
               redirect={() => {
                 this.props.navigation.navigate('subscriptionStack')
               }}
             />
+            }
             <View>
               <View style={Style.title}>
                 <Text
@@ -317,7 +436,7 @@ class HomePage extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
-                redirect={() => { return }}
+                redirect={(item) => { this.attendEvent(item) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
               {!isLoading && events.length === 0 && <Text style={{

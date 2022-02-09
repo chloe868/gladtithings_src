@@ -38,6 +38,7 @@ class Stack extends Component {
     let temp = [];
     temp.push(item);
     this.setState({selected: temp})
+    this.manageCharges(item)
   }
 
   manageCharges(item){
@@ -189,10 +190,17 @@ class Stack extends Component {
             minHeight: height * 1.5
           }}>
             <AmountInput
-              onChange={(amount, currency) => this.setState({
-                amount: amount,
-                currency: currency
-              })
+              onChange={(amount, currency) => 
+                {
+                  this.setState({
+                    amount: amount,
+                    currency: currency
+                  }, () => {
+                    if(selected.length > 0) {
+                      this.manageCharges(selected[0])
+                    }
+                  })
+                }
               }
               maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
               type={{

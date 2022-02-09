@@ -72,7 +72,25 @@ class TransactionDetails extends Component {
                   fontSize: BasicStyles.standardFontSize
                 }}>More details</Text>
               </View>
+              {data.details.charge && <View style={{
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row'
+              }}>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%'
+                }}>Charge:</Text>
 
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%',
+                  textAlign: 'right'
+                }}
+                  numberOfLines={1}
+                >{data.details.charge}</Text>
+              </View>}
               <View style={{
                 height: 50,
                 justifyContent: 'center',

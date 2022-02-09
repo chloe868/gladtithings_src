@@ -26,7 +26,7 @@ export default {
   add: 'Add',
   month: 'Month',
   nextDonation: 'Next donation on',
-  Donation: 'Donation',
+  Donation: 'Donate',
   Follow: 'Follow',
   cancelConfirmation: 'Are you sure you want to cancel ?',
   DrawerMenu: [
@@ -118,6 +118,11 @@ export default {
       title: 'Notification Settings',
       description: "Receives notification to any of the ff.",
       route: 'notificationSettingsStack'
+    },
+    {
+      title: 'Events I Attended',
+      description: "View all events I attended.",
+      route: 'eventSettingsStack'
     },
     {
       title: 'About Glad Tithings',
@@ -272,5 +277,11 @@ export default {
     events: 'Events',
     announcement: 'Announcements',
     noAnnouncement: 'This church has no announcement.'
+  },
+  massesNearby: {
+    emptyMasses: 'No nearby masses.'
+  },
+  homepage: {
+    noSubscription: 'You do not have any church subscriptions. Click "Find Church" below to look for churches you are interested to.'
   }
 }

@@ -60,6 +60,7 @@ class Subscriptions extends Component {
   }
 
   retrieveLTransaction = (flag, item) => {
+
     const { user } = this.props.state;
     let parameter = {
       condition: [{
@@ -67,15 +68,18 @@ class Subscriptions extends Component {
         value: user.id,
         clause: '='
       }, {
-        column: 'merchant',
-        value: item.merchant,
-        clause: '='
-      }, {
-        column: 'description',
+      //   column: 'merchant',
+      //   value: item.merchant,
+      //   clause: '='
+      // }, {
+      //   column: 'amount',
+      //   value: 0,
+      //   clause: '>'
+      // }, {
+        column: 'details',
         value: 'subscription',
         clause: '='
       }],
-      merchant: item.merchant,
       sort: { created_at: 'desc' },
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
@@ -105,7 +109,7 @@ class Subscriptions extends Component {
         value: user.id,
         clause: '='
       }, {
-        column: 'description',
+        column: 'details',
         value: 'subscription',
         clause: '='
       }],

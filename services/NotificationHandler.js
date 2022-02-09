@@ -32,10 +32,11 @@ class NotificationHandler extends Component {
 
   setTopics() {
     const { user } = this.props.state;
+    console.log(user);
     if (fcmService && user) {
-      fcmService.subscribeTopic(user.id)
       fcmService.subscribeTopic('ticket-comment')
       fcmService.subscribeTopic('comment-reply')
+      fcmService.subscribeTopic(user.id)
     }
   }
 
@@ -126,6 +127,11 @@ class NotificationHandler extends Component {
         setComments(comments);
       }
         break
+      case 'subscription': {
+        console.log(data, '================from subscription------------------')
+        this.playSound()
+      }
+      break
     }
   }
 

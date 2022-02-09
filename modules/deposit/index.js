@@ -21,13 +21,13 @@ class Deposit extends Component {
       card: null,
       isLoading: false,
       subscribeId: null,
-      currency: 'PHP',
+      currency: 'USD',
       ledger: null
     };
   }
 
   componentDidMount() {
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' });
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' });
   }
 
   unsubscribe = () => {
@@ -61,7 +61,6 @@ class Deposit extends Component {
   }
 
   retrieveLedger = (currency) => {
-    co
     const { user } = this.props.state;
     const { amount } = this.state;
     let parameter = {
@@ -81,17 +80,21 @@ class Deposit extends Component {
       console.log('[retrieve ledger]', response.data)
       this.setState({ isLoading: false })
       if(response.data.length > 0) {
-        let ledger = currency === 'PHP' ? response.data[0] : response.data[1];
-        console.log('[sulod sa ledger]', ledger)  
-        this.setState({ledger: ledger})
-        if(parseFloat(ledger.available_balance) >= parseFloat(amount)) {
-          if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
-            this.createLedger();
+        let ledger = response.data.filter(item => item.currency == currency);
+        console.log(ledger, currency)
+        if(ledger.length > 0) {
+          this.setState({ledger: ledger[0]})
+          if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
+            if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
+              this.createLedger();
+            } else {
+              this.subscribe();
+            }
           } else {
-            this.subscribe();
+            Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
           }
         } else {
-          Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
+          Alert.alert('Payment Error', 'You have no balance for this currency.');
         }
       }
     }, error => {
@@ -189,11 +192,17 @@ class Deposit extends Component {
     const { user } = this.props.state;
     const { currency } = this.state;
     const { params } = this.props.navigation.state;
+    if(params.data.addition_informations != 'subscription-enabled') {
+      Alert.alert('Cannot subscribe', 'The merchant disabled its subscription.');
+      console.log(params);
+      return
+    }
     let parameter = {
       account_id: user.id,
       merchant: params.data.id,
       amount: this.state.amount,
-      currency: currency
+      currency: currency,
+      to: params.data.account_id
     };
     console.log(parameter, Routes.SubscriptionCreate);
     Api.request(Routes.SubscriptionCreate, parameter, response => {
@@ -325,8 +334,7 @@ class Deposit extends Component {
                       }}>Current Amount: {data?.amount}</Text>
                       <AmountInput
                         onChange={(amount, currency) => this.setState({
-                          amount: amount,
-                          currency: currency
+                          amount: amount
                         })
                         }
                         maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
@@ -339,8 +347,7 @@ class Deposit extends Component {
                     </View> :
                     <AmountInput
                       onChange={(amount, currency) => this.setState({
-                        amount: amount,
-                        currency: currency
+                        amount: amount
                       })
                       }
                       maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
