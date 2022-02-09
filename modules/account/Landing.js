@@ -16,7 +16,7 @@ class Landing extends Component {
 
   onFocusFunction = async () => {
     const { setLanguage } = this.props;
-    if(this.props.state.language === null) {
+    if (this.props.state.language === null) {
       setLanguage(Helper.defaultLanguage)
     }
     Linking.getInitialURL().then(url => {
@@ -44,11 +44,11 @@ class Landing extends Component {
 
   navigate = (url) => { // E
     const { navigate } = this.props.navigation;
-    if(url !== null){
+    if (url !== null) {
       const route = url.replace(/.*?:\/\//g, '');
       const routeName = route.split('/')[0];
       if (routeName === 'wearesynqt' && route.split('/')[1] === 'profile') {
-        const {setDeepLinkRoute} = this.props;
+        const { setDeepLinkRoute } = this.props;
         setDeepLinkRoute(url);
       };
     }
@@ -83,7 +83,7 @@ class Landing extends Component {
         colors={theme && theme.gradient !== undefined && theme.gradient !== null ? theme.gradient : Color.gradient}
         // colors={[theme ? theme.primary : Color.primary, theme ? theme.primary : Color.secondary, Color.primary]}
         locations={[0, 0.5, 1]} start={{ x: 2, y: 0 }} end={{ x: 1, y: 1 }}
-        style={{height: '100%'}}
+        style={{ height: '100%' }}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}>
@@ -102,7 +102,7 @@ class Landing extends Component {
                 width: '65%',
                 height: '100%',
                 resizeMode: 'contain',
-              }}/>
+              }} />
             </View>
             <View style={{
               position: 'absolute',
@@ -110,34 +110,41 @@ class Landing extends Component {
               alignItems: 'center'
             }}>
               <Button
-              style={{
-                width: '70%',
-                height: 50,
-                backgroundColor: theme ? theme.secondary : Color.secondary,
-                marginBottom: '20%'
-              }}
-              content={
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ color: 'white', fontSize: 15 }}>{language?.getStarted}</Text>
-                </View>
-              }
-              redirect={() => this.props.navigation.navigate('registerStack')}
-            />
-            <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('loginStack')}>
-              <Text style={{
-                color: 'white',
-                fontSize: BasicStyles.standardFontSize + 2
+                style={{
+                  width: '70%',
+                  height: 50,
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                  marginBottom: '15%'
+                }}
+                content={
+                  <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ color: 'white', fontSize: 15 }}>{language?.getStarted}</Text>
+                  </View>
+                }
+                redirect={() => this.props.navigation.navigate('registerStack')}
+              />
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('loginStack')}>
+                <Text style={{
+                  color: 'white',
+                  fontSize: BasicStyles.standardFontSize + 2
                 }}>{language?.alreadyHaveAnAccount}&nbsp;&nbsp;
-                  <Text
-                    style={{
-                      fontFamily: 'Poppins-SemiBold',
-                      fontSize: BasicStyles.standardFontSize + 2
-                    }}>
-                    {language?.signIn}
-                  </Text>
                 </Text>
               </TouchableOpacity>
+              <Button
+                style={{
+                  width: '70%',
+                  height: 50,
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                  marginTop: 20
+                }}
+                content={
+                  <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ color: 'white', fontSize: 15 }}>{language?.signIn}</Text>
+                  </View>
+                }
+                redirect={() => this.props.navigation.navigate('loginStack')}
+              />
             </View>
           </View>
         </ScrollView>

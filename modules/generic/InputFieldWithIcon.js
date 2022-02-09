@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableHighlight} from 'react-native';
+import { View, Text, TextInput, Dimensions} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-brands-svg-icons'
 import { Color, BasicStyles } from 'common';
 import { connect } from 'react-redux';
+const width = Math.round(Dimensions.get('window').width)
 class TextInputWithIcon extends Component{
   
   constructor(props){
@@ -45,7 +46,8 @@ class TextInputWithIcon extends Component{
           flexDirection: 'row',
           ...BasicStyles.standardFormControl,
           ...this.props.style,
-          alignItems: 'center'
+          alignItems: 'center',
+          overflow: 'hidden'
           }}>
           <FontAwesomeIcon style={{
             marginLeft: 10,
@@ -63,7 +65,8 @@ class TextInputWithIcon extends Component{
             editable={this.props.disable ? false : true}
             secureTextEntry={this.props.secureTextEntry ? this.props.secureTextEntry : false}
             style={{
-              width: '100%'
+              width: '80%',
+              paddingRight: 5
             }}
           />
         </View>

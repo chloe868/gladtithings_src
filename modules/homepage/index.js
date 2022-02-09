@@ -23,6 +23,8 @@ class HomePage extends Component {
       churches: [],
       days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       isLoading: false,
+      isLoading1: false,
+      isLoading2: false,
       events: [],
       offset: 0,
       limit: 5,
@@ -91,58 +93,6 @@ class HomePage extends Component {
     });
   }
 
-  attendEvent = (item) => {
-    let parameter = {
-      condition: [{
-        value: item.id,
-        column: 'id',
-        clause: '='
-      }]
-    }
-    this.setState({loadingEvent: true})
-    Api.request(Routes.eventsRetrieve, parameter, response => {
-      this.setState({loadingEvent: false})
-      if (response.data.length > 0) {
-        Alert.alert('Attend Event?', `Event Name: ${response.data[0].name?.toUpperCase()}\n\nLimit: ${response.data[0].limit}`, [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'Attend',
-            onPress: () => this.addToEventAttendees(item),
-          },
-        ]);
-      }
-    }, error => {
-      this.setState({loadingEvent: false})
-      console.log(error)
-    })
-  }
-
-  addToEventAttendees = (event) => {
-    this.setState({loadingEvent: true})
-    console.log(Routes.eventAttendeesCreate, {
-      event_id: event.id,
-      account_id: this.props.state.user.id
-    });
-    Api.request(Routes.eventAttendeesCreate, {
-      event_id: event.id,
-      account_id: this.props.state.user.id
-    }, response => {
-      this.setState({loadingEvent: false})
-      if (response.data > 0) {
-        Alert.alert('Success', `You successfully attended to "${event.name}" event.`);
-      } else {
-        Alert.alert('Error', response.error);
-      }
-    }, error => {
-      this.setState({loadingEvent: false})
-      console.log(error)
-    })
-  }
-
   retrieveRecentlyVisitedChurches = () => {
     const { user } = this.props.state;
     let parameter = {
@@ -190,7 +140,9 @@ class HomePage extends Component {
       limit: limit,
       offset: offset
     }
+    this.setState({isLoading2: true})
     Api.request(Routes.eventsRetrieve, parameter, response => {
+      this.setState({isLoading2: false})
       if (response.data.length > 0) {
         response.data.map((item, index) => {
           item['logo'] = item.image?.length > 0 ? item.image[0].category : null
@@ -215,10 +167,10 @@ class HomePage extends Component {
         longitude: region.longitude
       }
     }
-    this.setState({ isLoading: true })
+    this.setState({ isLoading1: true })
     Api.request(Routes.merchantsRetrieve, parameter, response => {
+      this.setState({ isLoading1: false })
       console.log('[RESPONSE]', response)
-      this.setState({ isLoading: false })
       if (response.data.length > 0) {
         let temp = [];
         response.data.map((item, index) => {
@@ -256,7 +208,7 @@ class HomePage extends Component {
 
   render() {
     const { theme, user, language } = this.props.state;
-    const { churches, isLoading, events, recentlyVisited, loadingEvent, currentSubscription } = this.state;
+    const { churches, isLoading, events, recentlyVisited, loadingEvent, currentSubscription, isLoading1, isLoading2 } = this.state;
     return (
       <View style={{
         backgroundColor: Color.containerBackground
@@ -292,7 +244,7 @@ class HomePage extends Component {
             />
             }
             <View>
-              <View style={Style.title}>
+              {recentlyVisited.length > 0 && <View style={Style.title}>
                 <Text
                   numberOfLines={1}
                   style={{
@@ -320,7 +272,7 @@ class HomePage extends Component {
                     color: theme ? theme.primary : Color.primary
                   }}>{language.findChurch}</Text>
                 </TouchableOpacity>
-              </View>
+              </View>}
               {isLoading &&
                 <View style={{
                   flexDirection: 'row',
@@ -342,14 +294,7 @@ class HomePage extends Component {
                 redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
               />
-              {!isLoading && recentlyVisited.length === 0 && <Text style={{
-                padding: 20,
-                margin: 0,
-                marginTop: -25,
-                marginBottom: -20,
-                fontSize: 11
-              }}>No recently visited churches.</Text>}
-              <View style={Style.title}>
+              {churches.length > 0 && <View style={Style.title}>
                 <Text
                   numberOfLines={1}
                   style={{
@@ -369,8 +314,8 @@ class HomePage extends Component {
                   }}>{language.findMass + '>>>'}</Text>
 
                 </TouchableOpacity>
-              </View>
-              {isLoading &&
+              </View>}
+              {isLoading1 &&
                 <View style={{
                   flexDirection: 'row',
                   width: width
@@ -390,14 +335,7 @@ class HomePage extends Component {
                 redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
               />
-              {!isLoading && churches.length === 0 && <Text style={{
-                padding: 20,
-                margin: 0,
-                marginTop: -25,
-                marginBottom: -20,
-                fontSize: 11
-              }}>No nearby upcoming masses.</Text>}
-              <View style={Style.title}>
+              {events.length > 0 && <View style={Style.title}>
                 <Text
                   numberOfLines={1}
                   style={{
@@ -417,8 +355,8 @@ class HomePage extends Component {
                   }}>{language.viewMore + '>>>'}</Text>
 
                 </TouchableOpacity>
-              </View>
-              {isLoading &&
+              </View>}
+              {isLoading2 &&
                 <View style={{
                   flexDirection: 'row',
                   width: width
@@ -436,16 +374,9 @@ class HomePage extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
-                redirect={(item) => { this.attendEvent(item) }}
+                redirect={(item) => { this.props.navigation.navigate('viewEventStack', {data : item}) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
-              {!isLoading && events.length === 0 && <Text style={{
-                padding: 20,
-                margin: 0,
-                marginTop: -25,
-                marginBottom: -20,
-                fontSize: 11
-              }}>No nearby upcoming events.</Text>}
             </View>
           </View>
         </ScrollView>

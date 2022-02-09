@@ -44,6 +44,7 @@ import OtherTransactionStack from 'src/modules/deposit/Drawer';
 import DashboardStack from 'src/modules/dashboard/Drawer';
 import PaymentCardsStack from 'components/Payments/Cards/Drawer';
 import AttendedEvents from 'src/modules/attendedEvents/Drawer';
+import ViewEvent from '../modules/events/viewEvent/Drawer';
 
 const WelcomeStack = createStackNavigator(
   {
@@ -137,7 +138,8 @@ const PrimaryNav = createStackNavigator(
     otherTransactionStack: { screen : OtherTransactionStack },
     dashboardStack : { screen : DashboardStack },
     paymentCardsStack: { screen: PaymentCardsStack},
-    eventSettingsStack: { screen: AttendedEvents}
+    eventSettingsStack: { screen: AttendedEvents},
+    viewEventStack: { screen: ViewEvent }
   },
   {
     // Default config for all screens
