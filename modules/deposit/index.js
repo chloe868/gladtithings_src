@@ -61,6 +61,7 @@ class Deposit extends Component {
   }
 
   retrieveLedger = (currency) => {
+    co
     const { user } = this.props.state;
     const { amount } = this.state;
     let parameter = {
@@ -77,9 +78,11 @@ class Deposit extends Component {
     console.log(Routes.ledgerSummary, parameter);
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerSummary, parameter, response => {
+      console.log('[retrieve ledger]', response.data)
       this.setState({ isLoading: false })
       if(response.data.length > 0) {
         let ledger = currency === 'PHP' ? response.data[0] : response.data[1];
+        console.log('[sulod sa ledger]', ledger)  
         this.setState({ledger: ledger})
         if(parseFloat(ledger.available_balance) >= parseFloat(amount)) {
           if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
@@ -99,6 +102,7 @@ class Deposit extends Component {
 
   createPayment = () => {
     let cur = this.props.state.ledger?.currency || this.state.currency;
+    console.log('[ledger]', this.props.state.ledger)
     if (this.state.amount !== null && this.state.amount > 0) {
       this.retrieveLedger(cur)
     } else {

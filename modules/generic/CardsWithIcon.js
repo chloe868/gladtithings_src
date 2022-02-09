@@ -81,7 +81,6 @@ class CardsWithIcon extends Component {
     if (this.props.amount) {
       amount = this.props.amount.split(' ')[1]
     }
-    console.log(amount);
     return (
       <TouchableOpacity
         style={{

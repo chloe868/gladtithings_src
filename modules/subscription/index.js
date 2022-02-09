@@ -28,8 +28,9 @@ class Subscriptions extends Component {
       dataPayment: [],
       items: null,
       limit: 4,
+      offset: 0
     }
-  }
+  } 
 
   componentDidMount = () => {
     this.retrieveAllSub()
@@ -58,7 +59,7 @@ class Subscriptions extends Component {
     });
   }
 
-  retrieveLTransaction = (flag) => {
+  retrieveLTransaction = (flag, item) => {
     const { user } = this.props.state;
     let parameter = {
       condition: [{
@@ -66,16 +67,23 @@ class Subscriptions extends Component {
         value: user.id,
         clause: '='
       }, {
+        column: 'merchant',
+        value: item.merchant,
+        clause: '='
+      }, {
         column: 'description',
         value: 'subscription',
         clause: '='
       }],
+      merchant: item.merchant,
       sort: { created_at: 'desc' },
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
     }
     this.setState({ isLoading: true })
+    console.log('[parameter]', parameter)
     Api.request(Routes.ledgerRetrieve, parameter, response => {
+      console.log('[limited]', response)
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.setState({
@@ -105,6 +113,7 @@ class Subscriptions extends Component {
     }
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerRetrieve, parameter, response => {
+      console.log('[no limit]', response.data)
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.setState({
@@ -181,7 +190,7 @@ class Subscriptions extends Component {
                             data={item}
                             redirect={() => {
                               this.setState({ details: true, items: item })
-                              this.retrieveLTransaction(false)
+                              this.retrieveLTransaction(false, item)
                               this.retrieveAllSub(false)
                             }}
                           />
