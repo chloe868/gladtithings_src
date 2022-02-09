@@ -186,13 +186,36 @@ class Deposit extends Component {
     );
   };
 
+  verifyMerchant = (merchant) => {
+    let parameter = {
+      condition: [{
+        value: merchant.id,
+        clause: '=',
+        column: 'id'
+      }]
+    };
+    console.log(parameter, Routes.merchantsRetrieve);
+    this.setState({ isLoading: true })
+    Api.request(Routes.merchantsRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        return response.data[0].addition_informations
+      } else {
+        return null
+      }
+    }, error => {
+      this.setState({ isLoading: false })
+      console.log(error)
+      return null
+    });
+  }
+
   subscribe = () => {
     const { user } = this.props.state;
     const { currency } = this.state;
     const { params } = this.props.navigation.state;
-    if(params.data.addition_informations != 'subscription-enabled') {
-      Alert.alert('Cannot subscribe', 'The merchant disabled its subscription.');
-      console.log(params);
+    if(this.verifyMerchant(params.data) !== 'subscription-enabled') {
+      Alert.alert('Error subscription', 'The church disabled its subscription.')
       return
     }
     let parameter = {
