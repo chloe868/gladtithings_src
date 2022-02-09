@@ -91,6 +91,44 @@ class TransactionDetails extends Component {
                   numberOfLines={1}
                 >{data.details.charge}</Text>
               </View>}
+              {data.details.amount && <View style={{
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row'
+              }}>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%'
+                }}>Amount:</Text>
+
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%',
+                  textAlign: 'right'
+                }}
+                  numberOfLines={1}
+                >{data.details.amount}</Text>
+              </View>}
+              {data.details.total && <View style={{
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row'
+              }}> 
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%'
+                }}>Total:</Text>
+
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%',
+                  textAlign: 'right'
+                }}
+                  numberOfLines={1}
+                >{data.details.total}</Text>
+              </View>}
               <View style={{
                 height: 50,
                 justifyContent: 'center',

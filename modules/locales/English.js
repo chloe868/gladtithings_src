@@ -283,5 +283,8 @@ export default {
   },
   homepage: {
     noSubscription: 'You do not have any church subscriptions. Click "Find Church" below to look for churches you are interested to.'
+  },
+  events: {
+    attend: 'Attend'
   }
 }

@@ -35,58 +35,6 @@ class Events extends Component {
     this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
   }
 
-  attendEvent = (item) => {
-    let parameter = {
-      condition: [{
-        value: item.id,
-        column: 'id',
-        clause: '='
-      }]
-    }
-    this.setState({loadingEvent: true})
-    Api.request(Routes.eventsRetrieve, parameter, response => {
-      this.setState({loadingEvent: false})
-      if (response.data.length > 0) {
-        Alert.alert('Attend Event?', `Event Name: ${response.data[0].name?.toUpperCase()}\n\nLimit: ${response.data[0].limit}`, [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'Attend',
-            onPress: () => this.addToEventAttendees(item),
-          },
-        ]);
-      }
-    }, error => {
-      this.setState({loadingEvent: false})
-      console.log(error)
-    })
-  }
-
-  addToEventAttendees = (event) => {
-    this.setState({loadingEvent: true})
-    console.log(Routes.eventAttendeesCreate, {
-      event_id: event.id,
-      account_id: this.props.state.user.id
-    });
-    Api.request(Routes.eventAttendeesCreate, {
-      event_id: event.id,
-      account_id: this.props.state.user.id
-    }, response => {
-      this.setState({loadingEvent: false})
-      if (response.data > 0) {
-        Alert.alert('Success', `You successfully attended to "${event.name}" event.`);
-      } else {
-        Alert.alert('Error', response.error);
-      }
-    }, error => {
-      this.setState({loadingEvent: false})
-      console.log(error)
-    })
-  }
-
   retrieveEvents = (flag) => {
     const { user } = this.props.state;
     const { limit, offset, events } = this.state;
@@ -215,7 +163,7 @@ class Events extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
-                redirect={(item) => { this.attendEvent(item) }}
+                redirect={(item) => { this.props.navigation.navigate('viewEventStack', {data : item}) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item}) }}
               />
               {!isLoading && events.length == 0 &&

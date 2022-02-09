@@ -225,18 +225,18 @@ class ChurchProfile extends Component {
               {announcements.length == 0 && !isLoading && <Text>{language.churchProfile?.noAnnouncement}</Text>}
             </View>
             <View>
-              <Text style={{
+              {this.state.data.length > 0 && <Text style={{
                 paddingTop: 10,
                 paddingLeft: 20,
                 fontFamily: 'Poppins-SemiBold'
-              }}>{language.churchProfile?.events}</Text>
+              }}>{language.churchProfile?.events}</Text>}
               <CardsWithImages
                 button={true}
                 version={1}
                 data={this.state.data}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
-                redirect={() => { return }}
+                redirect={(item) => { this.props.navigation.navigate('viewEventStack', {data : item}) }}
                 buttonClick={() => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings' }) }}
               />
             </View>
